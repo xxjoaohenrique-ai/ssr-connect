@@ -1,0 +1,29 @@
+name: Verificar SSR-CONNECT
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  teste-e-compilacao:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Baixar o codigo
+        uses: actions/checkout@v4
+      - name: Configurar Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Instalar dependencias fixadas no lockfile
+        run: npm ci
+      - name: Testar autenticacao e sessoes
+        run: npm test
+      - name: Compilar interface React/Vite
+        run: npm run build
