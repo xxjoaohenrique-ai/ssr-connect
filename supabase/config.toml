@@ -1,0 +1,6 @@
+[functions.portalApi]
+verify_jwt = false
+[functions.adminApi]
+verify_jwt = false
+[functions.ssrApi]
+verify_jwt = false
