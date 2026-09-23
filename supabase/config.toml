@@ -1,3 +1,7 @@
+[auth]
+site_url = "https://ssr-connect.pages.dev"
+additional_redirect_urls = ["https://ssr-connect.pages.dev/**", "http://localhost:5173/**"]
+
 [functions.portalApi]
 verify_jwt = false
 [functions.adminApi]

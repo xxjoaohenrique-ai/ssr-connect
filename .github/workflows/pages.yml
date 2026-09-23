@@ -38,7 +38,7 @@ jobs:
         env:
           GITHUB_PAGES: "true"
           VITE_SUPABASE_URL: https://gczbmneklbmiitsgjvbm.supabase.co
-          VITE_SUPABASE_ANON_KEY: ${{ vars.SSR_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.SSR_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_gW_Ma2lA-MdC2V_vBaatnA_5SZPxONu' }}
         run: npm run build
 
       - name: Suporte a recarregar links do React no GitHub Pages

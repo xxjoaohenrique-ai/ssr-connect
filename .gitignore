@@ -12,6 +12,8 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+.deploy-repo/
+.wrangler/
 dist
 dist-ssr
 *.local
@@ -33,3 +35,4 @@ base44/.app.jsonc
 
 # Permite versionar apenas o exemplo de configuracao sem credenciais.
 !.env.example
+!.env.production
