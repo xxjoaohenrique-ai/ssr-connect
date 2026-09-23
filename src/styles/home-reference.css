@@ -1,10 +1,6 @@
 /* SSR-CONNECT 2026 homepage concept. Scoped so existing portal/admin layouts are unchanged. */
-.ssr-reference-home {
-  --hero-ink: #f8fbff;
-  --hero-muted: #aabdd1;
-  color: var(--hero-ink);
-  background: #08182c;
-}
+.ssr-reference-home { background: hsl(var(--background)); }
+.ssr-reference-hero { color: #f8fbff; }
 .ssr-reference-hero {
   isolation: isolate;
   position: relative;
@@ -147,6 +143,8 @@
 .ssr-reference-header .ssr-header-enroll { color: #fff; background: linear-gradient(105deg, #209eed, #04b8e8); }
 .ssr-reference-header .ssr-mobile-trigger { color: #f0f9ff; border-color: rgba(154, 196, 239, .4); }
 .ssr-reference-header .ssr-brand-subtitle { color: #b4c8dc; }
+.ssr-reference-header .ssr-header-theme { color: #e7f2ff; border-color: rgba(154, 196, 239, .4); }
+.ssr-reference-header nav { max-width: 1660px; padding-inline: clamp(18px, 5vw, 96px); }
 .ssr-reference-home .ssr-ticker { background: linear-gradient(90deg, #0e5799, #006d86 65%, #087f83); color: #fff; }
 .ssr-ticker-content { display: flex; justify-content: center; align-items: center; gap: 12px; margin: 0 auto; max-width: 1540px; }
 .ssr-ticker-content svg { flex: none; color: #6ce9fb; }
