@@ -138,7 +138,7 @@ export default function PaiDashboard({ session, onLogout }) {
 
       <PortalSectionTitle>Conta e segurança</PortalSectionTitle>
 
-      <ChangePasswordCard onSubmit={(cur, next) => changeParentPassword(session.id, cur, next)} />
+      <ChangePasswordCard onSubmit={async (cur, next) => { await changeParentPassword(session.id, cur, next); onLogout?.(); }} />
       <DeleteAccountCard session={session} onLogout={onLogout} />
     </div>
   );
