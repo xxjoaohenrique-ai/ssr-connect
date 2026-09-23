@@ -1,7 +1,5 @@
 # Status da migração
 
-O banco separado do SSR-CONNECT já existe no projeto Supabase `gczbmneklbmiitsgjvbm`, em São Paulo.
+Site publicado: https://ssr-connect.pages.dev
 
-O envio ao GitHub ainda está incompleto: falta enviar `src/` e `supabase/functions/` a partir do pacote exportado. Não publique este repositório como site em produção até completar a transferência e testar as funções, o login e os dados.
-
-O aplicativo original no Base44 não foi desligado.
+Consulte [STATUS_IMPLANTACAO.md](STATUS_IMPLANTACAO.md) para o estado verificado em 23/09/2026. O código foi completado, o backend foi implantado e a conta administrativa foi criada. Dados antigos ainda dependem de exportação e importação.

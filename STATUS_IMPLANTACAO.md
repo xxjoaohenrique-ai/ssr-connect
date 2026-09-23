@@ -10,6 +10,9 @@
 - Consultas públicas retornam HTTP 200; dados privados sem sessão retornam 401/403.
 - Home, JavaScript, `/portal-aluno` e `/admin-login` responderam HTTP 200.
 - Verificação visual em navegador não realizada nesta sessão.
+- Supabase Auth configurado com a URL publicada e redirecionamentos.
+- Primeira conta administrativa criada; login e validação de sessão testados.
+- Código completo enviado ao GitHub em `main`.
 
 ## Causa do problema
 

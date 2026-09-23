@@ -1,4 +1,8 @@
+> **Atualização 23/09/2026:** site publicado em https://ssr-connect.pages.dev, funções Supabase e segredo de sessão configurados. Código completo enviado ao GitHub e conta administrativa provisionada. Os registros antigos ainda precisam de exportação/importação. Consulte [STATUS_IMPLANTACAO.md](STATUS_IMPLANTACAO.md); as etapas e os status antigos abaixo são históricos.
+
 # SSR-CONNECT independente do Base44
+
+> **STATUS (22/09/2026):** o projeto Supabase exclusivo `gczbmneklbmiitsgjvbm` já foi criado, e a tabela e o bucket já existem. Ainda faltam: upload integral do código no GitHub, implantação das funções, configuração do segredo de sessão, importação dos dados antigos e Cloudflare Pages. Leia [CONFIGURAR_CLOUDFLARE.md](CONFIGURAR_CLOUDFLARE.md). Não desative o Base44.
 
 Este repositório foi convertido a partir do ZIP exportado pelo proprietário.
 Ele contém frontend React/Vite, autenticação Supabase Auth, backend Supabase Edge
