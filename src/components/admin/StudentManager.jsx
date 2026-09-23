@@ -5,7 +5,7 @@ import {
 import { base44 } from "@/api/base44Client";
 import { adminList, adminCreate, adminUpdate, adminDelete, adminBulkCreate } from "@/lib/adminApi";
 import { Modal, Field, inputCls } from "./ui";
-import { genLogin, genPassword, sha256 } from "@/lib/alunoAuth";
+import { genLogin, genPassword } from "@/lib/alunoAuth";
 import { COURSE_OPTIONS } from "@/lib/courses";
 import PdfNamesImport from "./PdfNamesImport";
 
@@ -54,13 +54,12 @@ export default function StudentManager() {
     if (editing === "new") {
       const login = genLogin(form.name, existingLogins);
       const password = genPassword();
-      const password_hash = await sha256(password);
       await adminCreate("Student", {
         name: form.name.trim(),
         turma: form.turma.trim(),
         course: form.course,
         student_login: login,
-        password_hash,
+        password,
         enrollment: form.enrollment.trim(),
         is_active: form.is_active,
       });
@@ -80,8 +79,7 @@ export default function StudentManager() {
   // Gerar nova senha para um aluno e mostrar a senha em texto.
   const regenerate = async (it) => {
     const password = genPassword();
-    const password_hash = await sha256(password);
-    await adminUpdate("Student", it.id, { password_hash, password_changed: false });
+    await adminUpdate("Student", it.id, { password, password_changed: false });
     setCreds([{ name: it.name, login: it.student_login, password }]);
     load();
   };
@@ -109,7 +107,7 @@ export default function StudentManager() {
         turma: bulk.turma.trim(),
         course: bulk.course,
         student_login: login,
-        password_hash: await sha256(password),
+        password,
         is_active: true,
       });
     }
