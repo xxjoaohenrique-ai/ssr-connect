@@ -427,3 +427,64 @@ select:focus-visible, textarea:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .ssr-home-tile, .ssr-home-course { transform: none !important; }
 }
+
+/* Responsividade SSR-CONNECT: mobile pequeno, tablets e navegação por teclado. */
+.ssr-skip-link {
+  position: fixed;
+  z-index: 100;
+  top: calc(0.5rem + env(safe-area-inset-top));
+  left: max(0.75rem, env(safe-area-inset-left));
+  transform: translateY(-200%);
+  border-radius: 0.75rem;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+}
+.ssr-skip-link:focus {
+  transform: translateY(0);
+}
+#conteudo-principal:focus { outline: none; }
+
+.ssr-home-hub-grid > * { min-width: 0; }
+.ssr-home-tile, .ssr-home-course, .ssr-home-news {
+  overflow-wrap: anywhere;
+}
+.ssr-home-news > div:last-child { min-width: 0; }
+
+@media (min-width: 460px) and (max-width: 639px) {
+  .ssr-home-hub-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ssr-home-hub-grid .ssr-home-tile { padding: 1rem; }
+}
+@media (max-width: 459px) {
+  .ssr-home-hub-grid .ssr-home-tile {
+    display: grid;
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    column-gap: 0.85rem;
+    align-content: center;
+  }
+  .ssr-home-hub-grid .ssr-home-tile > span:first-child {
+    grid-row: span 3;
+    margin-top: 0;
+  }
+  .ssr-home-hub-grid .ssr-home-tile h3 { margin-top: 0; }
+  .ssr-home-hub-grid .ssr-home-tile p { margin-top: 0.25rem; }
+  .ssr-home-hub-grid .ssr-home-tile > span:last-child { margin-top: 0.5rem; }
+}
+@media (max-width: 359px) {
+  .ssr-brand .heading-font { font-size: 0.8125rem; }
+  .ssr-home-hero h1 {
+    font-size: clamp(2.05rem, 10vw, 2.55rem);
+    overflow-wrap: anywhere;
+  }
+  .ssr-feature-panel .ssr-quick-link { gap: 0.65rem; padding: 0.75rem; }
+  .ssr-home-news { gap: 0.625rem; }
+}
+@media (hover: none) {
+  .ssr-home-tile:hover, .ssr-home-course:hover {
+    box-shadow: 0 2px 3px hsl(var(--foreground) / .025);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ssr-skip-link { transition: none; }
+}
