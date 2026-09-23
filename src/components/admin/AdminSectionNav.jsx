@@ -1,7 +1,7 @@
 // Navegação de seções do painel admin — barra horizontal rolável e fixa (mobile/tablet).
 export default function AdminSectionNav({ sections, active, onSelect }) {
   return (
-    <div className="sticky top-[calc(4rem_+_env(safe-area-inset-top))] z-30 -mx-4 border-b border-border bg-background/85 px-4 backdrop-blur-xl sm:-mx-6 sm:px-6 lg:hidden">
+    <div className="sticky top-[calc(4.5rem_+_env(safe-area-inset-top))] z-30 -mx-4 border-b border-border bg-background/85 px-4 backdrop-blur-xl sm:-mx-6 sm:px-6 lg:hidden">
       <div className="scrollbar-thin flex gap-1.5 overflow-x-auto py-2.5">
         {sections.map((s) => {
           const isActive = active === s.key;
