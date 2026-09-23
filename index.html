@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%233B82F6'/%3E%3Cpath d='M12 4 2 9l10 5 8-4v5h2V9z' fill='white'/%3E%3Cpath d='M5 13.5V17c0 1.5 3 3.5 7 3.5s7-2 7-3.5v-3.5l-7 3.5z' fill='%2310B981'/%3E%3C/svg%3E" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="%BASE_URL%manifest.json" />
     <meta name="description" content="CETI Sebastião Soares Ribeiro — ecossistema educacional completo. Acesso a cursos, biblioteca digital, calendário, notícias e ferramentas de apoio ao ensino para alunos, professores, pais e comunidade." />
     <meta name="keywords" content="escola, educação, biblioteca digital, cursos, calendário escolar, CETI, Sebastião Soares Ribeiro" />
     <meta name="author" content="CETI Sebastião Soares Ribeiro" />
@@ -17,7 +17,16 @@
     <title>CETI Sebastião Soares Ribeiro | Ecossistema Educacional</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div id="ssr-startup-fallback" role="status" style="box-sizing:border-box;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#f5f8fc;color:#172033;font-family:Arial,Helvetica,sans-serif">
+        <div style="box-sizing:border-box;max-width:480px;width:100%;padding:32px;border:1px solid #e5eaf1;border-radius:18px;background:white;box-shadow:0 12px 36px rgba(28,42,67,.08)">
+          <div style="font-weight:800;font-size:20px;color:#244b8d">SSR-CONNECT</div>
+          <h1 style="font-size:24px;margin:18px 0 10px;line-height:1.25">O portal não conseguiu iniciar</h1>
+          <p style="font-size:16px;line-height:1.55;color:#485468">A versão publicada pode estar incompleta. Recarregue a página. Se continuar assim, a equipe responsável precisará concluir a publicação.</p>
+          <button type="button" onclick="location.reload()" style="border:0;border-radius:10px;background:#1e62bc;color:white;cursor:pointer;font-size:16px;font-weight:700;padding:13px 18px">Recarregar página</button>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
