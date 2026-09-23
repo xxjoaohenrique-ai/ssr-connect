@@ -137,7 +137,7 @@ export default function Navbar() {
             aria-label={open ? "Fechar menu" : "Abrir menu"}
             aria-expanded={open}
             aria-controls="ssr-menu-mobile"
-            className="ssr-mobile-trigger inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border text-foreground transition-colors hover:bg-primary/10 " + (isHome ? "2xl:hidden" : "lg:hidden")}
+            className={"ssr-mobile-trigger inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border text-foreground transition-colors hover:bg-primary/10 " + (isHome ? "2xl:hidden" : "lg:hidden")}
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
