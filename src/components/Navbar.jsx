@@ -57,14 +57,14 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 z-50 w-full transition-all duration-300 glass-nav ${
+      className={`fixed top-0 z-50 w-full transition-all duration-300 glass-nav ssr-site-header ${
         scrolled ? "pb-2 pt-[calc(0.5rem_+_env(safe-area-inset-top))] shadow-soft" : "pb-3 pt-[calc(0.75rem_+_env(safe-area-inset-top))]"
       }`}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link to="/" aria-label="SSR-CONNECT — ir para o início" className="group flex min-w-0 items-center gap-2.5">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-transform group-hover:scale-105">
+        <Link to="/" aria-label="SSR-CONNECT — ir para o início" className="ssr-brand group flex min-w-0 items-center gap-2.5">
+          <span className="ssr-brand-mark flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-transform group-hover:scale-105">
             <GraduationCap className="h-5 w-5" />
           </span>
           <span className="flex min-w-0 flex-col leading-tight">
@@ -74,7 +74,7 @@ export default function Navbar() {
         </Link>
 
         {/* Links desktop */}
-        <div className="hidden items-center gap-5 xl:gap-7 lg:flex">
+        <div className="ssr-desktop-links hidden items-center gap-5 xl:gap-7 lg:flex">
           {mainLinks.map((l) => (
             <NavLink key={l.to} to={l.to} className={linkClass} end={l.to === "/"}>
               {l.label}
@@ -132,7 +132,7 @@ export default function Navbar() {
       {/* Menu mobile */}
       {open && (
         <div id="ssr-menu-mobile" className="lg:hidden">
-          <div className="mx-4 mt-2 max-h-[70dvh] overflow-y-auto overscroll-contain rounded-2xl border border-border bg-card p-3 shadow-float sm:mx-6">
+          <div className="ssr-mobile-menu mx-4 mt-2 max-h-[70dvh] overflow-y-auto overscroll-contain rounded-2xl border border-border bg-card p-3 shadow-float sm:mx-6">
             <div className="flex flex-col gap-1">
               {mainLinks.map((l) => (
                 <NavLink
