@@ -301,3 +301,129 @@ select:focus-visible, textarea:focus-visible {
   html:focus-within { scroll-behavior: auto; }
   .ssr-quick-link svg { transition: none; }
 }
+
+
+/* SSR-CONNECT • atualização visual 2026
+   Apenas apresentação: nenhuma regra depende do Auth, API ou estado dos portais. */
+@layer base {
+  :root {
+    --background: 210 35% 98%;
+    --foreground: 218 41% 14%;
+    --primary: 204 89% 40%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 163 76% 31%;
+    --muted: 210 28% 95%;
+    --muted-foreground: 215 17% 41%;
+    --border: 213 23% 89%;
+    --input: 213 23% 89%;
+    --ring: 204 89% 40%;
+    --radius: 0.875rem;
+  }
+  .dark {
+    --background: 220 29% 8%;
+    --foreground: 210 25% 96%;
+    --card: 220 26% 11%;
+    --popover: 220 26% 11%;
+    --primary: 199 90% 64%;
+    --primary-foreground: 220 36% 9%;
+    --secondary: 159 62% 57%;
+    --muted: 218 24% 16%;
+    --muted-foreground: 216 16% 72%;
+    --border: 217 20% 22%;
+    --input: 217 20% 22%;
+    --ring: 199 90% 64%;
+  }
+  body { overscroll-behavior-y: auto; }
+}
+
+.ssr-site-header {
+  border-bottom: 1px solid hsl(var(--border) / .78);
+}
+.glass-nav {
+  background: hsl(var(--background) / .96);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+.dark .glass-nav { background: hsl(var(--background) / .95); }
+.ssr-brand-mark { box-shadow: 0 5px 16px -8px hsl(var(--primary) / .55); }
+.ssr-desktop-links a { text-underline-offset: 5px; }
+.ssr-mobile-menu { box-shadow: 0 18px 45px -24px hsl(var(--foreground) / .32); }
+.ssr-mobile-menu a:focus-visible { outline-offset: -3px; }
+
+.ssr-home-hero {
+  background:
+    radial-gradient(circle at 85% 16%, hsl(var(--primary) / .075), transparent 37%),
+    linear-gradient(180deg, hsl(var(--card) / .5), hsl(var(--background)) 85%);
+}
+.dark .ssr-home-hero {
+  background:
+    radial-gradient(circle at 83% 20%, hsl(var(--primary) / .085), transparent 40%),
+    hsl(var(--background));
+}
+.ssr-home-hero .ssr-hero-grid { opacity: .35; }
+.ssr-feature-panel {
+  border-color: hsl(var(--border));
+  box-shadow: 0 20px 55px -35px hsl(var(--foreground) / .3);
+}
+.ssr-feature-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 1.75rem auto;
+  height: 3px;
+  background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--secondary)));
+  border-radius: 0 0 999px 999px;
+}
+.ssr-feature-panel .ssr-quick-link {
+  border: 1px solid hsl(var(--border) / .68);
+  background: hsl(var(--background) / .63);
+}
+.ssr-feature-panel .ssr-quick-link:hover {
+  border-color: hsl(var(--primary) / .38);
+  background: hsl(var(--primary) / .055);
+}
+
+.ssr-home-section { position: relative; }
+.ssr-home-tile {
+  border-radius: 1.125rem;
+  box-shadow: 0 2px 3px hsl(var(--foreground) / .025);
+}
+.ssr-home-tile:hover {
+  border-color: hsl(var(--primary) / .42);
+  box-shadow: 0 18px 35px -28px hsl(var(--foreground) / .32);
+}
+.ssr-home-course {
+  border-radius: 1.125rem;
+  box-shadow: 0 2px 3px hsl(var(--foreground) / .025);
+}
+.ssr-home-news { border-radius: 1.125rem; }
+.ssr-page-hero {
+  background: linear-gradient(115deg, hsl(var(--card) / .88), hsl(var(--primary) / .035));
+}
+
+.ssr-bottom-nav {
+  background: hsl(var(--card) / .98);
+  box-shadow: 0 -8px 28px -22px hsl(var(--foreground) / .45);
+}
+.ssr-bottom-nav a[aria-current="page"] { position: relative; }
+.ssr-bottom-nav a[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  width: 25px;
+  height: 3px;
+  border-radius: 999px;
+  background: hsl(var(--primary));
+}
+
+@media (max-width: 639px) {
+  .ssr-home-hero .ssr-hero-grid { opacity: .16; }
+  .ssr-home-hero h1 { font-size: clamp(2.35rem, 11vw, 3.2rem); line-height: 1.07; }
+  .ssr-feature-panel { padding: 1.1rem; }
+  .ssr-feature-panel::before { inset-inline: 1.1rem; }
+  .ssr-home-tile, .ssr-home-course { border-radius: 1rem; }
+  .ssr-bottom-nav a { min-height: 60px; }
+  input, select, textarea { font-size: max(16px, 1rem); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ssr-home-tile, .ssr-home-course { transform: none !important; }
+}
