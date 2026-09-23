@@ -119,7 +119,6 @@ export default function Home() {
               <button type="submit" disabled={!query.trim()}>Buscar <ArrowRight size={17} aria-hidden="true" /></button>
             </motion.form>
             <nav className="ssr-reference-quick" aria-label="Acessos rápidos">
-              <Link to="/calendario"><CalendarDays size={16} aria-hidden="true" /> Horários</Link>
               <Link to="/noticias"><Megaphone size={16} aria-hidden="true" /> Comunicados</Link>
               <Link to="/portal-aluno"><BarChart3 size={16} aria-hidden="true" /> Resultados</Link>
               <Link to="/calendario"><CalendarDays size={16} aria-hidden="true" /> Calendário</Link>
@@ -247,37 +246,6 @@ export default function Home() {
               )}
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* CALENDÁRIO */}
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:py-20 sm:px-6 lg:px-8">
-        <div className="flex min-w-0 flex-wrap items-end justify-between gap-2">
-          <SectionHeading align="left" eyebrow="Agenda" title="Próximos eventos" />
-          <Link to="/calendario" className="inline-flex min-h-10 items-center text-sm font-semibold text-primary hover:underline">Calendário completo</Link>
-        </div>
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {loading ? (
-            <div className="col-span-full flex justify-center py-10"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
-          ) : events.length === 0 ? (
-            <p className="col-span-full py-6 text-center text-sm text-muted-foreground">Nenhum evento próximo.</p>
-          ) : (
-            events.map((e, i) => {
-              const p = toParts(e.date);
-              return (
-                <motion.div key={e.id} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className="group flex min-w-0 items-center gap-4 rounded-2xl border border-border bg-card p-4 transition hover:border-primary/30 hover:shadow-soft sm:p-5">
-                  <div className="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-xl bg-primary/8 text-primary">
-                    <span className="heading-font text-2xl font-bold leading-none">{p.day}</span>
-                    <span className="text-[11px] uppercase tracking-wide">{p.month}</span>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold leading-snug">{e.title}</h3>
-                    <p className="mt-1 text-xs text-muted-foreground">{e.location || e.type}</p>
-                  </div>
-                </motion.div>
-              );
-            })
-          )}
         </div>
       </section>
 
