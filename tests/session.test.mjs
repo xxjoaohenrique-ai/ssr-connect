@@ -19,7 +19,7 @@ test('token alterado e expirado são rejeitados',async()=>{
 test('hash com salt por conta e verificação de senha', async () => {
   const one = await hashPassword('senha-de-teste-123');
   const two = await hashPassword('senha-de-teste-123');
-  assert.match(one, /^pbkdf2_sha256\\$310000\\$/);
+  assert.match(one, /^pbkdf2_sha256\$310000\$/);
   assert.notEqual(one, two, 'salts individuais');
   assert.equal(await verifyPassword('senha-de-teste-123', one), true);
   assert.equal(await verifyPassword('errada', one), false);
