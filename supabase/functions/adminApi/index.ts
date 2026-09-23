@@ -25,6 +25,13 @@ function sanitizeAdmin(a) {
   };
 }
 
+// Nunca envie hashes ou tokens de sessão em respostas de listagem/edição.
+function sanitizeRecord(record) {
+  if (!record) return record;
+  const { password_hash, token, ...safe } = record;
+  return safe;
+}
+
 const NO_SECRET = () =>
   Response.json({ error: "Servidor sem segredo de sessão configurado (PORTAL_TOKEN_SECRET)." }, { status: 500 });
 
@@ -94,23 +101,70 @@ export async function handleAdmin(req) {
       } else {
         rows = await coll.list(body.sort, body.limit);
       }
-      return Response.json({ rows });
+      return Response.json({ rows: rows.map(sanitizeRecord) });
     }
     if (action === "create") {
+      if (entity === "AdminAccount") {
+        const email = normEmail(body.data?.email);
+        if (!email || !body.data?.password_hash) {
+          return Response.json({ error: "Informe e-mail e senha do administrador." }, { status: 400 });
+        }
+        const accounts = await coll.list();
+        if (accounts.length >= 5) {
+          return Response.json({ error: "Limite de cinco administradores atingido." }, { status: 400 });
+        }
+        if (accounts.some((account) => normEmail(account.email) === email)) {
+          return Response.json({ error: "Este e-mail já está cadastrado." }, { status: 400 });
+        }
+        const rec = await coll.create({ ...body.data, email });
+        return Response.json({ record: sanitizeRecord(rec) });
+      }
       const rec = await coll.create(body.data);
-      return Response.json({ record: rec });
+      return Response.json({ record: sanitizeRecord(rec) });
     }
     if (action === "update") {
+      if (entity === "AdminAccount") {
+        const account = await coll.get(body.id);
+        if (!account) return Response.json({ error: "Conta não encontrada." }, { status: 404 });
+        if (body.data?.is_active === false && account.is_active !== false) {
+          const active = await coll.filter({ is_active: true });
+          if (active.length <= 1) {
+            return Response.json({ error: "Não é possível desativar o último administrador ativo." }, { status: 400 });
+          }
+        }
+        if (body.data?.email !== undefined) {
+          const email = normEmail(body.data.email);
+          if (!email) return Response.json({ error: "Informe um e-mail válido." }, { status: 400 });
+          const accounts = await coll.list();
+          if (accounts.some((other) => other.id !== body.id && normEmail(other.email) === email)) {
+            return Response.json({ error: "Este e-mail já está cadastrado." }, { status: 400 });
+          }
+          body.data = { ...body.data, email };
+        }
+      }
       const rec = await coll.update(body.id, body.data);
-      return Response.json({ record: rec });
+      return Response.json({ record: sanitizeRecord(rec) });
     }
     if (action === "delete") {
+      if (entity === "AdminAccount") {
+        const account = await coll.get(body.id);
+        if (!account) return Response.json({ error: "Conta não encontrada." }, { status: 404 });
+        if (account.is_active !== false) {
+          const active = await coll.filter({ is_active: true });
+          if (active.length <= 1) {
+            return Response.json({ error: "Não é possível excluir o último administrador ativo." }, { status: 400 });
+          }
+        }
+      }
       await coll.delete(body.id);
       return Response.json({ ok: true });
     }
     if (action === "bulkCreate") {
+      if (entity === "AdminAccount") {
+        return Response.json({ error: "Cadastre os administradores individualmente." }, { status: 400 });
+      }
       const recs = await coll.bulkCreate(body.records);
-      return Response.json({ records: recs });
+      return Response.json({ records: recs.map(sanitizeRecord) });
     }
 
     return Response.json({ error: "Ação inválida." }, { status: 400 });
