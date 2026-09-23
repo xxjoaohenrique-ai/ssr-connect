@@ -1,0 +1,61 @@
+name: Publicar SSR-CONNECT no GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "ssr-pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verificar se o projeto React foi enviado por completo
+        run: |
+          test -s src/main.jsx || { echo "::error::Falta src/main.jsx. O repositório recebeu apenas parte do ZIP."; exit 1; }
+          test -s src/App.jsx || { echo "::error::Falta src/App.jsx. Envie a pasta src completa."; exit 1; }
+          test -s src/api/ssrClient.js || { echo "::error::Falta src/api/ssrClient.js. Envie a pasta src completa."; exit 1; }
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+      - run: npm test
+
+      - name: Gerar site para a subpasta /ssr-connect/
+        env:
+          GITHUB_PAGES: "true"
+          VITE_SUPABASE_URL: https://gczbmneklbmiitsgjvbm.supabase.co
+          VITE_SUPABASE_ANON_KEY: ${{ vars.SSR_SUPABASE_PUBLISHABLE_KEY }}
+        run: npm run build
+
+      - name: Suporte a recarregar links do React no GitHub Pages
+        run: cp dist/index.html dist/404.html
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar site compilado
+        id: deployment
+        uses: actions/deploy-pages@v4
