@@ -403,11 +403,19 @@ export async function handlePortal(req) {
       if (!String(l.title || "").trim() || !String(l.url || "").trim()) {
         return Response.json({ error: "Informe título e link do material." }, { status: 400 });
       }
+      // Impede esquemas javascript:, data: e endereços malformados em links de aulas.
+      let safeUrl;
+      try {
+        safeUrl = new URL(String(l.url).trim());
+        if (safeUrl.protocol !== "https:") throw new Error("Protocolo inválido");
+      } catch {
+        return Response.json({ error: "Use um link HTTPS válido para a aula." }, { status: 400 });
+      }
       const rec = await svc.entities.Lesson.create({
         title: (l.title || "").trim(),
         description: (l.description || "").trim(),
         type: l.type || "Vídeo",
-        url: (l.url || "").trim(),
+        url: safeUrl.toString(),
         turma: requestedTurma,
         discipline: (l.discipline || "").trim(),
         // O autor é sempre o professor autenticado — não pode ser forjado.
