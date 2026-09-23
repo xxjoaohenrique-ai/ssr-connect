@@ -41,3 +41,25 @@ O banco estava vazio no início desta implantação. O código exportado não
 inclui alunos, professores, responsáveis, contas antigas ou mídias. A
 importação exige uma exportação dos registros; não desligar o sistema antigo
 antes de importar e conferir os dados. O banco Palmeirais Conectada não foi alterado.
+
+
+## Publicação automática via GitHub Actions (configurada em código)
+
+O workflow `.github/workflows/cloudflare-pages.yml` foi acrescentado para
+compilar e testar o projeto e publicar a pasta `dist` no **projeto Pages existente**
+`ssr-connect` após cada push em `main`. Ele não cria outro projeto, não altera
+o Supabase nem desativa a publicação separada do GitHub Pages.
+
+**Para ativá-lo, ainda é necessário cadastrar duas credenciais no repositório:**
+
+1. Em Cloudflare, crie um API token com permissão de editar Cloudflare Pages
+   para a conta que contém o projeto `ssr-connect`. Não inclua esse token no código.
+2. No GitHub, abra Settings > Secrets and variables > Actions > New repository secret
+   e salve o token como `CLOUDFLARE_API_TOKEN`.
+3. Na mesma área, salve o identificador da conta Cloudflare como
+   `CLOUDFLARE_ACCOUNT_ID`. Ele consta no painel da conta Cloudflare.
+4. Abra Actions > Publicar SSR-CONNECT no Cloudflare Pages > Run workflow
+   para publicar a versão atual sem precisar criar um novo commit.
+
+O workflow informa erro explícito quando faltar alguma credencial: um build
+com sucesso, sozinho, **não confirma que o Cloudflare foi atualizado**.
