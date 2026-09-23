@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Megaphone } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const DEFAULT = "Bem-vindo ao SSR-CONNECT · Notícias, calendário e informações da escola em um só lugar";
@@ -19,9 +20,8 @@ export default function TickerBanner() {
   }, []);
 
   return (
-    <div className="bg-gradient-to-r from-[#1e88e5] to-[#00897b] px-4 py-2.5 text-center text-xs font-medium tracking-wide text-white sm:text-sm">
-      <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-white align-middle" />
-      {text}
+    <div className="ssr-ticker bg-gradient-to-r from-[#1e88e5] to-[#00897b] px-4 py-2.5 text-xs font-medium tracking-wide text-white sm:text-sm" role="status">
+      <div className="ssr-ticker-content"><Megaphone size={17} aria-hidden="true" /><span>{text}</span></div>
     </div>
   );
 }

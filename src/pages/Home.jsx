@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search, ArrowRight, BookOpen, CalendarDays, Newspaper, Image as ImageIcon, Users, GraduationCap, Megaphone, Code2, AlertTriangle, ChevronRight, Loader2 } from "lucide-react";
+import { Search, ArrowRight, BookOpen, CalendarDays, School, BarChart3, Newspaper, Image as ImageIcon, Users, GraduationCap, Megaphone, Code2, AlertTriangle, ChevronRight, Loader2 } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import TestimonialSection from "@/components/TestimonialSection";
 import TickerBanner from "@/components/TickerBanner";
+import HomeShowcase from "@/components/HomeShowcase";
+import "@/styles/home-reference.css";
 import { Image } from "@/components/ui/image";
 import { base44 } from "@/api/base44Client";
 
@@ -86,70 +88,45 @@ export default function Home() {
   };
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="ssr-reference-home overflow-x-hidden">
       {/* BANNER DE AVISOS (editável pelo admin) */}
       <TickerBanner />
 
-      {/* HERO — editorial, responsivo e sem indicadores fictícios */}
-      <section className="ssr-hero ssr-home-hero relative isolate overflow-hidden border-b border-border/70">
-        <div className="ssr-hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
-        <div className="relative mx-auto grid max-w-7xl min-w-0 items-center gap-8 px-4 py-11 sm:gap-12 sm:px-6 sm:py-16 lg:min-h-[620px] lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:gap-12 lg:px-8 lg:py-24">
-          <div className="min-w-0 max-w-2xl">
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="inline-flex max-w-full items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-2 text-[11px] font-semibold tracking-wide text-primary sm:text-xs">
-              <span className="h-2 w-2 rounded-full bg-secondary" />
-              CETI Sebastião Soares Ribeiro
+      {/* HERO: referência visual reproduzida como componentes reais, não uma imagem estática. */}
+      <section className="ssr-reference-hero" aria-labelledby="ssr-home-heading">
+        <div className="ssr-reference-hero-inner">
+          <div className="ssr-reference-copy">
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="ssr-reference-label">
+              <School size={16} aria-hidden="true" /> CETI Sebastião Soares Ribeiro
             </motion.div>
-            <motion.h1 initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.08 }} className="heading-font mt-6 max-w-3xl text-[clamp(2.35rem,5.5vw,5.1rem)] font-extrabold leading-[1.08] tracking-[-0.055em] text-balance sm:mt-7">
-              A vida escolar,<br />
-              <span className="text-primary">mais conectada.</span>
+            <motion.h1 id="ssr-home-heading" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.08 }} className="heading-font ssr-reference-title">
+              <span>Sua escola.</span>
+              <span>Suas descobertas.</span>
+              <span className="ssr-reference-gradient">Seu próximo passo.</span>
             </motion.h1>
-            <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.16 }} className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Notícias, avisos, materiais de estudo e calendário em um espaço feito para estudantes, famílias e professores.
+            <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.16 }} className="ssr-reference-lead">
+              Aprenda, acompanhe as novidades e participe da vida escolar.
+              Tudo o que conecta você ao CETI, em um só lugar.
             </motion.p>
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.22 }} className="mt-8 grid gap-3 min-[420px]:grid-cols-2 sm:flex sm:flex-wrap">
-              <Link to="/portal-aluno" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-colors hover:bg-primary/90">
-                Acessar o portal <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link to="/sobre" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:border-primary/40 hover:text-primary">
-                Conheça o CETI
-              </Link>
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.22 }} className="ssr-reference-actions">
+              <Link to="/login" className="ssr-reference-cta ssr-reference-cta--primary"><GraduationCap size={22} aria-hidden="true" /> Entrar com Google <ArrowRight size={18} aria-hidden="true" /></Link>
+              <Link to="/portal-aluno" className="ssr-reference-cta ssr-reference-cta--secondary"><School size={20} aria-hidden="true" /> Portal Escolar</Link>
             </motion.div>
-            <motion.form onSubmit={handleSearch} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} role="search" className="mt-8 flex max-w-xl min-w-0 items-center gap-1.5 rounded-2xl border border-border bg-card p-1.5 shadow-soft focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/15 sm:mt-9 sm:gap-2">
-              <Search aria-hidden="true" className="ml-3 h-5 w-5 shrink-0 text-muted-foreground" />
+            <motion.form onSubmit={handleSearch} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} role="search" className="ssr-reference-search">
+              <Search size={21} aria-hidden="true" />
               <label htmlFor="ssr-home-search" className="sr-only">Pesquisar informações da escola</label>
-              <input id="ssr-home-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Notícias, cursos, biblioteca..." autoComplete="off" enterKeyHint="search" className="min-w-0 flex-1 bg-transparent py-2 text-base text-foreground outline-none placeholder:text-muted-foreground sm:text-sm" />
-              <button type="submit" disabled={!query.trim()} className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl bg-foreground px-3 text-sm font-semibold text-background transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-45 sm:px-4">Buscar</button>
+              <input id="ssr-home-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="O que você procura?" autoComplete="off" enterKeyHint="search" />
+              <button type="submit" disabled={!query.trim()}>Buscar <ArrowRight size={17} aria-hidden="true" /></button>
             </motion.form>
+            <nav className="ssr-reference-quick" aria-label="Acessos rápidos">
+              <Link to="/calendario"><CalendarDays size={16} aria-hidden="true" /> Horários</Link>
+              <Link to="/noticias"><Megaphone size={16} aria-hidden="true" /> Comunicados</Link>
+              <Link to="/portal-aluno"><BarChart3 size={16} aria-hidden="true" /> Resultados</Link>
+              <Link to="/calendario"><CalendarDays size={16} aria-hidden="true" /> Calendário</Link>
+            </nav>
           </div>
-
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.18 }} className="ssr-hero-panel ssr-feature-panel relative min-w-0 rounded-[1.75rem] border border-border bg-card p-5 shadow-card sm:p-7">
-            <div className="flex items-start justify-between gap-4 border-b border-border pb-5">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">SSR-CONNECT</p>
-                <h2 className="heading-font mt-1.5 text-2xl font-bold tracking-tight">O que você precisa?</h2>
-                <p className="mt-1 text-sm text-muted-foreground">Acesse os espaços mais usados.</p>
-              </div>
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary"><GraduationCap className="h-6 w-6" /></span>
-            </div>
-            <div className="mt-4 space-y-2">
-              {[
-                { icon: GraduationCap, title: "Portal do aluno", desc: "Sua área de estudos", to: "/portal-aluno" },
-                { icon: CalendarDays, title: "Calendário escolar", desc: "Datas e eventos", to: "/calendario" },
-                { icon: BookOpen, title: "Biblioteca digital", desc: "Materiais e conteúdos", to: "/biblioteca" },
-              ].map((item) => (
-                <Link key={item.to} to={item.to} className="ssr-quick-link group flex items-center gap-4 rounded-2xl border border-transparent p-3.5 transition-colors hover:border-border hover:bg-muted/60">
-                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><item.icon className="h-5 w-5" /></span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-sm font-semibold text-foreground">{item.title}</span>
-                    <span className="mt-0.5 block text-xs text-muted-foreground">{item.desc}</span>
-                  </span>
-                  <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
-                </Link>
-              ))}
-            </div>
-            <Link to="/noticias" className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-primary/5 px-4 py-4 text-sm font-semibold text-primary transition-colors hover:bg-primary/10">
-              Acompanhe os comunicados da escola <ArrowRight className="h-4 w-4 shrink-0" />
-            </Link>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.18 }} className="min-w-0">
+            <HomeShowcase events={events} loading={loading} />
           </motion.div>
         </div>
       </section>
