@@ -82,7 +82,7 @@ export default function Home() {
       <TickerBanner />
 
       {/* HERO — editorial, responsivo e sem indicadores fictícios */}
-      <section className="ssr-hero relative isolate overflow-hidden border-b border-border/70">
+      <section className="ssr-hero ssr-home-hero relative isolate overflow-hidden border-b border-border/70">
         <div className="ssr-hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
         <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 sm:py-20 lg:min-h-[620px] lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 lg:px-8 lg:py-24">
           <div className="max-w-2xl">
@@ -113,7 +113,7 @@ export default function Home() {
             </motion.form>
           </div>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.18 }} className="ssr-hero-panel relative rounded-[1.75rem] border border-border bg-card p-5 shadow-card sm:p-7">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.18 }} className="ssr-hero-panel ssr-feature-panel relative rounded-[1.75rem] border border-border bg-card p-5 shadow-card sm:p-7">
             <div className="flex items-start justify-between gap-4 border-b border-border pb-5">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">SSR-CONNECT</p>
@@ -146,12 +146,12 @@ export default function Home() {
       </section>
 
       {/* KNOWLEDGE HUB */}
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:py-20 sm:px-6 lg:px-8">
+      <section className="ssr-home-section mx-auto max-w-7xl px-4 py-12 sm:py-20 sm:px-6 lg:px-8">
         <SectionHeading eyebrow="Hub do Conhecimento" title="Tudo o que você precisa, em um só lugar" description="Centralize o acesso às ferramentas e informações essenciais da vida escolar — para alunos, professores, pais e comunidade." />
         <div className="mt-10 grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {hubTiles.map((t, i) => (
             <motion.div key={t.title} custom={i} variants={fadeUp} initial="hidden" whileInView="show" whileHover={{ y: -6, scale: 1.02 }} viewport={{ once: true, margin: "-60px" }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
-              <Link to={t.to} className="group flex h-full flex-col rounded-2xl border border-border bg-card p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-card sm:p-6">
+              <Link to={t.to} className="ssr-home-tile group flex h-full flex-col rounded-2xl border border-border bg-card p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-card sm:p-6">
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground"><t.icon className="h-6 w-6" /></span>
                 <h3 className="heading-font mt-5 text-lg font-semibold">{t.title}</h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{t.desc}</p>
@@ -192,7 +192,7 @@ export default function Home() {
         <SectionHeading eyebrow="Nossos Cursos" title="Técnico e formação regular, lado a lado" />
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {courses.map((c, i) => (
-            <motion.div key={c.name} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }} className="group rounded-3xl border border-border bg-card p-8 transition hover:border-primary/40 hover:shadow-xl">
+            <motion.div key={c.name} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }} className="ssr-home-course group rounded-3xl border border-border bg-card p-8 transition hover:border-primary/40 hover:shadow-xl">
               <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary"><c.icon className="h-6 w-6" /></span>
               <h3 className="heading-font mt-5 text-xl font-semibold">{c.name}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{c.desc}</p>
@@ -219,7 +219,7 @@ export default function Home() {
                 news.map((n, i) => {
                   const p = toParts(n.date);
                   return (
-                    <motion.article key={n.id} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className="group flex gap-4 rounded-2xl border border-border bg-background p-4 transition hover:border-primary/30 hover:shadow-soft sm:p-5">
+                    <motion.article key={n.id} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className="ssr-home-news group flex gap-4 rounded-2xl border border-border bg-background p-4 transition hover:border-primary/30 hover:shadow-soft sm:p-5">
                       <div className="flex h-20 w-20 shrink-0 flex-col items-center justify-center rounded-xl border border-border bg-muted/40 sm:h-24 sm:w-28">
                         <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{p.month}</span>
                         <span className="heading-font text-2xl font-bold text-foreground">{p.day}</span>
