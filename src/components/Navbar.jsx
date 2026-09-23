@@ -106,7 +106,7 @@ export default function Navbar() {
         <div className="flex shrink-0 items-center gap-1 sm:gap-2">
           <ThemeToggle className={isHome ? "ssr-header-theme" : ""} />
           <Link
-            to={isHome ? "/login" : "/admin-login"}
+            to={isHome ? "/portal-aluno" : "/admin-login"}
             className="ssr-header-login hidden min-h-10 items-center rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-foreground/80 transition-colors hover:border-primary/40 hover:text-primary xl:inline-flex"
           >
             Entrar
@@ -167,7 +167,7 @@ export default function Navbar() {
               ))}
               <div className="my-1 border-t border-border/60" />
               <NavLink
-                to={isHome ? "/login" : "/admin-login"}
+                to={isHome ? "/portal-aluno" : "/admin-login"}
                 className="rounded-xl border border-border/70 px-4 py-3 text-center text-sm font-semibold text-foreground/80"
               >
                 Entrar
