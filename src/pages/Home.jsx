@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search, ArrowRight, BookOpen, CalendarDays, School, BarChart3, Newspaper, Image as ImageIcon, Users, GraduationCap, Megaphone, Code2, AlertTriangle, ChevronRight, Loader2 } from "lucide-react";
+import { Search, ArrowRight, BookOpen, CalendarDays, School, BarChart3, Lightbulb, Newspaper, Image as ImageIcon, Users, GraduationCap, Megaphone, Code2, AlertTriangle, ChevronRight, Loader2 } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import TestimonialSection from "@/components/TestimonialSection";
 import TickerBanner from "@/components/TickerBanner";
@@ -89,46 +89,47 @@ export default function Home() {
 
   return (
     <div className="ssr-reference-home overflow-x-hidden">
-      {/* BANNER DE AVISOS (editável pelo admin) */}
-      <TickerBanner />
-
-      {/* HERO: referência visual reproduzida como componentes reais, não uma imagem estática. */}
+      {/* Capa pública: as quatro janelas levam a páginas reais do site. */}
       <section className="ssr-reference-hero" aria-labelledby="ssr-home-heading">
         <div className="ssr-reference-hero-inner">
           <div className="ssr-reference-copy">
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="ssr-reference-label">
-              <School size={16} aria-hidden="true" /> CETI Sebastião Soares Ribeiro
-            </motion.div>
-            <motion.h1 id="ssr-home-heading" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.08 }} className="heading-font ssr-reference-title">
-              <span>Sua escola.</span>
-              <span>Suas descobertas.</span>
-              <span className="ssr-reference-gradient">Seu próximo passo.</span>
-            </motion.h1>
-            <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.16 }} className="ssr-reference-lead">
-              Aprenda, acompanhe as novidades e participe da vida escolar.
-              Tudo o que conecta você ao CETI, em um só lugar.
+            <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="ssr-reference-label">
+              EDUCAÇÃO QUE TRANSFORMA <span aria-hidden="true" />
             </motion.p>
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.22 }} className="ssr-reference-actions">
-              <Link to="/portal-aluno" className="ssr-reference-cta ssr-reference-cta--primary"><GraduationCap size={22} aria-hidden="true" /> Acessar minha conta <ArrowRight size={18} aria-hidden="true" /></Link>
-              <Link to="/sobre" className="ssr-reference-cta ssr-reference-cta--secondary"><School size={20} aria-hidden="true" /> Conheça o CETI</Link>
+            <motion.h1 id="ssr-home-heading" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.08 }} className="heading-font ssr-reference-title">
+              <span>Conhecimento</span>
+              <span>que conecta</span>
+              <span className="ssr-reference-gradient">novos futuros.</span>
+            </motion.h1>
+            <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.14 }} className="ssr-reference-lead">
+              O CETI Sebastião Soares Ribeiro conecta estudantes, famílias,
+              professores e comunidade. Conheça nossos cursos, notícias, eventos
+              e serviços em um só lugar.
+            </motion.p>
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="ssr-reference-actions">
+              <Link to="/sobre" className="ssr-reference-cta ssr-reference-cta--primary"><Users size={21} aria-hidden="true" /> Conheça a nossa escola <ArrowRight size={18} aria-hidden="true" /></Link>
+              <Link to="/portal-aluno" className="ssr-reference-cta ssr-reference-cta--secondary"><GraduationCap size={20} aria-hidden="true" /> Acesse o Portal Escolar</Link>
             </motion.div>
-            <motion.form onSubmit={handleSearch} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} role="search" className="ssr-reference-search">
-              <Search size={21} aria-hidden="true" />
+            <div className="ssr-reference-values" aria-label="Explore nossa comunidade">
+              <Link to="/sobre"><GraduationCap size={23} aria-hidden="true" /><strong>Educação de qualidade</strong><span>Ensino e oportunidades.</span></Link>
+              <Link to="/contato"><Users size={23} aria-hidden="true" /><strong>Comunidade engajada</strong><span>Escola e família juntas.</span></Link>
+              <Link to="/cursos"><Lightbulb size={23} aria-hidden="true" /><strong>Projetos que inspiram</strong><span>Aprender na prática.</span></Link>
+              <Link to="/cursos"><BarChart3 size={23} aria-hidden="true" /><strong>Novas possibilidades</strong><span>Conheça nossos cursos.</span></Link>
+            </div>
+            <form onSubmit={handleSearch} role="search" className="ssr-reference-search">
+              <Search size={18} aria-hidden="true" />
               <label htmlFor="ssr-home-search" className="sr-only">Pesquisar informações da escola</label>
               <input id="ssr-home-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="O que você procura?" autoComplete="off" enterKeyHint="search" />
-              <button type="submit" disabled={!query.trim()}>Buscar <ArrowRight size={17} aria-hidden="true" /></button>
-            </motion.form>
-            <nav className="ssr-reference-quick" aria-label="Acessos rápidos">
-              <Link to="/noticias"><Megaphone size={16} aria-hidden="true" /> Comunicados</Link>
-              <Link to="/portal-aluno"><BarChart3 size={16} aria-hidden="true" /> Resultados</Link>
-              <Link to="/calendario"><CalendarDays size={16} aria-hidden="true" /> Calendário</Link>
-            </nav>
+              <button type="submit" disabled={!query.trim()}>Buscar <ArrowRight size={16} aria-hidden="true" /></button>
+            </form>
           </div>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.18 }} className="min-w-0">
-            <HomeShowcase events={events} loading={loading} />
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.18 }} className="ssr-reference-preview">
+            <HomeShowcase events={events} news={news} loading={loading} />
           </motion.div>
         </div>
       </section>
+      {/* Avisos continuam editáveis pelo administrador e visíveis ao público. */}
+      <TickerBanner />
 
       {/* KNOWLEDGE HUB */}
       <section className="ssr-home-section mx-auto max-w-7xl px-4 py-12 sm:py-20 sm:px-6 lg:px-8">
