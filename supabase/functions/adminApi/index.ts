@@ -1,5 +1,6 @@
 import { getService } from '../_shared/store.ts';
 import { hashPassword, verifyPassword, isLegacyPasswordHash, signToken, verifyToken, TOKEN_TTL_MS } from "../_shared/session-tokens.ts";
+import { loginThrottle, TOO_MANY } from '../_shared/auth-throttle.ts';
 
 // Camada de autenticação e escrita do Painel Administrativo.
 // O acesso é por conta própria (e-mail + senha, igual ao Portal Escolar):
@@ -70,17 +71,20 @@ export async function handleAdmin(req) {
     // ---------- Sessão do administrador (e-mail + senha) ----------
     if (action === "adminLogin") {
       if (!SECRET) return NO_SECRET();
+      if (!(await loginThrottle(svc, "admin", body.email))) return TOO_MANY();
       const rows = await svc.entities.AdminAccount.filter({
         email: normEmail(body.email),
         is_active: true,
       });
       const acc = rows[0];
       if (!acc || !(await verifyPassword(body.password, acc.password_hash))) {
+        if (!(await loginThrottle(svc, "admin", body.email, "failure"))) return TOO_MANY();
         return Response.json({ error: "E-mail ou senha incorretos." }, { status: 401 });
       }
       if (isLegacyPasswordHash(acc.password_hash)) {
         await svc.entities.AdminAccount.update(acc.id, { password_hash: await hashPassword(body.password) });
       }
+      await loginThrottle(svc, "admin", body.email, "success");
       const token = await signToken(
         { sub: acc.id, role: "admin", v: acc.session_version ?? null, exp: Date.now() + TOKEN_TTL_MS },
         SECRET
