@@ -29,6 +29,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const isHome = location.pathname === "/";
 
   useEffect(() => {
     const onScroll = () => {
@@ -57,7 +58,7 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 z-50 w-full transition-all duration-300 glass-nav ssr-site-header ${
+      className={`fixed top-0 z-50 w-full transition-all duration-300 glass-nav ssr-site-header ${isHome ? "ssr-reference-header" : ""} ${
         scrolled ? "pb-2 pt-[calc(0.5rem_+_env(safe-area-inset-top))] shadow-soft" : "pb-3 pt-[calc(0.75rem_+_env(safe-area-inset-top))]"
       }`}
     >
@@ -68,8 +69,8 @@ export default function Navbar() {
             <GraduationCap className="h-5 w-5" />
           </span>
           <span className="flex min-w-0 flex-col leading-tight">
-            <span className="heading-font text-[14px] font-extrabold tracking-tight min-[380px]:text-base sm:text-lg">SSR<span className="text-primary">-CONNECT</span></span>
-            <span className="hidden text-[10px] font-semibold tracking-wide text-muted-foreground sm:block">CETI Sebastião Soares Ribeiro</span>
+            <span className="heading-font text-[14px] font-extrabold tracking-tight min-[380px]:text-base sm:text-lg">SSR<span className="text-primary">CONNECT</span></span>
+            <span className="ssr-brand-subtitle hidden text-[10px] font-semibold tracking-wide text-muted-foreground sm:block">CETI Sebastião Soares Ribeiro</span>
           </span>
         </Link>
 
@@ -103,18 +104,18 @@ export default function Navbar() {
 
         {/* Ações */}
         <div className="flex shrink-0 items-center gap-1 sm:gap-2">
-          <ThemeToggle />
+          <ThemeToggle className={isHome ? "ssr-header-theme" : ""} />
           <Link
-            to="/admin-login"
-            className="hidden min-h-10 items-center rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-foreground/80 transition-colors hover:border-primary/40 hover:text-primary xl:inline-flex"
+            to={isHome ? "/login" : "/admin-login"}
+            className="ssr-header-login hidden min-h-10 items-center rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-foreground/80 transition-colors hover:border-primary/40 hover:text-primary xl:inline-flex"
           >
             Entrar
           </Link>
           <Link
             to="/contato"
-            className="hidden min-h-10 items-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 xl:inline-flex"
+            className="ssr-header-enroll hidden min-h-10 items-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 xl:inline-flex"
           >
-            Fale com a escola
+            {isHome ? "Matrículas" : "Fale com a escola"}
           </Link>
           <button
             type="button"
@@ -122,7 +123,7 @@ export default function Navbar() {
             aria-label={open ? "Fechar menu" : "Abrir menu"}
             aria-expanded={open}
             aria-controls="ssr-menu-mobile"
-            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border text-foreground transition-colors hover:bg-primary/10 lg:hidden"
+            className="ssr-mobile-trigger inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border text-foreground transition-colors hover:bg-primary/10 lg:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -166,7 +167,7 @@ export default function Navbar() {
               ))}
               <div className="my-1 border-t border-border/60" />
               <NavLink
-                to="/admin-login"
+                to={isHome ? "/login" : "/admin-login"}
                 className="rounded-xl border border-border/70 px-4 py-3 text-center text-sm font-semibold text-foreground/80"
               >
                 Entrar
@@ -175,7 +176,7 @@ export default function Navbar() {
                 to="/contato"
                 className="mt-2 rounded-xl bg-primary px-4 py-3 text-center text-sm font-semibold text-primary-foreground"
               >
-                Fale Conosco
+                {isHome ? "Matrículas" : "Fale Conosco"}
               </NavLink>
             </div>
           </div>
