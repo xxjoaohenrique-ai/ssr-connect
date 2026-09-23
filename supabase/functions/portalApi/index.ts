@@ -14,14 +14,15 @@ import { loginThrottle, TOO_MANY } from '../_shared/auth-throttle.ts';
 const LOGIN_DOMAIN = "@aluno.cetisebastiaosoribeiro.edu.br";
 const GMAIL_DOMAIN = "@gmail.com";
 
-// Busca aluno pelo login. Logins novos são e-mails Gmail aleatórios; os
-// antigos usam o domínio institucional. Aceita o login com ou sem domínio.
+// Busca aluno pelo login escolar interno; preserva compatibilidade com
+// contas antigas que usam @gmail.com ou o domínio institucional.
+// Um login sem @ também pode ser o identificador escolar completo.
 async function findStudentByLogin(base44, raw) {
   const l = (raw || "").trim().toLowerCase();
   if (!l) return null;
   const candidates = l.includes("@")
     ? [l]
-    : [`${l}${LOGIN_DOMAIN}`, `${l}${GMAIL_DOMAIN}`];
+    : [l, `${l}${LOGIN_DOMAIN}`, `${l}${GMAIL_DOMAIN}`];
   for (const c of candidates) {
     const rows = await base44.entities.Student.filter({ student_login: c, is_active: true });
     if (rows[0]) return rows[0];
