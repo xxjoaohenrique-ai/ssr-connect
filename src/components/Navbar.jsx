@@ -33,15 +33,22 @@ export default function Navbar() {
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 24);
-      setOpen(false);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Fecha o menu mobile ao navegar
+  // Fecha ao navegar ou pressionar Escape, mas não durante a rolagem do menu.
   useEffect(() => setOpen(false), [location.pathname]);
+  useEffect(() => {
+    if (!open) return undefined;
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
 
   const linkClass = ({ isActive }) =>
     `relative text-sm font-medium tracking-wide transition-colors hover:text-primary after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:rounded-full after:bg-primary after:transition-all after:duration-300 hover:after:w-full ${
@@ -54,19 +61,20 @@ export default function Navbar() {
         scrolled ? "pb-2 pt-[calc(0.5rem_+_env(safe-area-inset-top))] shadow-soft" : "pb-3 pt-[calc(0.75rem_+_env(safe-area-inset-top))]"
       }`}
     >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 group">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-transform group-hover:scale-105">
+        <Link to="/" aria-label="SSR-CONNECT — ir para o início" className="group flex min-w-0 items-center gap-2.5">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-transform group-hover:scale-105">
             <GraduationCap className="h-5 w-5" />
           </span>
-          <span className="heading-font text-xl font-extrabold tracking-tight">
-            CETI<span className="text-primary">.</span>
+          <span className="flex min-w-0 flex-col leading-tight">
+            <span className="heading-font text-base font-extrabold tracking-tight sm:text-lg">SSR<span className="text-primary">-CONNECT</span></span>
+            <span className="hidden text-[10px] font-semibold tracking-wide text-muted-foreground sm:block">CETI Sebastião Soares Ribeiro</span>
           </span>
         </Link>
 
         {/* Links desktop */}
-        <div className="hidden items-center gap-7 lg:flex">
+        <div className="hidden items-center gap-5 xl:gap-7 lg:flex">
           {mainLinks.map((l) => (
             <NavLink key={l.to} to={l.to} className={linkClass} end={l.to === "/"}>
               {l.label}
@@ -74,7 +82,7 @@ export default function Navbar() {
           ))}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-1 text-sm font-medium tracking-wide text-foreground/80 transition-colors hover:text-primary">
+              <button className="flex min-h-10 items-center gap-1 text-sm font-medium tracking-wide text-foreground/80 transition-colors hover:text-primary">
                 Recursos <ChevronDown className="h-4 w-4" />
               </button>
             </DropdownMenuTrigger>
@@ -98,20 +106,23 @@ export default function Navbar() {
           <ThemeToggle />
           <Link
             to="/admin-login"
-            className="hidden rounded-full border border-border/70 px-4 py-2.5 text-sm font-semibold text-foreground/80 transition hover:text-primary lg:inline-flex"
+            className="hidden min-h-10 items-center rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-foreground/80 transition-colors hover:border-primary/40 hover:text-primary xl:inline-flex"
           >
             Entrar
           </Link>
           <Link
             to="/contato"
-            className="hidden rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:scale-105 hover:bg-primary/90 sm:inline-flex"
+            className="hidden min-h-10 items-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 xl:inline-flex"
           >
-            Matrículas
+            Fale com a escola
           </Link>
           <button
+            type="button"
             onClick={() => setOpen((o) => !o)}
-            aria-label="Abrir menu"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/70 text-foreground transition hover:bg-primary/10 lg:hidden"
+            aria-label={open ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={open}
+            aria-controls="ssr-menu-mobile"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border text-foreground transition-colors hover:bg-primary/10 lg:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -120,8 +131,8 @@ export default function Navbar() {
 
       {/* Menu mobile */}
       {open && (
-        <div className="lg:hidden">
-          <div className="mx-4 mt-2 max-h-[calc(100dvh_-_7rem_-_env(safe-area-inset-top))] overflow-y-auto rounded-2xl border border-border/60 bg-card/95 p-4 shadow-xl backdrop-blur-xl">
+        <div id="ssr-menu-mobile" className="lg:hidden">
+          <div className="mx-4 mt-2 max-h-[70dvh] overflow-y-auto overscroll-contain rounded-2xl border border-border bg-card p-3 shadow-float sm:mx-6">
             <div className="flex flex-col gap-1">
               {mainLinks.map((l) => (
                 <NavLink
