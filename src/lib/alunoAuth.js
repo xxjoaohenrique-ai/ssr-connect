@@ -6,8 +6,8 @@ import { base44 } from "@/api/base44Client";
 import { portalApi } from "@/lib/portalApi";
 
 const SESSION_KEY = "aluno_session";
-// Domínio dos e-mails de login dos alunos (padrão Gmail).
-const GMAIL_DOMAIN = "@gmail.com";
+// Login escolar interno: não representa uma caixa de e-mail existente.
+const SCHOOL_LOGIN_PREFIX = "aluno.";
 
 export async function sha256(text) {
   const data = new TextEncoder().encode(text);
@@ -29,13 +29,13 @@ function slugifyName(name) {
     .filter(Boolean);
 }
 
-// Gera um e-mail aleatório no padrão Gmail para o aluno entrar no portal.
-// O nome facilita a identificação e a sequência aleatória garante unicidade.
+// Gera um identificador escolar interno. Logins antigos com @gmail.com
+// ou domínio institucional continuam aceitos pelo backend.
 export function genLogin(name, existing = []) {
   const parts = slugifyName(name);
   const base = parts.length ? parts.join(".") : "aluno";
   const taken = new Set((existing || []).map((l) => (l || "").toLowerCase()));
-  let login = `${base}.${genPassword(6)}${GMAIL_DOMAIN}`;
+  let login = `${SCHOOL_LOGIN_PREFIX}${base}.${genPassword(8)}`;
   while (taken.has(login.toLowerCase())) {
     login = `${base}.${genPassword(6)}${GMAIL_DOMAIN}`;
   }

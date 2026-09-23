@@ -154,6 +154,14 @@ export async function handleAdmin(req) {
         return Response.json({ record: sanitizeRecord(rec) });
       }
       const prepared = await prepareCredentials(entity, body.data);
+      if (entity === "Student") {
+        const login = String(prepared.student_login || "").trim().toLowerCase();
+        if (!login) return Response.json({ error: "Informe um login escolar." }, { status: 400 });
+        if ((await coll.filter({ student_login: login })).length) {
+          return Response.json({ error: "Este login escolar já está cadastrado." }, { status: 409 });
+        }
+        prepared.student_login = login;
+      }
       const rec = await coll.create(prepared);
       return Response.json({ record: sanitizeRecord(rec) });
     }
@@ -203,6 +211,18 @@ export async function handleAdmin(req) {
         return Response.json({ error: "Cadastre até 60 alunos por lote." }, { status: 400 });
       }
       const prepared = await Promise.all((body.records || []).map((record) => prepareCredentials(entity, record)));
+      if (entity === "Student") {
+        const existing = await coll.list();
+        const taken = new Set(existing.map((s) => String(s.student_login || "").toLowerCase()));
+        for (const student of prepared) {
+          const login = String(student.student_login || "").trim().toLowerCase();
+          if (!login || taken.has(login)) {
+            return Response.json({ error: "Login escolar vazio ou duplicado no cadastro." }, { status: 409 });
+          }
+          taken.add(login);
+          student.student_login = login;
+        }
+      }
       const recs = await coll.bulkCreate(prepared);
       return Response.json({ records: recs.map(sanitizeRecord) });
     }

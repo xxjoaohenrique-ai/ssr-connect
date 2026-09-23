@@ -135,7 +135,7 @@ export default function StudentManager() {
       {creds && (
         <div className="mt-6 rounded-2xl border border-secondary/40 bg-secondary/5 p-5">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-secondary">Credenciais geradas — entregue ao aluno:</p>
+            <p className="text-sm font-semibold text-secondary">Contas escolares geradas — entregue individualmente ao aluno:</p>
             <button onClick={() => setCreds(null)} className="text-muted-foreground hover:text-foreground"><X className="h-4 w-4" /></button>
           </div>
           <div className="mt-3 overflow-x-auto">
@@ -164,7 +164,7 @@ export default function StudentManager() {
               </tbody>
             </table>
           </div>
-          <p className="mt-3 text-xs text-muted-foreground">A senha é exibida apenas agora. Guarde-a — ela não pode ser recuperada depois, apenas redefinida.</p>
+          <p className="mt-3 text-xs text-muted-foreground">Este login funciona somente no SSR-CONNECT; não cria Gmail. A senha é exibida apenas agora e deve ser entregue individualmente. Depois, só poderá ser redefinida.</p>
         </div>
       )}
 
