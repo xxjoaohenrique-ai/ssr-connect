@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Video, Link as LinkIcon, ExternalLink, Loader2, PlayCircle } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { portalApi } from "@/lib/portalApi";
 
 function youtubeEmbed(url) {
   const m = (url || "").match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
@@ -18,9 +18,8 @@ export default function LessonsCard({ turma }) {
     let active = true;
     (async () => {
       try {
-        const all = await base44.entities.Lesson.filter({ is_active: true }, "-date", 100);
-        const rel = all.filter((l) => !l.turma || l.turma === "Todas" || l.turma === turma);
-        if (active) setLessons(rel);
+        const { lessons } = await portalApi({ action: "studentLessons" });
+        if (active) setLessons(lessons);
       } catch (e) { console.error(e); }
       setLoading(false);
     })();
