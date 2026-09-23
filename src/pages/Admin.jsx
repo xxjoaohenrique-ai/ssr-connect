@@ -45,9 +45,9 @@ export default function Admin() {
   return (
     <div>
       {/* Cabeçalho do painel */}
-      <section className="relative overflow-hidden border-b border-border bg-card/40">
+      <section className="relative overflow-hidden border-b border-border bg-card/65">
         <div className="ssr-hero-grid pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
-        <div className="relative mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-6 px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
+        <div className="relative mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-6 px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
               <ShieldCheck className="h-3.5 w-3.5" /> Painel Administrativo
@@ -69,13 +69,13 @@ export default function Admin() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-7 sm:px-6 sm:py-10 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-4">
+        <div className="grid min-w-0 gap-7 lg:grid-cols-[17rem_minmax(0,1fr)]">
           <aside className="lg:sticky lg:top-24 lg:self-start">
             {/* Navegação mobile: barra horizontal rolável e fixa */}
             <AdminSectionNav sections={SECTIONS} active={active} onSelect={setActive} />
 
             {/* Navegação desktop: sidebar vertical */}
-            <div className="hidden rounded-2xl border border-border bg-card p-2.5 shadow-soft lg:block">
+            <div className="ssr-admin-sidebar hidden rounded-xl border border-border bg-card p-2.5 lg:block">
               {NAV_GROUPS.map((group) => (
                 <div key={group} className="mb-4 last:mb-1">
                   <p className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{group}</p>
@@ -87,7 +87,7 @@ export default function Admin() {
                         type="button"
                         aria-pressed={isActive}
                         onClick={() => setActive(s.key)}
-                        className={`group mb-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors duration-200 ${
+                        className={`group mb-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors duration-200 ${
                           isActive
                             ? "bg-primary/10 text-primary"
                             : "hover:bg-muted"
@@ -116,7 +116,7 @@ export default function Admin() {
             </div>
           </aside>
 
-          <div className="lg:col-span-3">
+          <div className="ssr-admin-content min-w-0">
             <div key={active} className="animate-fade-in-up">
               <Current onNavigate={setActive} />
             </div>
