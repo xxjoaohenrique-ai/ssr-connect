@@ -81,7 +81,8 @@ export async function handleAdmin(req) {
         if (!(await loginThrottle(svc, "admin", body.email, "failure"))) return TOO_MANY();
         return Response.json({ error: "E-mail ou senha incorretos." }, { status: 401 });
       }
-      if (isLegacyPasswordHash(acc.password_hash)) {
+      if (isLegacyPasswordHash(acc.password_hash) &&
+          typeof body.password === "string" && body.password.length >= 8 && body.password.length <= 128) {
         await svc.entities.AdminAccount.update(acc.id, { password_hash: await hashPassword(body.password) });
       }
       await loginThrottle(svc, "admin", body.email, "success");
