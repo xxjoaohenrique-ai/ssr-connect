@@ -51,8 +51,8 @@ export default function Navbar() {
   }, [open]);
 
   const linkClass = ({ isActive }) =>
-    `relative text-sm font-medium tracking-wide transition-colors hover:text-primary after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:rounded-full after:bg-primary after:transition-all after:duration-300 hover:after:w-full ${
-      isActive ? "text-primary after:w-full" : "text-foreground/70 after:w-0"
+    `ssr-header-link text-sm font-semibold transition-colors hover:text-primary ${
+      isActive ? "text-primary" : "text-foreground/75"
     }`;
 
   return (
@@ -63,18 +63,18 @@ export default function Navbar() {
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link to="/" aria-label="SSR-CONNECT — ir para o início" className="group flex min-w-0 items-center gap-2.5">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-transform group-hover:scale-105">
+        <Link to="/" aria-label="SSR-CONNECT — ir para o início" className="group flex min-w-0 items-center gap-2.5 rounded-lg focus-visible:outline-offset-4">
+          <span className="ssr-brand-mark flex h-10 w-10 shrink-0 items-center justify-center rounded-[.7rem] transition-transform group-hover:-translate-y-0.5">
             <GraduationCap className="h-5 w-5" />
           </span>
           <span className="flex min-w-0 flex-col leading-tight">
-            <span className="heading-font text-base font-extrabold tracking-tight sm:text-lg">SSR<span className="text-primary">-CONNECT</span></span>
+            <span className="heading-font text-[.95rem] font-extrabold tracking-tight sm:text-lg">SSR<span className="text-primary">-CONNECT</span></span>
             <span className="hidden text-[10px] font-semibold tracking-wide text-muted-foreground sm:block">CETI Sebastião Soares Ribeiro</span>
           </span>
         </Link>
 
         {/* Links desktop */}
-        <div className="hidden items-center gap-5 xl:gap-7 lg:flex">
+        <div className="hidden items-center gap-0.5 xl:flex">
           {mainLinks.map((l) => (
             <NavLink key={l.to} to={l.to} className={linkClass} end={l.to === "/"}>
               {l.label}
@@ -82,7 +82,7 @@ export default function Navbar() {
           ))}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex min-h-10 items-center gap-1 text-sm font-medium tracking-wide text-foreground/80 transition-colors hover:text-primary">
+              <button className="ssr-header-link flex min-h-10 items-center gap-1 text-sm font-semibold text-foreground/75 transition-colors hover:text-primary">
                 Recursos <ChevronDown className="h-4 w-4" />
               </button>
             </DropdownMenuTrigger>
@@ -102,17 +102,17 @@ export default function Navbar() {
         </div>
 
         {/* Ações */}
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <ThemeToggle />
           <Link
             to="/admin-login"
-            className="hidden min-h-10 items-center rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-foreground/80 transition-colors hover:border-primary/40 hover:text-primary xl:inline-flex"
+            className="ssr-header-action hidden min-h-10 items-center border border-border bg-card px-4 py-2.5 text-sm font-semibold text-foreground/80 transition-colors hover:border-primary/40 hover:text-primary xl:inline-flex"
           >
             Entrar
           </Link>
           <Link
             to="/contato"
-            className="hidden min-h-10 items-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 xl:inline-flex"
+            className="ssr-header-action hidden min-h-10 items-center bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 xl:inline-flex"
           >
             Fale com a escola
           </Link>
@@ -122,7 +122,7 @@ export default function Navbar() {
             aria-label={open ? "Fechar menu" : "Abrir menu"}
             aria-expanded={open}
             aria-controls="ssr-menu-mobile"
-            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border text-foreground transition-colors hover:bg-primary/10 lg:hidden"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border bg-card text-foreground transition-colors hover:bg-primary/10 xl:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -131,8 +131,8 @@ export default function Navbar() {
 
       {/* Menu mobile */}
       {open && (
-        <div id="ssr-menu-mobile" className="lg:hidden">
-          <div className="mx-4 mt-2 max-h-[70dvh] overflow-y-auto overscroll-contain rounded-2xl border border-border bg-card p-3 shadow-float sm:mx-6">
+        <div id="ssr-menu-mobile" className="xl:hidden">
+          <div className="ssr-mobile-menu mx-4 mt-2 overflow-y-auto overscroll-contain rounded-2xl border border-border p-3 sm:mx-6">
             <div className="flex flex-col gap-1">
               {mainLinks.map((l) => (
                 <NavLink

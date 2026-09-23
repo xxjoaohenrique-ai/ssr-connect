@@ -15,7 +15,7 @@ export default function MobileNav() {
   return (
     <nav
       aria-label="Navegação principal"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 shadow-[0_-8px_30px_-20px_rgba(15,23,42,0.25)] backdrop-blur-xl lg:hidden"
+      className="ssr-bottom-nav fixed inset-x-0 bottom-0 z-40 lg:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div className="mx-auto grid max-w-lg grid-cols-5 items-stretch px-1">
@@ -26,7 +26,7 @@ export default function MobileNav() {
             end={end}
             aria-label={label}
             className={({ isActive }) =>
-              `flex min-h-[58px] min-w-0 flex-col items-center justify-center gap-0.5 rounded-xl px-0.5 py-1.5 text-[10px] font-semibold transition-colors sm:text-[11px] ${
+              `ssr-bottom-link flex min-h-[60px] min-w-0 flex-col items-center justify-center gap-0.5 rounded-lg px-0.5 py-1.5 text-[10px] font-semibold transition-colors sm:text-[11px] ${
                 isActive ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground"
               }`
             }

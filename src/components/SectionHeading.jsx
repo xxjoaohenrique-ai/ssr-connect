@@ -21,7 +21,7 @@ export default function SectionHeading({ eyebrow, title, description, align = "c
       <h2 className="heading-font mt-5 text-3xl font-bold tracking-tight sm:text-[2.5rem] text-balance">
         {title}
       </h2>
-      <div className={`mt-5 h-1 w-12 rounded-full bg-gradient-to-r from-primary to-secondary ${accent}`} />
+      <div className={`mt-5 h-0.5 w-12 bg-secondary ${accent}`} />
       {description && (
         <p className="mt-5 text-base leading-relaxed text-muted-foreground text-pretty">
           {description}
