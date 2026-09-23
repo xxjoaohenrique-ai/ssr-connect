@@ -1,5 +1,6 @@
 import { getService } from '../_shared/store.ts';
-import { sha256, signToken, verifyToken, TOKEN_TTL_MS } from "../_shared/session-tokens.ts";
+import { hashPassword, verifyPassword, isLegacyPasswordHash, signToken, verifyToken, TOKEN_TTL_MS } from "../_shared/session-tokens.ts";
+import { loginThrottle, TOO_MANY } from '../_shared/auth-throttle.ts';
 
 // Camada de autenticação e escrita do Painel Administrativo.
 // O acesso é por conta própria (e-mail + senha, igual ao Portal Escolar):
@@ -28,8 +29,32 @@ function sanitizeAdmin(a) {
 // Nunca envie hashes ou tokens de sessão em respostas de listagem/edição.
 function sanitizeRecord(record) {
   if (!record) return record;
-  const { password_hash, token, ...safe } = record;
+  const { password_hash, password, token, ...safe } = record;
   return safe;
+}
+
+async function prepareCredentials(entity, raw, updating = false) {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    throw new Error("Dados inválidos.");
+  }
+  const { password, ...data } = raw;
+  if (entity !== "AdminAccount" && entity !== "Student" && entity !== "Teacher" && entity !== "Parent") {
+    if (password !== undefined || data.password_hash !== undefined) {
+      throw new Error("Credenciais não permitidas neste recurso.");
+    }
+    return data;
+  }
+  if (password !== undefined) {
+    data.password_hash = await hashPassword(password);
+    data.password_changed = false;
+    if (updating) data.session_version = crypto.randomUUID();
+  } else if (data.password_hash !== undefined && !isLegacyPasswordHash(data.password_hash)) {
+    // Compatibilidade temporária com a versão anterior do formulário.
+    throw new Error("Formato de senha inválido.");
+  } else if (data.password_hash !== undefined && updating) {
+    data.session_version = crypto.randomUUID();
+  }
+  return data;
 }
 
 const NO_SECRET = () =>
@@ -46,17 +71,23 @@ export async function handleAdmin(req) {
     // ---------- Sessão do administrador (e-mail + senha) ----------
     if (action === "adminLogin") {
       if (!SECRET) return NO_SECRET();
-      const hash = await sha256(body.password);
+      if (!(await loginThrottle(svc, "admin", body.email))) return TOO_MANY();
       const rows = await svc.entities.AdminAccount.filter({
         email: normEmail(body.email),
         is_active: true,
       });
       const acc = rows[0];
-      if (!acc || acc.password_hash !== hash) {
+      if (!acc || !(await verifyPassword(body.password, acc.password_hash))) {
+        if (!(await loginThrottle(svc, "admin", body.email, "failure"))) return TOO_MANY();
         return Response.json({ error: "E-mail ou senha incorretos." }, { status: 401 });
       }
+      if (isLegacyPasswordHash(acc.password_hash) &&
+          typeof body.password === "string" && body.password.length >= 8 && body.password.length <= 128) {
+        await svc.entities.AdminAccount.update(acc.id, { password_hash: await hashPassword(body.password) });
+      }
+      await loginThrottle(svc, "admin", body.email, "success");
       const token = await signToken(
-        { sub: acc.id, role: "admin", exp: Date.now() + TOKEN_TTL_MS },
+        { sub: acc.id, role: "admin", v: acc.session_version ?? null, exp: Date.now() + TOKEN_TTL_MS },
         SECRET
       );
       return Response.json({ admin: { ...sanitizeAdmin(acc), token } });
@@ -70,7 +101,8 @@ export async function handleAdmin(req) {
       }
       let acc = null;
       try { acc = await svc.entities.AdminAccount.get(payload.sub); } catch { acc = null; }
-      if (!acc || acc.is_active === false) {
+      if (!acc || acc.is_active === false ||
+          (payload.v ?? null) !== (acc.session_version ?? null)) {
         return Response.json({ error: "Conta de administrador desativada." }, { status: 401 });
       }
       return Response.json({ admin: sanitizeAdmin(acc) });
@@ -82,7 +114,8 @@ export async function handleAdmin(req) {
       const payload = await verifyToken(body.token, SECRET);
       if (!payload || payload.role !== "admin") return false;
       const acc = await svc.entities.AdminAccount.get(payload.sub);
-      return !!acc && acc.is_active !== false;
+      return !!acc && acc.is_active !== false &&
+        (payload.v ?? null) === (acc.session_version ?? null);
     };
 
     if (!(await isAdmin())) {
@@ -106,7 +139,7 @@ export async function handleAdmin(req) {
     if (action === "create") {
       if (entity === "AdminAccount") {
         const email = normEmail(body.data?.email);
-        if (!email || !body.data?.password_hash) {
+        if (!email || !(body.data?.password || body.data?.password_hash)) {
           return Response.json({ error: "Informe e-mail e senha do administrador." }, { status: 400 });
         }
         const accounts = await coll.list();
@@ -116,10 +149,12 @@ export async function handleAdmin(req) {
         if (accounts.some((account) => normEmail(account.email) === email)) {
           return Response.json({ error: "Este e-mail já está cadastrado." }, { status: 400 });
         }
-        const rec = await coll.create({ ...body.data, email });
+        const prepared = await prepareCredentials(entity, body.data);
+        const rec = await coll.create({ ...prepared, email });
         return Response.json({ record: sanitizeRecord(rec) });
       }
-      const rec = await coll.create(body.data);
+      const prepared = await prepareCredentials(entity, body.data);
+      const rec = await coll.create(prepared);
       return Response.json({ record: sanitizeRecord(rec) });
     }
     if (action === "update") {
@@ -142,7 +177,8 @@ export async function handleAdmin(req) {
           body.data = { ...body.data, email };
         }
       }
-      const rec = await coll.update(body.id, body.data);
+      const prepared = await prepareCredentials(entity, body.data, true);
+      const rec = await coll.update(body.id, prepared);
       return Response.json({ record: sanitizeRecord(rec) });
     }
     if (action === "delete") {
@@ -163,13 +199,18 @@ export async function handleAdmin(req) {
       if (entity === "AdminAccount") {
         return Response.json({ error: "Cadastre os administradores individualmente." }, { status: 400 });
       }
-      const recs = await coll.bulkCreate(body.records);
+      if (entity === "Student" && (!Array.isArray(body.records) || body.records.length > 60)) {
+        return Response.json({ error: "Cadastre até 60 alunos por lote." }, { status: 400 });
+      }
+      const prepared = await Promise.all((body.records || []).map((record) => prepareCredentials(entity, record)));
+      const recs = await coll.bulkCreate(prepared);
       return Response.json({ records: recs.map(sanitizeRecord) });
     }
 
     return Response.json({ error: "Ação inválida." }, { status: 400 });
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    console.error("adminApi:", error);
+    return Response.json({ error: "Não foi possível concluir a operação." }, { status: 500 });
   }
 }
 import { preflight, corsResult } from '../_shared/response.ts';

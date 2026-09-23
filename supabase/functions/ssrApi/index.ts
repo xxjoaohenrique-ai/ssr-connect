@@ -18,7 +18,8 @@ async function isStaff(payload:any, svc: ReturnType<typeof getService>) {
   const a=await verifyToken(payload?.token,secret);
   if(!a || !['admin','teacher'].includes(a.role)) return null;
   const entry=await svc.entities[a.role==='admin'?'AdminAccount':'Teacher'].get(a.sub);
-  if(!entry || entry.is_active===false) return null;
+  if(!entry || entry.is_active===false ||
+     (a.v ?? null)!==(entry.session_version ?? null)) return null;
   return a;
 }
 async function handle(req: Request) {
@@ -32,7 +33,22 @@ async function handle(req: Request) {
       const file=form.get('file');
       if(!(file instanceof File)) return json({error:'Arquivo não encontrado.'},400);
       const types=new Set(['image/jpeg','image/png','image/webp','image/gif','application/pdf','text/plain']);
-      if(!types.has(file.type)||file.size>10*1024*1024) return json({error:'Tipo inválido ou arquivo acima de 10 MB.'},400);
+      if(!types.has(file.type)||file.size>10*1024*1024||file.size===0) return json({error:'Tipo inválido ou arquivo acima de 10 MB.'},400);
+      // O Content-Type pode ser falsificado; confira a assinatura dos arquivos binários.
+      const bytes=new Uint8Array(await file.slice(0,16).arrayBuffer());
+      const starts=(signature:number[])=>signature.every((v,i)=>bytes[i]===v);
+      const valid={
+        'image/jpeg':starts([0xff,0xd8,0xff]),
+        'image/png':starts([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a]),
+        'image/webp':starts([0x52,0x49,0x46,0x46])&&startsAt(8,[0x57,0x45,0x42,0x50]),
+        'image/gif':starts([0x47,0x49,0x46,0x38]) && [0x37,0x39].includes(bytes[4]),
+        'application/pdf':starts([0x25,0x50,0x44,0x46,0x2d]),
+        'text/plain':!bytes.includes(0)
+      }[file.type];
+      if(!valid) return json({error:'O conteúdo do arquivo não corresponde ao formato declarado.'},400);
+      function startsAt(offset:number,signature:number[]) {
+        return signature.every((v,i)=>bytes[offset+i]===v);
+      }
       const ext=({'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif','application/pdf':'pdf','text/plain':'txt'} as Record<string,string>)[file.type];
       const path=`${a.role}/${crypto.randomUUID()}.${ext}`;
       const {error}=await svc.supabase.storage.from('ssr-public').upload(path,file,{contentType:file.type,upsert:false});
@@ -49,8 +65,14 @@ async function handle(req: Request) {
       // o navegador pede list() sem filtros.
       const requested=body.filter && typeof body.filter==='object' && !Array.isArray(body.filter) ? body.filter : {};
       // Publicação/ativação não pode ser anulada por filtro do cliente.
-      const rows=await coll.filter({...requested,...PUBLIC_ENTITIES[entity]},body.sort,body.limit);
-      return json({rows:rows.map(sanitize)});
+      // Aulas destinadas a turmas não podem ser obtidas pela API pública,
+      // mesmo com filtro arbitrário fornecido pelo navegador.
+      const rows=await coll.filter({...requested,...PUBLIC_ENTITIES[entity]},body.sort,
+        entity==='Lesson' ? undefined : body.limit);
+      const visible=entity==='Lesson' ? rows.filter((r:any)=>!r.turma || r.turma==='Todas') : rows;
+      const limited=entity==='Lesson' && Number.isInteger(body.limit) && body.limit>=0
+        ? visible.slice(0,body.limit) : visible;
+      return json({rows:limited.map(sanitize)});
     }
     if(action==='create' && entity==='Testimonial') {
       const d=body.data||{};

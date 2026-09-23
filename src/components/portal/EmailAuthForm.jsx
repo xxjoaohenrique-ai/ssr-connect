@@ -23,7 +23,7 @@ export default function EmailAuthForm({ title, subtitle, onLogin, onRegister, ex
       if (mode === "login") {
         await onLogin(email, password);
       } else {
-        if (password.length < 6) throw new Error("A senha deve ter ao menos 6 caracteres.");
+        if (password.length < 8) throw new Error("A senha deve ter ao menos 8 caracteres.");
         const res = await onRegister({ name, email, password, ...extra });
         // Cadastro pendente (ex.: professor): não loga, só confirma ao usuário.
         if (res?.pending) {

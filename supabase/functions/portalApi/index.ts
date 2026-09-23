@@ -1,5 +1,6 @@
 import { getService } from '../_shared/store.ts';
-import { sha256, signToken, verifyToken, TOKEN_TTL_MS } from "../_shared/session-tokens.ts";
+import { hashPassword, verifyPassword, isLegacyPasswordHash, signToken, verifyToken, TOKEN_TTL_MS } from "../_shared/session-tokens.ts";
+import { loginThrottle, TOO_MANY } from '../_shared/auth-throttle.ts';
 
 // Camada de autenticação e dados do Portal Escolar (aluno / professor / pai).
 // Roda com service role para contornar o RLS admin-only de Student/Parent/Teacher,
@@ -89,24 +90,36 @@ export async function handlePortal(req) {
       );
     }
 
-    // Verifica o token e garante o papel esperado. Retorna o payload ou null.
+    // A sessão é validada contra a conta ativa e a versão atual de sessão.
+    // Redefinir a senha invalida os tokens anteriores, inclusive os já emitidos.
     const auth = async (role) => {
       const payload = await verifyToken(body.token, SECRET);
-      if (!payload) return null;
-      if (role && payload.role !== role) return null;
+      if (!payload || (role && payload.role !== role)) return null;
+      const map = { student: "Student", teacher: "Teacher", parent: "Parent" };
+      const entity = map[payload.role];
+      if (!entity || typeof payload.sub !== "string") return null;
+      const account = await svc.entities[entity].get(payload.sub);
+      if (!account || account.is_active === false ||
+          (payload.v ?? null) !== (account.session_version ?? null)) return null;
       return payload;
     };
-    const issue = (sub, role) =>
-      signToken({ sub, role, exp: Date.now() + TOKEN_TTL_MS }, SECRET);
+    const issue = (account, role) =>
+      signToken({ sub: account.id, role, v: account.session_version ?? null, exp: Date.now() + TOKEN_TTL_MS }, SECRET);
 
     // ---------- Aluno ----------
     if (action === "studentLogin") {
-      const hash = await sha256(body.password);
+      if (!(await loginThrottle(svc, "student", body.login))) return TOO_MANY();
       const s = await findStudentByLogin(svc, body.login);
-      if (!s || s.password_hash !== hash) {
+      if (!s || !(await verifyPassword(body.password, s.password_hash))) {
+        if (!(await loginThrottle(svc, "student", body.login, "failure"))) return TOO_MANY();
         return Response.json({ error: "Login ou senha incorretos." }, { status: 401 });
       }
-      const token = await issue(s.id, "student");
+      if (isLegacyPasswordHash(s.password_hash) &&
+          typeof body.password === "string" && body.password.length >= 8 && body.password.length <= 128) {
+        await svc.entities.Student.update(s.id, { password_hash: await hashPassword(body.password) });
+      }
+      await loginThrottle(svc, "student", body.login, "success");
+      const token = await issue(s, "student");
       return Response.json({ student: { ...sanitizeStudent(s), token } });
     }
 
@@ -114,37 +127,43 @@ export async function handlePortal(req) {
       const a = await auth("student");
       if (!a) return UNAUTHORIZED();
       const s = await svc.entities.Student.get(a.sub);
-      if (!s) return Response.json({ error: "Aluno não encontrado." }, { status: 404 });
+      if (!s || s.is_active === false) return UNAUTHORIZED();
       return Response.json({ student: sanitizeStudent(s) });
     }
 
     if (action === "studentChangePassword") {
       const a = await auth("student");
       if (!a) return UNAUTHORIZED();
-      const cur = await sha256(body.current);
       const s = await svc.entities.Student.get(a.sub);
-      if (!s || s.password_hash !== cur) {
+      if (!s || !(await verifyPassword(body.current, s.password_hash))) {
         return Response.json({ error: "Senha atual incorreta." }, { status: 400 });
       }
       await svc.entities.Student.update(a.sub, {
-        password_hash: await sha256(body.next),
+        password_hash: await hashPassword(body.next),
         password_changed: true,
+        session_version: crypto.randomUUID(),
       });
       return Response.json({ ok: true });
     }
 
     // ---------- Professor ----------
     if (action === "teacherLogin") {
-      const hash = await sha256(body.password);
+      if (!(await loginThrottle(svc, "teacher", body.email))) return TOO_MANY();
       const rows = await svc.entities.Teacher.filter({
         email: normEmail(body.email),
         is_active: true,
       });
       const t = rows[0];
-      if (!t || t.password_hash !== hash) {
+      if (!t || !(await verifyPassword(body.password, t.password_hash))) {
+        if (!(await loginThrottle(svc, "teacher", body.email, "failure"))) return TOO_MANY();
         return Response.json({ error: "E-mail ou senha incorretos." }, { status: 401 });
       }
-      const token = await issue(t.id, "teacher");
+      if (isLegacyPasswordHash(t.password_hash) &&
+          typeof body.password === "string" && body.password.length >= 8 && body.password.length <= 128) {
+        await svc.entities.Teacher.update(t.id, { password_hash: await hashPassword(body.password) });
+      }
+      await loginThrottle(svc, "teacher", body.email, "success");
+      const token = await issue(t, "teacher");
       return Response.json({ teacher: { ...sanitizeTeacher(t), token } });
     }
 
@@ -154,7 +173,10 @@ export async function handlePortal(req) {
       if (exists.length) {
         return Response.json({ error: "E-mail já cadastrado." }, { status: 400 });
       }
-      const password_hash = await sha256(body.password);
+      if (!e || !String(body.name || "").trim()) {
+        return Response.json({ error: "Preencha nome e e-mail." }, { status: 400 });
+      }
+      const password_hash = await hashPassword(body.password);
       // Cadastro pendente de aprovação: sem turmas (atribuídas pelo admin) e
       // inativo até a coordenação aprovar. Nenhum token é emitido — o professor
       // só acessa o portal após um administrador ativar a conta e definir turmas.
@@ -177,30 +199,36 @@ export async function handlePortal(req) {
     if (action === "teacherChangePassword") {
       const a = await auth("teacher");
       if (!a) return UNAUTHORIZED();
-      const cur = await sha256(body.current);
       const t = await svc.entities.Teacher.get(a.sub);
-      if (!t || t.password_hash !== cur) {
+      if (!t || !(await verifyPassword(body.current, t.password_hash))) {
         return Response.json({ error: "Senha atual incorreta." }, { status: 400 });
       }
       await svc.entities.Teacher.update(a.sub, {
-        password_hash: await sha256(body.next),
+        password_hash: await hashPassword(body.next),
         password_changed: true,
+        session_version: crypto.randomUUID(),
       });
       return Response.json({ ok: true });
     }
 
     // ---------- Pai / Mãe ----------
     if (action === "parentLogin") {
-      const hash = await sha256(body.password);
+      if (!(await loginThrottle(svc, "parent", body.email))) return TOO_MANY();
       const rows = await svc.entities.Parent.filter({
         email: normEmail(body.email),
         is_active: true,
       });
       const p = rows[0];
-      if (!p || p.password_hash !== hash) {
+      if (!p || !(await verifyPassword(body.password, p.password_hash))) {
+        if (!(await loginThrottle(svc, "parent", body.email, "failure"))) return TOO_MANY();
         return Response.json({ error: "E-mail ou senha incorretos." }, { status: 401 });
       }
-      const token = await issue(p.id, "parent");
+      if (isLegacyPasswordHash(p.password_hash) &&
+          typeof body.password === "string" && body.password.length >= 8 && body.password.length <= 128) {
+        await svc.entities.Parent.update(p.id, { password_hash: await hashPassword(body.password) });
+      }
+      await loginThrottle(svc, "parent", body.email, "success");
+      const token = await issue(p, "parent");
       return Response.json({ parent: { ...sanitizeParent(p), token } });
     }
 
@@ -210,7 +238,10 @@ export async function handlePortal(req) {
       if (exists.length) {
         return Response.json({ error: "E-mail já cadastrado." }, { status: 400 });
       }
-      const password_hash = await sha256(body.password);
+      if (!e || !String(body.name || "").trim()) {
+        return Response.json({ error: "Preencha nome e e-mail." }, { status: 400 });
+      }
+      const password_hash = await hashPassword(body.password);
       const p = await svc.entities.Parent.create({
         name: (body.name || "").trim(),
         email: e,
@@ -219,21 +250,21 @@ export async function handlePortal(req) {
         is_active: true,
         password_changed: true,
       });
-      const token = await issue(p.id, "parent");
+      const token = await issue(p, "parent");
       return Response.json({ parent: { ...sanitizeParent(p), token } });
     }
 
     if (action === "parentChangePassword") {
       const a = await auth("parent");
       if (!a) return UNAUTHORIZED();
-      const cur = await sha256(body.current);
       const p = await svc.entities.Parent.get(a.sub);
-      if (!p || p.password_hash !== cur) {
+      if (!p || !(await verifyPassword(body.current, p.password_hash))) {
         return Response.json({ error: "Senha atual incorreta." }, { status: 400 });
       }
       await svc.entities.Parent.update(a.sub, {
-        password_hash: await sha256(body.next),
+        password_hash: await hashPassword(body.next),
         password_changed: true,
+        session_version: crypto.randomUUID(),
       });
       return Response.json({ ok: true });
     }
@@ -304,10 +335,12 @@ export async function handlePortal(req) {
     if (action === "linkChild") {
       const a = await auth("parent");
       if (!a) return UNAUTHORIZED();
+      if (!(await loginThrottle(svc, "link-child", body.studentLogin))) return TOO_MANY();
       const p = await svc.entities.Parent.get(a.sub);
       if (!p) return UNAUTHORIZED();
       const s = await findStudentByLogin(svc, body.studentLogin);
       if (!s) {
+        if (!(await loginThrottle(svc, "link-child", body.studentLogin, "failure"))) return TOO_MANY();
         return Response.json(
           { error: "Aluno não encontrado. Verifique o login informado." },
           { status: 400 }
@@ -322,10 +355,11 @@ export async function handlePortal(req) {
           { status: 400 }
         );
       }
-      const pwdHash = await sha256(body.studentPassword);
-      if (s.password_hash !== pwdHash) {
+      if (!(await verifyPassword(body.studentPassword, s.password_hash))) {
+        if (!(await loginThrottle(svc, "link-child", body.studentLogin, "failure"))) return TOO_MANY();
         return Response.json({ error: "Senha do aluno incorreta." }, { status: 401 });
       }
+      await loginThrottle(svc, "link-child", body.studentLogin, "success");
       const cur = p.student_ids || [];
       if (cur.includes(s.id)) {
         return Response.json({ error: "Este filho já está vinculado." }, { status: 400 });
@@ -335,6 +369,25 @@ export async function handlePortal(req) {
       return Response.json({ student_ids: updated });
     }
 
+    // Consulta autenticada: nunca confiar na turma ou nome fornecidos pelo navegador.
+    if (action === "studentLessons") {
+      const a = await auth("student");
+      if (!a) return UNAUTHORIZED();
+      const s = await svc.entities.Student.get(a.sub);
+      const lessons = await svc.entities.Lesson.filter({ is_active: true }, "-date", 200);
+      const turma = s.turma || "";
+      return Response.json({ lessons: lessons.filter((l) =>
+        !l.turma || l.turma === "Todas" || l.turma === turma
+      ) });
+    }
+
+    if (action === "teacherLessons") {
+      const a = await auth("teacher");
+      if (!a) return UNAUTHORIZED();
+      const lessons = await svc.entities.Lesson.list("-date", 200);
+      return Response.json({ lessons: lessons.filter((l) => l.author_id === a.sub) });
+    }
+
     // ---------- Aulas (professor) ----------
     if (action === "createLesson") {
       const a = await auth("teacher");
@@ -342,15 +395,32 @@ export async function handlePortal(req) {
       const t = await svc.entities.Teacher.get(a.sub);
       if (!t || !t.is_active) return UNAUTHORIZED();
       const l = body.lesson || {};
+      const requestedTurma = String(l.turma || "").trim();
+      const assignedTurmas = parseTurmas(t.turmas);
+      if (requestedTurma && requestedTurma !== "Todas" && !assignedTurmas.includes(requestedTurma)) {
+        return Response.json({ error: "Você não está autorizado a publicar nessa turma." }, { status: 403 });
+      }
+      if (!String(l.title || "").trim() || !String(l.url || "").trim()) {
+        return Response.json({ error: "Informe título e link do material." }, { status: 400 });
+      }
+      // Impede esquemas javascript:, data: e endereços malformados em links de aulas.
+      let safeUrl;
+      try {
+        safeUrl = new URL(String(l.url).trim());
+        if (safeUrl.protocol !== "https:") throw new Error("Protocolo inválido");
+      } catch {
+        return Response.json({ error: "Use um link HTTPS válido para a aula." }, { status: 400 });
+      }
       const rec = await svc.entities.Lesson.create({
         title: (l.title || "").trim(),
         description: (l.description || "").trim(),
         type: l.type || "Vídeo",
-        url: (l.url || "").trim(),
-        turma: l.turma || "",
+        url: safeUrl.toString(),
+        turma: requestedTurma,
         discipline: (l.discipline || "").trim(),
         // O autor é sempre o professor autenticado — não pode ser forjado.
         author: t.name || "Professor",
+        author_id: t.id,
         date: new Date().toISOString().slice(0, 10),
         is_active: true,
       });
@@ -364,8 +434,8 @@ export async function handlePortal(req) {
       if (!t || !t.is_active) return UNAUTHORIZED();
       const l = await svc.entities.Lesson.get(body.id);
       if (!l) return Response.json({ error: "Aula não encontrada." }, { status: 404 });
-      // Só pode excluir as próprias aulas (mesmo autor).
-      if ((l.author || "") !== (t.name || "")) {
+      // Somente o professor que publicou (ID estável) pode excluir.
+      if (l.author_id !== t.id) {
         return Response.json(
           { error: "Você só pode excluir suas próprias aulas." },
           { status: 403 }

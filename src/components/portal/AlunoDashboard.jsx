@@ -112,7 +112,7 @@ export default function AlunoDashboard({ session, onLogout }) {
 
       <PortalSectionTitle>Conta e segurança</PortalSectionTitle>
 
-      <ChangePasswordCard onSubmit={(cur, next) => changeAlunoPassword(session.id, cur, next)} />
+      <ChangePasswordCard onSubmit={async (cur, next) => { await changeAlunoPassword(session.id, cur, next); onLogout?.(); }} />
       <DeleteAccountCard session={session} onLogout={onLogout} />
     </div>
   );

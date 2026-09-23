@@ -54,7 +54,7 @@ export default function ProfessorDashboard({ session, onLogout }) {
 
       <PortalSectionTitle>Conta e segurança</PortalSectionTitle>
 
-      <ChangePasswordCard onSubmit={(cur, next) => changeTeacherPassword(session.id, cur, next)} />
+      <ChangePasswordCard onSubmit={async (cur, next) => { await changeTeacherPassword(session.id, cur, next); onLogout?.(); }} />
       <DeleteAccountCard session={session} onLogout={onLogout} />
     </div>
   );

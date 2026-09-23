@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ShieldCheck, Loader2, Mail, Trash2, KeyRound, UserPlus } from "lucide-react";
 import { adminList, adminCreate, adminUpdate, adminDelete } from "@/lib/adminApi";
-import { sha256, genPassword } from "@/lib/alunoAuth";
+import { genPassword } from "@/lib/alunoAuth";
 
 const MAX_ADMINS = 5;
 
@@ -35,10 +35,10 @@ export default function AdminAccessManager() {
     setBusy(true);
     setErr(null);
     try {
-      const password = genPassword(10);
+      const password = genPassword(14);
       const rec = await adminCreate("AdminAccount", {
         email,
-        password_hash: await sha256(password),
+        password,
         password_changed: false,
         is_active: true,
       });
@@ -55,9 +55,9 @@ export default function AdminAccessManager() {
     setBusy(true);
     setErr(null);
     try {
-      const password = genPassword(10);
+      const password = genPassword(14);
       await adminUpdate("AdminAccount", acc.id, {
-        password_hash: await sha256(password),
+        password,
         password_changed: false,
       });
       setRevealed({ label: acc.email, password });

@@ -20,8 +20,8 @@ export default function LessonManager({ turmas, disciplines = [], author, teache
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const all = await base44.entities.Lesson.list("-date", 200);
-      setLessons(all.filter((l) => !author || l.author === author));
+      const { lessons } = await portalApi({ action: "teacherLessons" });
+      setLessons(lessons);
     } catch (e) { console.error(e); }
     setLoading(false);
   }, [author]);
