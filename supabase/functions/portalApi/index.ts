@@ -1,5 +1,6 @@
 import { getService } from '../_shared/store.ts';
 import { hashPassword, verifyPassword, isLegacyPasswordHash, signToken, verifyToken, TOKEN_TTL_MS } from "../_shared/session-tokens.ts";
+import { loginThrottle, TOO_MANY } from '../_shared/auth-throttle.ts';
 
 // Camada de autenticação e dados do Portal Escolar (aluno / professor / pai).
 // Roda com service role para contornar o RLS admin-only de Student/Parent/Teacher,
@@ -107,13 +108,16 @@ export async function handlePortal(req) {
 
     // ---------- Aluno ----------
     if (action === "studentLogin") {
+      if (!(await loginThrottle(svc, "student", body.login))) return TOO_MANY();
       const s = await findStudentByLogin(svc, body.login);
       if (!s || !(await verifyPassword(body.password, s.password_hash))) {
+        if (!(await loginThrottle(svc, "student", body.login, "failure"))) return TOO_MANY();
         return Response.json({ error: "Login ou senha incorretos." }, { status: 401 });
       }
       if (isLegacyPasswordHash(s.password_hash)) {
         await svc.entities.Student.update(s.id, { password_hash: await hashPassword(body.password) });
       }
+      await loginThrottle(svc, "student", body.login, "success");
       const token = await issue(s, "student");
       return Response.json({ student: { ...sanitizeStudent(s), token } });
     }
@@ -143,17 +147,20 @@ export async function handlePortal(req) {
 
     // ---------- Professor ----------
     if (action === "teacherLogin") {
+      if (!(await loginThrottle(svc, "teacher", body.email))) return TOO_MANY();
       const rows = await svc.entities.Teacher.filter({
         email: normEmail(body.email),
         is_active: true,
       });
       const t = rows[0];
       if (!t || !(await verifyPassword(body.password, t.password_hash))) {
+        if (!(await loginThrottle(svc, "teacher", body.email, "failure"))) return TOO_MANY();
         return Response.json({ error: "E-mail ou senha incorretos." }, { status: 401 });
       }
       if (isLegacyPasswordHash(t.password_hash)) {
         await svc.entities.Teacher.update(t.id, { password_hash: await hashPassword(body.password) });
       }
+      await loginThrottle(svc, "teacher", body.email, "success");
       const token = await issue(t, "teacher");
       return Response.json({ teacher: { ...sanitizeTeacher(t), token } });
     }
@@ -204,17 +211,20 @@ export async function handlePortal(req) {
 
     // ---------- Pai / Mãe ----------
     if (action === "parentLogin") {
+      if (!(await loginThrottle(svc, "parent", body.email))) return TOO_MANY();
       const rows = await svc.entities.Parent.filter({
         email: normEmail(body.email),
         is_active: true,
       });
       const p = rows[0];
       if (!p || !(await verifyPassword(body.password, p.password_hash))) {
+        if (!(await loginThrottle(svc, "parent", body.email, "failure"))) return TOO_MANY();
         return Response.json({ error: "E-mail ou senha incorretos." }, { status: 401 });
       }
       if (isLegacyPasswordHash(p.password_hash)) {
         await svc.entities.Parent.update(p.id, { password_hash: await hashPassword(body.password) });
       }
+      await loginThrottle(svc, "parent", body.email, "success");
       const token = await issue(p, "parent");
       return Response.json({ parent: { ...sanitizeParent(p), token } });
     }
@@ -322,10 +332,12 @@ export async function handlePortal(req) {
     if (action === "linkChild") {
       const a = await auth("parent");
       if (!a) return UNAUTHORIZED();
+      if (!(await loginThrottle(svc, "link-child", body.studentLogin))) return TOO_MANY();
       const p = await svc.entities.Parent.get(a.sub);
       if (!p) return UNAUTHORIZED();
       const s = await findStudentByLogin(svc, body.studentLogin);
       if (!s) {
+        if (!(await loginThrottle(svc, "link-child", body.studentLogin, "failure"))) return TOO_MANY();
         return Response.json(
           { error: "Aluno não encontrado. Verifique o login informado." },
           { status: 400 }
@@ -341,8 +353,10 @@ export async function handlePortal(req) {
         );
       }
       if (!(await verifyPassword(body.studentPassword, s.password_hash))) {
+        if (!(await loginThrottle(svc, "link-child", body.studentLogin, "failure"))) return TOO_MANY();
         return Response.json({ error: "Senha do aluno incorreta." }, { status: 401 });
       }
+      await loginThrottle(svc, "link-child", body.studentLogin, "success");
       const cur = p.student_ids || [];
       if (cur.includes(s.id)) {
         return Response.json({ error: "Este filho já está vinculado." }, { status: 400 });
