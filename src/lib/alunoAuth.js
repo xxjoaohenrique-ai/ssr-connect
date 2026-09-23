@@ -43,7 +43,7 @@ export function genLogin(name, existing = []) {
 }
 
 // Senha aleatória curta, sem caracteres ambíguos (0/O, 1/l).
-export function genPassword(len = 8) {
+export function genPassword(len = 12) {
   const chars = "abcdefghijkmnpqrstuvwxyz23456789";
   const arr = new Uint32Array(len);
   crypto.getRandomValues(arr);
