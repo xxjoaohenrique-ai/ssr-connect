@@ -42,11 +42,11 @@ export default function Footer() {
 
   const c = info || CONTACT_DEFAULTS;
   return (
-    <footer className="relative mt-24 border-t border-border bg-card/50">
-      <div className="mx-auto max-w-7xl px-4 pt-16 pb-28 sm:px-6 sm:pb-20 lg:px-8">
-        <div className="grid gap-12 lg:grid-cols-4">
+    <footer className="relative mt-16 min-w-0 border-t border-border bg-card/50 sm:mt-24">
+      <div className="mx-auto max-w-7xl px-4 pb-[calc(7.25rem_+_env(safe-area-inset-bottom))] pt-12 sm:px-6 sm:pt-16 lg:pb-20 lg:px-8">
+        <div className="grid gap-9 sm:grid-cols-2 sm:gap-12 lg:grid-cols-4">
           {/* Marca + contato */}
-          <div className="lg:col-span-2">
+          <div className="min-w-0 sm:col-span-2 lg:col-span-2">
             <Link to="/" className="flex items-center gap-2">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary text-white">
                 <GraduationCap className="h-5 w-5" />
@@ -60,7 +60,7 @@ export default function Footer() {
               encontra o futuro. Uma plataforma organizada e acessível para alunos, professores,
               pais e comunidade escolar.
             </p>
-            <div className="mt-6 space-y-2 text-sm text-muted-foreground">
+            <div className="mt-6 min-w-0 space-y-2 break-words text-sm text-muted-foreground">
               <p className="flex items-center gap-2">
                 <MapPin className="h-4 w-4 text-primary" /> {c.address}
               </p>
@@ -96,7 +96,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-center text-xs text-muted-foreground sm:justify-start">
+          <div className="flex min-w-0 flex-wrap items-center justify-center gap-x-4 gap-y-1 break-words text-center text-xs text-muted-foreground sm:justify-start">
             <p>© {new Date().getFullYear()} CETI Sebastião Soares Ribeiro. Todos os direitos reservados.</p>
             <Link to="/admin" className="transition-colors hover:text-primary">Painel Admin</Link>
           </div>

@@ -61,14 +61,14 @@ export default function Navbar() {
         scrolled ? "pb-2 pt-[calc(0.5rem_+_env(safe-area-inset-top))] shadow-soft" : "pb-3 pt-[calc(0.75rem_+_env(safe-area-inset-top))]"
       }`}
     >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+      <nav className="mx-auto flex max-w-7xl min-w-0 items-center justify-between gap-2 px-3 min-[380px]:px-4 sm:gap-3 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link to="/" aria-label="SSR-CONNECT — ir para o início" className="ssr-brand group flex min-w-0 items-center gap-2.5">
-          <span className="ssr-brand-mark flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-transform group-hover:scale-105">
+        <Link to="/" aria-label="SSR-CONNECT — ir para o início" className="ssr-brand group flex min-w-0 items-center gap-1.5 sm:gap-2.5">
+          <span className="ssr-brand-mark flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-transform group-hover:scale-105 sm:h-10 sm:w-10">
             <GraduationCap className="h-5 w-5" />
           </span>
           <span className="flex min-w-0 flex-col leading-tight">
-            <span className="heading-font text-base font-extrabold tracking-tight sm:text-lg">SSR<span className="text-primary">-CONNECT</span></span>
+            <span className="heading-font text-[14px] font-extrabold tracking-tight min-[380px]:text-base sm:text-lg">SSR<span className="text-primary">-CONNECT</span></span>
             <span className="hidden text-[10px] font-semibold tracking-wide text-muted-foreground sm:block">CETI Sebastião Soares Ribeiro</span>
           </span>
         </Link>
@@ -102,7 +102,7 @@ export default function Navbar() {
         </div>
 
         {/* Ações */}
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
           <ThemeToggle />
           <Link
             to="/admin-login"
@@ -132,7 +132,7 @@ export default function Navbar() {
       {/* Menu mobile */}
       {open && (
         <div id="ssr-menu-mobile" className="lg:hidden">
-          <div className="ssr-mobile-menu mx-4 mt-2 max-h-[70dvh] overflow-y-auto overscroll-contain rounded-2xl border border-border bg-card p-3 shadow-float sm:mx-6">
+          <div className="ssr-mobile-menu mx-3 mt-2 max-h-[min(74dvh,calc(100dvh-6rem))] overflow-y-auto overscroll-contain rounded-2xl border border-border bg-card p-3 shadow-float min-[380px]:mx-4 sm:mx-auto sm:max-w-xl">
             <div className="flex flex-col gap-1">
               {mainLinks.map((l) => (
                 <NavLink
