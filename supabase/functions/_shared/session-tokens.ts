@@ -1,6 +1,6 @@
 // Tokens de sessão assinados (HMAC-SHA256) — lógica compartilhada pelos
 // backend functions portalApi (aluno/professor/pai) e adminApi (painel).
-export const TOKEN_TTL_MS = 1000 * 60 * 60 * 24 * 30; // 30 dias
+export const TOKEN_TTL_MS = 1000 * 60 * 60 * 24 * 7; // 7 dias para novas sessões
 
 export async function sha256(text) {
   const data = new TextEncoder().encode(text);
@@ -8,6 +8,55 @@ export async function sha256(text) {
   return Array.from(new Uint8Array(buf))
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
+}
+
+// Senhas novas: PBKDF2 com salt aleatório por conta (WebCrypto/Deno/Node).
+// Hashes legados SHA-256 continuam válidos somente para migração no login.
+const PASSWORD_ITERATIONS = 310_000;
+const PASSWORD_SCHEME = "pbkdf2_sha256";
+function sameBytes(a, b) {
+  if (a.length !== b.length) return false;
+  let difference = 0;
+  for (let i = 0; i < a.length; i++) difference |= a[i] ^ b[i];
+  return difference === 0;
+}
+async function derivePassword(password, salt, iterations) {
+  const key = await crypto.subtle.importKey(
+    "raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveBits"]
+  );
+  return new Uint8Array(await crypto.subtle.deriveBits(
+    { name: "PBKDF2", hash: "SHA-256", salt, iterations }, key, 256
+  ));
+}
+export async function hashPassword(password) {
+  if (typeof password !== "string" || password.length < 8 || password.length > 128) {
+    throw new Error("A senha deve ter entre 8 e 128 caracteres.");
+  }
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const digest = await derivePassword(password, salt, PASSWORD_ITERATIONS);
+  return `${PASSWORD_SCHEME}${PASSWORD_ITERATIONS}${b64url(salt)}${b64url(digest)}`;
+}
+export function isLegacyPasswordHash(stored) {
+  return typeof stored === "string" && /^[0-9a-f]{64}$/i.test(stored);
+}
+export async function verifyPassword(password, stored) {
+  if (typeof password !== "string" || typeof stored !== "string") return false;
+  if (isLegacyPasswordHash(stored)) {
+    return sameBytes(
+      new TextEncoder().encode(await sha256(password)),
+      new TextEncoder().encode(stored.toLowerCase())
+    );
+  }
+  const parts = stored.split("$");
+  if (parts.length !== 4 || parts[0] !== PASSWORD_SCHEME) return false;
+  const iterations = Number(parts[1]);
+  if (!Number.isInteger(iterations) || iterations < 100_000 || iterations > 1_000_000) return false;
+  try {
+    const salt = b64urlDecode(parts[2]);
+    const expected = b64urlDecode(parts[3]);
+    if (salt.length !== 16 || expected.length !== 32) return false;
+    return sameBytes(await derivePassword(password, salt, iterations), expected);
+  } catch { return false; }
 }
 
 function b64url(bytes) {
@@ -62,7 +111,7 @@ export async function verifyToken(token, secret) {
   if (!valid) return null;
   try {
     const payload = JSON.parse(new TextDecoder().decode(b64urlDecode(data)));
-    if (payload.exp && Date.now() > payload.exp) return null;
+    if (!Number.isSafeInteger(payload.exp) || Date.now() >= payload.exp) return null;
     return payload;
   } catch {
     return null;
