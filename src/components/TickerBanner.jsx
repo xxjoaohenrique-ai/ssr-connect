@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 
-const DEFAULT = "Aulas procedendo normalmente · Resultados do Simulado ENEM publicados · Inscrições abertas para 2027";
+const DEFAULT = "Bem-vindo ao SSR-CONNECT · Notícias, calendário e informações da escola em um só lugar";
 
 // Banner de avisos editável pelo administrador (entidade Ticker).
 export default function TickerBanner() {
