@@ -8,8 +8,10 @@ export default function AdminSectionNav({ sections, active, onSelect }) {
           return (
             <button
               key={s.key}
+              type="button"
+              aria-pressed={isActive}
               onClick={() => onSelect(s.key)}
-              className={`flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-semibold transition ${
+              className={`flex min-h-10 shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold transition-colors ${
                 isActive
                   ? "bg-primary text-primary-foreground shadow-soft"
                   : "border border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground"
