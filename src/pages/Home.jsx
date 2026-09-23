@@ -116,6 +116,12 @@ export default function Home() {
               <Link to="/cursos"><Lightbulb size={23} aria-hidden="true" /><strong>Projetos que inspiram</strong><span>Aprender na prática.</span></Link>
               <Link to="/cursos"><BarChart3 size={23} aria-hidden="true" /><strong>Novas possibilidades</strong><span>Conheça nossos cursos.</span></Link>
             </div>
+            <form onSubmit={handleSearch} role="search" className="ssr-reference-search">
+              <Search size={18} aria-hidden="true" />
+              <label htmlFor="ssr-home-search" className="sr-only">Pesquisar informações da escola</label>
+              <input id="ssr-home-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="O que você procura?" autoComplete="off" enterKeyHint="search" />
+              <button type="submit" disabled={!query.trim()}>Buscar <ArrowRight size={16} aria-hidden="true" /></button>
+            </form>
           </div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.18 }} className="ssr-reference-preview">
             <HomeShowcase events={events} news={news} loading={loading} />
