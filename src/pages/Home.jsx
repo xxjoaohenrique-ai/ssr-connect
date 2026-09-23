@@ -84,36 +84,35 @@ export default function Home() {
       {/* HERO — editorial, responsivo e sem indicadores fictícios */}
       <section className="ssr-hero relative isolate overflow-hidden border-b border-border/70">
         <div className="ssr-hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 sm:py-20 lg:min-h-[620px] lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 lg:px-8 lg:py-24">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-20 lg:min-h-[590px] lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 lg:px-8 lg:py-24">
           <div className="max-w-2xl">
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-2 text-xs font-semibold tracking-wide text-primary">
-              <span className="h-2 w-2 rounded-full bg-secondary" />
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="ssr-editorial-tag">
               CETI Sebastião Soares Ribeiro
             </motion.div>
-            <motion.h1 initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.08 }} className="heading-font mt-7 max-w-3xl text-[clamp(2.65rem,5.6vw,5.4rem)] font-extrabold leading-[1.07] tracking-[-0.055em] text-balance">
-              A vida escolar,<br />
-              <span className="text-primary">mais conectada.</span>
+            <motion.h1 initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.08 }} className="heading-font mt-7 max-w-3xl text-[clamp(2.45rem,5.4vw,5rem)] font-extrabold leading-[1.08] tracking-[-0.06em] text-balance">
+              Sua escola,<br />
+              <span className="text-primary">mais perto de você.</span>
             </motion.h1>
             <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.16 }} className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Notícias, avisos, materiais de estudo e calendário em um espaço feito para estudantes, famílias e professores.
+              O dia a dia do CETI em um só espaço: avisos, calendário, materiais de estudo e acesso ao portal escolar.
             </motion.p>
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.22 }} className="mt-8 flex flex-wrap gap-3">
-              <Link to="/portal-aluno" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-colors hover:bg-primary/90">
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.22 }} className="mt-8 flex flex-col gap-3 min-[420px]:flex-row">
+              <Link to="/portal-aluno" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-colors hover:bg-primary/90">
                 Acessar o portal <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link to="/sobre" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:border-primary/40 hover:text-primary">
+              <Link to="/sobre" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:border-primary/40 hover:text-primary">
                 Conheça o CETI
               </Link>
             </motion.div>
-            <motion.form onSubmit={handleSearch} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} role="search" className="mt-9 flex max-w-xl items-center gap-2 rounded-2xl border border-border bg-card p-1.5 shadow-soft focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/15">
+            <motion.form onSubmit={handleSearch} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} role="search" className="ssr-home-search mt-9 flex max-w-xl items-center gap-2 rounded-xl border border-border bg-card p-1.5 shadow-soft focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/15">
               <Search aria-hidden="true" className="ml-3 h-5 w-5 shrink-0 text-muted-foreground" />
               <label htmlFor="ssr-home-search" className="sr-only">Pesquisar informações da escola</label>
-              <input id="ssr-home-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Busque notícias, cursos, biblioteca..." className="min-w-0 flex-1 bg-transparent py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground" />
-              <button type="submit" className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-xl bg-foreground px-4 text-sm font-semibold text-background transition-opacity hover:opacity-85">Buscar</button>
+              <input id="ssr-home-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar notícias, cursos, materiais..." className="min-w-0 flex-1 bg-transparent py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground" />
+              <button type="submit" className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-lg bg-foreground px-3.5 text-sm font-semibold text-background transition-opacity hover:opacity-85">Buscar</button>
             </motion.form>
           </div>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.18 }} className="ssr-hero-panel relative rounded-[1.75rem] border border-border bg-card p-5 shadow-card sm:p-7">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.18 }} className="ssr-hero-panel relative border border-border bg-card p-5 sm:p-7">
             <div className="flex items-start justify-between gap-4 border-b border-border pb-5">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">SSR-CONNECT</p>
@@ -122,13 +121,13 @@ export default function Home() {
               </div>
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary"><GraduationCap className="h-6 w-6" /></span>
             </div>
-            <div className="mt-4 space-y-2">
+            <div className="mt-4 space-y-1">
               {[
                 { icon: GraduationCap, title: "Portal do aluno", desc: "Sua área de estudos", to: "/portal-aluno" },
                 { icon: CalendarDays, title: "Calendário escolar", desc: "Datas e eventos", to: "/calendario" },
                 { icon: BookOpen, title: "Biblioteca digital", desc: "Materiais e conteúdos", to: "/biblioteca" },
               ].map((item) => (
-                <Link key={item.to} to={item.to} className="ssr-quick-link group flex items-center gap-4 rounded-2xl border border-transparent p-3.5 transition-colors hover:border-border hover:bg-muted/60">
+                <Link key={item.to} to={item.to} className="ssr-quick-link group flex items-center gap-4 rounded-xl border border-transparent p-3.5 transition-colors hover:border-border hover:bg-muted/60">
                   <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><item.icon className="h-5 w-5" /></span>
                   <span className="min-w-0 flex-1">
                     <span className="block text-sm font-semibold text-foreground">{item.title}</span>
@@ -138,7 +137,7 @@ export default function Home() {
                 </Link>
               ))}
             </div>
-            <Link to="/noticias" className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-primary/5 px-4 py-4 text-sm font-semibold text-primary transition-colors hover:bg-primary/10">
+            <Link to="/noticias" className="mt-4 flex items-center justify-between gap-3 rounded-xl border border-primary/10 bg-primary/5 px-4 py-4 text-sm font-semibold text-primary transition-colors hover:bg-primary/10">
               Acompanhe os comunicados da escola <ArrowRight className="h-4 w-4 shrink-0" />
             </Link>
           </motion.div>
@@ -150,8 +149,8 @@ export default function Home() {
         <SectionHeading eyebrow="Hub do Conhecimento" title="Tudo o que você precisa, em um só lugar" description="Centralize o acesso às ferramentas e informações essenciais da vida escolar — para alunos, professores, pais e comunidade." />
         <div className="mt-10 grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {hubTiles.map((t, i) => (
-            <motion.div key={t.title} custom={i} variants={fadeUp} initial="hidden" whileInView="show" whileHover={{ y: -6, scale: 1.02 }} viewport={{ once: true, margin: "-60px" }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
-              <Link to={t.to} className="group flex h-full flex-col rounded-2xl border border-border bg-card p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-card sm:p-6">
+            <motion.div key={t.title} custom={i} variants={fadeUp} initial="hidden" whileInView="show" whileHover={{ y: -3 }} viewport={{ once: true, margin: "-60px" }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
+              <Link to={t.to} className="ssr-home-card group flex h-full flex-col border border-border bg-card p-5 transition-all duration-200 hover:-translate-y-0.5 sm:p-6">
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground"><t.icon className="h-6 w-6" /></span>
                 <h3 className="heading-font mt-5 text-lg font-semibold">{t.title}</h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{t.desc}</p>
@@ -192,7 +191,7 @@ export default function Home() {
         <SectionHeading eyebrow="Nossos Cursos" title="Técnico e formação regular, lado a lado" />
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {courses.map((c, i) => (
-            <motion.div key={c.name} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }} className="group rounded-3xl border border-border bg-card p-8 transition hover:border-primary/40 hover:shadow-xl">
+            <motion.div key={c.name} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }} className="ssr-home-card group border border-border bg-card p-7 transition sm:p-8">
               <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary"><c.icon className="h-6 w-6" /></span>
               <h3 className="heading-font mt-5 text-xl font-semibold">{c.name}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{c.desc}</p>
@@ -299,8 +298,8 @@ export default function Home() {
 
       {/* CTA */}
       <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary to-secondary px-6 py-12 text-center text-primary-foreground shadow-card animate-gradient-pan sm:px-16 sm:py-16">
-          <div className="absolute inset-0 opacity-30 prism-gradient" />
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="relative overflow-hidden rounded-2xl bg-primary px-6 py-12 text-center text-primary-foreground shadow-card sm:px-16 sm:py-16">
+          <div className="absolute inset-0 opacity-20 prism-gradient" />
           <div className="relative">
             <motion.h2 initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1, duration: 0.5 }} className="heading-font text-3xl font-bold sm:text-4xl text-balance">Quer conhecer melhor o CETI?</motion.h2>
             <p className="mx-auto mt-4 max-w-xl text-primary-foreground/85 text-balance">Tire suas dúvidas sobre matrículas ou converse com a secretaria.</p>
