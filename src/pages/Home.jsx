@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search, ArrowRight, BookOpen, CalendarDays, Newspaper, Image as ImageIcon, Users, GraduationCap, Megaphone, Code2, AlertTriangle, ChevronRight, ChevronDown, Loader2 } from "lucide-react";
+import { Search, ArrowRight, BookOpen, CalendarDays, Newspaper, Image as ImageIcon, Users, GraduationCap, Megaphone, Code2, AlertTriangle, ChevronRight, Loader2 } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import TestimonialSection from "@/components/TestimonialSection";
 import TickerBanner from "@/components/TickerBanner";
 import { Image } from "@/components/ui/image";
 import { base44 } from "@/api/base44Client";
 
-const HERO_IMG = `${import.meta.env.BASE_URL}images/hero.svg`;
 const STUDENTS_IMG = `${import.meta.env.BASE_URL}images/students.svg`;
 
 const hubTiles = [
@@ -82,47 +81,67 @@ export default function Home() {
       {/* BANNER DE AVISOS (editável pelo admin) */}
       <TickerBanner />
 
-      {/* HERO */}
-      <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden px-4 sm:min-h-[80vh]">
-        <div className="absolute inset-0">
-          <Image src={HERO_IMG} alt="Biblioteca moderna do CETI Sebastião Soares Ribeiro com estudantes colaborando" fittingType="fill" loading="eager" className="h-full w-full" />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/60 to-background" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-transparent" />
-        </div>
+      {/* HERO — editorial, responsivo e sem indicadores fictícios */}
+      <section className="ssr-hero relative isolate overflow-hidden border-b border-border/70">
+        <div className="ssr-hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 sm:py-20 lg:min-h-[620px] lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 lg:px-8 lg:py-24">
+          <div className="max-w-2xl">
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-2 text-xs font-semibold tracking-wide text-primary">
+              <span className="h-2 w-2 rounded-full bg-secondary" />
+              CETI Sebastião Soares Ribeiro
+            </motion.div>
+            <motion.h1 initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.08 }} className="heading-font mt-7 max-w-3xl text-[clamp(2.65rem,5.6vw,5.4rem)] font-extrabold leading-[1.07] tracking-[-0.055em] text-balance">
+              A vida escolar,<br />
+              <span className="text-primary">mais conectada.</span>
+            </motion.h1>
+            <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.16 }} className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+              Notícias, avisos, materiais de estudo e calendário em um espaço feito para estudantes, famílias e professores.
+            </motion.p>
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.22 }} className="mt-8 flex flex-wrap gap-3">
+              <Link to="/portal-aluno" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-colors hover:bg-primary/90">
+                Acessar o portal <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link to="/sobre" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:border-primary/40 hover:text-primary">
+                Conheça o CETI
+              </Link>
+            </motion.div>
+            <motion.form onSubmit={handleSearch} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} role="search" className="mt-9 flex max-w-xl items-center gap-2 rounded-2xl border border-border bg-card p-1.5 shadow-soft focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/15">
+              <Search aria-hidden="true" className="ml-3 h-5 w-5 shrink-0 text-muted-foreground" />
+              <label htmlFor="ssr-home-search" className="sr-only">Pesquisar informações da escola</label>
+              <input id="ssr-home-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Busque notícias, cursos, biblioteca..." className="min-w-0 flex-1 bg-transparent py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground" />
+              <button type="submit" className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-xl bg-foreground px-4 text-sm font-semibold text-background transition-opacity hover:opacity-85">Buscar</button>
+            </motion.form>
+          </div>
 
-        <div className="relative z-10 mx-auto max-w-5xl text-center">
-          <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 rounded-full glass-ui px-5 py-2 text-xs font-semibold uppercase tracking-widest text-primary">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-            CETI Sebastião Soares Ribeiro
-          </motion.span>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }} className="heading-font mt-6 text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl text-balance">
-            Onde o Conhecimento <br className="hidden sm:block" /> Encontra o <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text bg-[length:200%_auto] text-transparent italic animate-shimmer">Futuro.</span>
-          </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }} className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg text-balance">
-            Um ecossistema educacional completo, projetado para moldar mentes críticas e líderes globais através da tecnologia, inovação e acessibilidade para toda a comunidade escolar.
-          </motion.p>
-
-          <motion.form onSubmit={handleSearch} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.3 }} className="mx-auto mt-10 flex max-w-xl flex-col gap-3 sm:flex-row">
-            <div className="relative flex-1">
-              <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="O que você procura hoje?" className="w-full rounded-full glass-ui py-4 pl-12 pr-4 text-sm text-foreground outline-none ring-primary transition focus:ring-2" />
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.18 }} className="ssr-hero-panel relative rounded-[1.75rem] border border-border bg-card p-5 shadow-card sm:p-7">
+            <div className="flex items-start justify-between gap-4 border-b border-border pb-5">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">SSR-CONNECT</p>
+                <h2 className="heading-font mt-1.5 text-2xl font-bold tracking-tight">O que você precisa?</h2>
+                <p className="mt-1 text-sm text-muted-foreground">Acesse os espaços mais usados.</p>
+              </div>
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary"><GraduationCap className="h-6 w-6" /></span>
             </div>
-            <button type="submit" className="inline-flex items-center justify-center gap-2 rounded-full bg-secondary px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-secondary/30 transition hover:scale-105">
-              Explorar <ArrowRight className="h-4 w-4" />
-            </button>
-          </motion.form>
-
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="mt-8 flex flex-wrap justify-center gap-x-5 sm:gap-x-8 gap-y-3 text-sm text-muted-foreground">
-            <span className="flex items-center gap-2"><Users className="h-4 w-4 text-primary" /> 0 alunos</span>
-            <span className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-secondary" /> 0 títulos</span>
-            <span className="flex items-center gap-2"><GraduationCap className="h-4 w-4 text-primary" /> 0% aprovação</span>
+            <div className="mt-4 space-y-2">
+              {[
+                { icon: GraduationCap, title: "Portal do aluno", desc: "Sua área de estudos", to: "/portal-aluno" },
+                { icon: CalendarDays, title: "Calendário escolar", desc: "Datas e eventos", to: "/calendario" },
+                { icon: BookOpen, title: "Biblioteca digital", desc: "Materiais e conteúdos", to: "/biblioteca" },
+              ].map((item) => (
+                <Link key={item.to} to={item.to} className="ssr-quick-link group flex items-center gap-4 rounded-2xl border border-transparent p-3.5 transition-colors hover:border-border hover:bg-muted/60">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><item.icon className="h-5 w-5" /></span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-semibold text-foreground">{item.title}</span>
+                    <span className="mt-0.5 block text-xs text-muted-foreground">{item.desc}</span>
+                  </span>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+                </Link>
+              ))}
+            </div>
+            <Link to="/noticias" className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-primary/5 px-4 py-4 text-sm font-semibold text-primary transition-colors hover:bg-primary/10">
+              Acompanhe os comunicados da escola <ArrowRight className="h-4 w-4 shrink-0" />
+            </Link>
           </motion.div>
-        </div>
-
-        <div className="pointer-events-none absolute bottom-5 left-1/2 hidden -translate-x-1/2 sm:block">
-          <span className="flex h-9 w-5 items-start justify-center rounded-full border-2 border-foreground/30 p-1">
-            <span className="h-2 w-1 rounded-full bg-foreground/50 animate-scroll-down" />
-          </span>
         </div>
       </section>
 
@@ -132,8 +151,8 @@ export default function Home() {
         <div className="mt-10 grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {hubTiles.map((t, i) => (
             <motion.div key={t.title} custom={i} variants={fadeUp} initial="hidden" whileInView="show" whileHover={{ y: -6, scale: 1.02 }} viewport={{ once: true, margin: "-60px" }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
-              <Link to={t.to} className="group flex h-full flex-col rounded-3xl border border-border bg-card p-5 transition-all duration-300 hover:border-primary/30 hover:shadow-card sm:p-7">
-                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/8 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground"><t.icon className="h-6 w-6" /></span>
+              <Link to={t.to} className="group flex h-full flex-col rounded-2xl border border-border bg-card p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-card sm:p-6">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground"><t.icon className="h-6 w-6" /></span>
                 <h3 className="heading-font mt-5 text-lg font-semibold">{t.title}</h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{t.desc}</p>
                 <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-primary">Acessar <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" /></span>
@@ -150,17 +169,13 @@ export default function Home() {
             <div className="overflow-hidden rounded-3xl shadow-2xl">
               <Image src={STUDENTS_IMG} alt="Estudantes colaborando em sala de aula moderna" fittingType="fill" className="aspect-[4/3] w-full" />
             </div>
-            <div className="absolute -bottom-6 -right-6 hidden animate-float-slow rounded-2xl border border-border bg-card p-6 shadow-card sm:block">
-              <p className="heading-font text-3xl font-bold text-secondary">0 anos</p>
-              <p className="text-xs text-muted-foreground">formando cidadãos</p>
-            </div>
           </motion.div>
 
           <div>
-            <SectionHeading align="left"               eyebrow="Sobre o CETI" title="Uma instituição construída sobre o futuro"               description="Há mais de duas décadas, o CETI Sebastião Soares Ribeiro une tradição acadêmica e inovação tecnológica para oferecer uma educação transformadora." />
-            <p className="mt-5 text-sm leading-relaxed text-muted-foreground">Nossa metodologia integra tecnologias emergentes, aprendizado projetivo e um acompanhamento individualizado, preparando cada estudante para os desafios de um mundo em constante transformação.</p>
+            <SectionHeading align="left"               eyebrow="Sobre o CETI" title="Um espaço para aprender e crescer"               description="O CETI Sebastião Soares Ribeiro reúne ensino regular, formação técnica e atividades para a comunidade escolar." />
+            <p className="mt-5 text-sm leading-relaxed text-muted-foreground">Conheça os cursos, acompanhe as novidades e encontre os canais de comunicação da escola em um só lugar.</p>
             <div className="mt-8 grid grid-cols-3 gap-4">
-              {[{ n: "0", l: "Alunos" }, { n: "0", l: "Educadores" }, { n: "0%", l: "Aprovação" }].map((s) => (
+              {[{ n: "Ensino", l: "Regular" }, { n: "Cursos", l: "Técnicos" }, { n: "Vida", l: "Escolar" }].map((s) => (
                 <div key={s.l} className="rounded-2xl border border-border bg-background p-4 text-center">
                   <p className="heading-font text-2xl font-bold text-primary">{s.n}</p>
                   <p className="text-xs text-muted-foreground">{s.l}</p>
@@ -287,9 +302,9 @@ export default function Home() {
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary to-secondary px-6 py-12 text-center text-primary-foreground shadow-card animate-gradient-pan sm:px-16 sm:py-16">
           <div className="absolute inset-0 opacity-30 prism-gradient" />
           <div className="relative">
-            <motion.h2 initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1, duration: 0.5 }} className="heading-font text-3xl font-bold sm:text-4xl text-balance">Pronto para fazer parte do CETI?</motion.h2>
-            <p className="mx-auto mt-4 max-w-xl text-primary-foreground/85 text-balance">Matrículas abertas para 2027. Agende uma visita ou fale com nossa secretaria.</p>
-            <Link to="/contato" className="mt-8 inline-flex items-center gap-2 rounded-full bg-background px-8 py-4 text-sm font-semibold text-primary shadow-soft transition hover:scale-105">Iniciar matrícula <ArrowRight className="h-4 w-4" /></Link>
+            <motion.h2 initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1, duration: 0.5 }} className="heading-font text-3xl font-bold sm:text-4xl text-balance">Quer conhecer melhor o CETI?</motion.h2>
+            <p className="mx-auto mt-4 max-w-xl text-primary-foreground/85 text-balance">Tire suas dúvidas sobre matrículas ou converse com a secretaria.</p>
+            <Link to="/contato" className="mt-8 inline-flex items-center gap-2 rounded-full bg-background px-8 py-4 text-sm font-semibold text-primary shadow-soft transition hover:scale-105">Falar com a secretaria <ArrowRight className="h-4 w-4" /></Link>
           </div>
         </motion.div>
       </section>

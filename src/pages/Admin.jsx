@@ -45,39 +45,37 @@ export default function Admin() {
   return (
     <div>
       {/* Cabeçalho do painel */}
-      <section className="relative overflow-hidden border-b border-border">
-        <div className="absolute inset-0 prism-gradient" />
-        <div className="absolute -right-24 -top-32 h-72 w-72 rounded-full bg-secondary/10 blur-3xl" />
-        <div className="absolute -left-16 bottom-0 h-48 w-48 rounded-full bg-primary/10 blur-3xl" />
-        <div className="relative mx-auto flex max-w-7xl items-end justify-between gap-6 px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+      <section className="relative overflow-hidden border-b border-border bg-card/40">
+        <div className="ssr-hero-grid pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
+        <div className="relative mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-6 px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
               <ShieldCheck className="h-3.5 w-3.5" /> Painel Administrativo
             </span>
-            <h1 className="heading-font mt-5 text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">
+            <h1 className="heading-font mt-4 text-3xl font-extrabold tracking-[-0.045em] text-balance sm:text-4xl">
               Gestão de conteúdo
             </h1>
             <p className="mt-3 max-w-2xl text-muted-foreground text-pretty">
-              Edite notícias, avisos, eventos e cardápio — tudo se atualiza no site na hora, sem precisar de código.
+              Gerencie comunicados, notícias, eventos, alunos e conteúdos da escola em um só lugar.
             </p>
           </div>
           <button
             onClick={logout}
-            className="inline-flex shrink-0 items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground/80 transition hover:border-destructive/40 hover:text-destructive"
+            className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground/80 transition-colors hover:border-destructive/40 hover:text-destructive"
           >
             <LogOut className="h-4 w-4" /> Sair
           </button>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-7 sm:px-6 sm:py-10 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-4">
           <aside className="lg:sticky lg:top-24 lg:self-start">
             {/* Navegação mobile: barra horizontal rolável e fixa */}
             <AdminSectionNav sections={SECTIONS} active={active} onSelect={setActive} />
 
             {/* Navegação desktop: sidebar vertical */}
-            <div className="hidden rounded-3xl border border-border bg-card p-3 shadow-soft lg:block">
+            <div className="hidden rounded-2xl border border-border bg-card p-2.5 shadow-soft lg:block">
               {NAV_GROUPS.map((group) => (
                 <div key={group} className="mb-4 last:mb-1">
                   <p className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{group}</p>
@@ -86,23 +84,25 @@ export default function Admin() {
                     return (
                       <button
                         key={s.key}
+                        type="button"
+                        aria-pressed={isActive}
                         onClick={() => setActive(s.key)}
-                        className={`group mb-1 flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-all duration-200 ${
+                        className={`group mb-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors duration-200 ${
                           isActive
-                            ? "bg-primary text-primary-foreground shadow-soft"
-                            : "hover:translate-x-0.5 hover:bg-muted"
+                            ? "bg-primary/10 text-primary"
+                            : "hover:bg-muted"
                         }`}
                       >
                         <span
                           className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition ${
-                            isActive ? "bg-white/20" : "bg-primary/10 text-primary group-hover:bg-primary/15"
+                            isActive ? "bg-primary/15" : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"
                           }`}
                         >
                           <s.icon className="h-5 w-5" />
                         </span>
                         <span>
                           <p className="text-sm font-semibold">{s.label}</p>
-                          <p className={`text-xs ${isActive ? "text-primary-foreground/75" : "text-muted-foreground"}`}>{s.desc}</p>
+                          <p className={`text-xs ${"text-muted-foreground"}`}>{s.desc}</p>
                         </span>
                       </button>
                     );
