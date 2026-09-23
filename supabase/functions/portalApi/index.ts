@@ -114,7 +114,8 @@ export async function handlePortal(req) {
         if (!(await loginThrottle(svc, "student", body.login, "failure"))) return TOO_MANY();
         return Response.json({ error: "Login ou senha incorretos." }, { status: 401 });
       }
-      if (isLegacyPasswordHash(s.password_hash)) {
+      if (isLegacyPasswordHash(s.password_hash) &&
+          typeof body.password === "string" && body.password.length >= 8 && body.password.length <= 128) {
         await svc.entities.Student.update(s.id, { password_hash: await hashPassword(body.password) });
       }
       await loginThrottle(svc, "student", body.login, "success");
@@ -157,7 +158,8 @@ export async function handlePortal(req) {
         if (!(await loginThrottle(svc, "teacher", body.email, "failure"))) return TOO_MANY();
         return Response.json({ error: "E-mail ou senha incorretos." }, { status: 401 });
       }
-      if (isLegacyPasswordHash(t.password_hash)) {
+      if (isLegacyPasswordHash(t.password_hash) &&
+          typeof body.password === "string" && body.password.length >= 8 && body.password.length <= 128) {
         await svc.entities.Teacher.update(t.id, { password_hash: await hashPassword(body.password) });
       }
       await loginThrottle(svc, "teacher", body.email, "success");
@@ -221,7 +223,8 @@ export async function handlePortal(req) {
         if (!(await loginThrottle(svc, "parent", body.email, "failure"))) return TOO_MANY();
         return Response.json({ error: "E-mail ou senha incorretos." }, { status: 401 });
       }
-      if (isLegacyPasswordHash(p.password_hash)) {
+      if (isLegacyPasswordHash(p.password_hash) &&
+          typeof body.password === "string" && body.password.length >= 8 && body.password.length <= 128) {
         await svc.entities.Parent.update(p.id, { password_hash: await hashPassword(body.password) });
       }
       await loginThrottle(svc, "parent", body.email, "success");
