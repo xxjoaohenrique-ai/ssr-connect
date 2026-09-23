@@ -1,0 +1,59 @@
+name: Publicar SSR-CONNECT no Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+concurrency:
+  group: ssr-cloudflare-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Verificar e publicar no Cloudflare
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Testar autenticação e sessões
+        run: npm test
+
+      - name: Compilar React/Vite para a raiz do Cloudflare
+        run: npm run build
+        env:
+          GITHUB_PAGES: "false"
+
+      - name: Verificar credenciais do Cloudflare
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CF_TOKEN" ] || [ -z "$CF_ACCOUNT" ]; then
+            echo "::error::Configure CLOUDFLARE_API_TOKEN e CLOUDFLARE_ACCOUNT_ID em Settings > Secrets and variables > Actions no repositorio SSR-CONNECT."
+            echo "### Cloudflare Pages: publicação não realizada" >> "$GITHUB_STEP_SUMMARY"
+            echo "Faltam CLOUDFLARE_API_TOKEN e/ou CLOUDFLARE_ACCOUNT_ID no repositório." >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+      - name: Publicar no projeto existente ssr-connect
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=ssr-connect --branch=main
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
