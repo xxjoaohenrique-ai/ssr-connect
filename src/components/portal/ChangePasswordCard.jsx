@@ -15,7 +15,7 @@ export default function ChangePasswordCard({ onSubmit }) {
   const submit = async (e) => {
     e.preventDefault();
     setErr(null); setOk(null);
-    if (next.length < 6) { setErr("A nova senha deve ter ao menos 6 caracteres."); return; }
+    if (next.length < 8) { setErr("A nova senha deve ter ao menos 8 caracteres."); return; }
     if (next !== conf) { setErr("As senhas não conferem."); return; }
     setBusy(true);
     try {
@@ -36,7 +36,7 @@ export default function ChangePasswordCard({ onSubmit }) {
         </div>
         <div className="relative">
           <KeyRound className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <input type="password" value={next} onChange={(e) => setNext(e.target.value)} placeholder="Nova senha (mín. 6 caracteres)" className={inputCls} required />
+          <input type="password" value={next} onChange={(e) => setNext(e.target.value)} placeholder="Nova senha (mín. 8 caracteres)" className={inputCls} required />
         </div>
         <div className="relative">
           <KeyRound className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
