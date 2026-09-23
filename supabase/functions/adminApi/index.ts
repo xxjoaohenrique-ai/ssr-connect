@@ -123,6 +123,25 @@ export async function handleAdmin(req) {
       return Response.json({ record: sanitizeRecord(rec) });
     }
     if (action === "update") {
+      if (entity === "AdminAccount") {
+        const account = await coll.get(body.id);
+        if (!account) return Response.json({ error: "Conta não encontrada." }, { status: 404 });
+        if (body.data?.is_active === false && account.is_active !== false) {
+          const active = await coll.filter({ is_active: true });
+          if (active.length <= 1) {
+            return Response.json({ error: "Não é possível desativar o último administrador ativo." }, { status: 400 });
+          }
+        }
+        if (body.data?.email !== undefined) {
+          const email = normEmail(body.data.email);
+          if (!email) return Response.json({ error: "Informe um e-mail válido." }, { status: 400 });
+          const accounts = await coll.list();
+          if (accounts.some((other) => other.id !== body.id && normEmail(other.email) === email)) {
+            return Response.json({ error: "Este e-mail já está cadastrado." }, { status: 400 });
+          }
+          body.data = { ...body.data, email };
+        }
+      }
       const rec = await coll.update(body.id, body.data);
       return Response.json({ record: sanitizeRecord(rec) });
     }
@@ -141,6 +160,9 @@ export async function handleAdmin(req) {
       return Response.json({ ok: true });
     }
     if (action === "bulkCreate") {
+      if (entity === "AdminAccount") {
+        return Response.json({ error: "Cadastre os administradores individualmente." }, { status: 400 });
+      }
       const recs = await coll.bulkCreate(body.records);
       return Response.json({ records: recs.map(sanitizeRecord) });
     }
