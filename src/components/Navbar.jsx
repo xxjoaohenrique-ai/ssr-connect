@@ -85,7 +85,7 @@ export default function Navbar() {
         </Link>
 
         {/* Links desktop */}
-        <div className="ssr-desktop-links hidden items-center gap-5 xl:gap-7 lg:flex">
+        <div className={"ssr-desktop-links hidden items-center gap-5 xl:gap-7 " + (isHome ? "2xl:flex" : "lg:flex")}>
           {(isHome ? homeLinks : mainLinks).map((l) => (
             <NavLink key={l.to} to={l.to} className={linkClass} end={l.to === "/"}>
               {l.label}
@@ -137,7 +137,7 @@ export default function Navbar() {
             aria-label={open ? "Fechar menu" : "Abrir menu"}
             aria-expanded={open}
             aria-controls="ssr-menu-mobile"
-            className="ssr-mobile-trigger inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border text-foreground transition-colors hover:bg-primary/10 lg:hidden"
+            className="ssr-mobile-trigger inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border text-foreground transition-colors hover:bg-primary/10 " + (isHome ? "2xl:hidden" : "lg:hidden")}
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -146,7 +146,7 @@ export default function Navbar() {
 
       {/* Menu mobile */}
       {open && (
-        <div id="ssr-menu-mobile" className="lg:hidden">
+        <div id="ssr-menu-mobile" className={isHome ? "2xl:hidden" : "lg:hidden"}>
           <div className="ssr-mobile-menu mx-3 mt-2 max-h-[min(74dvh,calc(100dvh-6rem))] overflow-y-auto overscroll-contain rounded-2xl border border-border bg-card p-3 shadow-float min-[380px]:mx-4 sm:mx-auto sm:max-w-xl">
             <div className="flex flex-col gap-1">
               {(isHome ? homeLinks : mainLinks).map((l) => (
