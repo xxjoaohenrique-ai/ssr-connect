@@ -109,7 +109,7 @@ export default function Home() {
               Tudo o que conecta você ao CETI, em um só lugar.
             </motion.p>
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.22 }} className="ssr-reference-actions">
-              <Link to="/portal-aluno" className="ssr-reference-cta ssr-reference-cta--primary"><GraduationCap size={22} aria-hidden="true" /> Entrar no Portal <ArrowRight size={18} aria-hidden="true" /></Link>
+              <Link to="/portal-aluno" className="ssr-reference-cta ssr-reference-cta--primary"><GraduationCap size={22} aria-hidden="true" /> Acessar minha conta <ArrowRight size={18} aria-hidden="true" /></Link>
               <Link to="/sobre" className="ssr-reference-cta ssr-reference-cta--secondary"><School size={20} aria-hidden="true" /> Conheça o CETI</Link>
             </motion.div>
             <motion.form onSubmit={handleSearch} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} role="search" className="ssr-reference-search">
