@@ -16,6 +16,16 @@ const mainLinks = [
   { label: "Admin", to: "/admin" },
 ];
 
+const homeLinks = [
+  { label: "Início", to: "/" },
+  { label: "A Escola", to: "/sobre" },
+  { label: "Notícias", to: "/noticias" },
+  { label: "Eventos", to: "/calendario" },
+  { label: "Cursos", to: "/cursos" },
+  { label: "Portal do Aluno", to: "/portal-aluno" },
+  { label: "Contato", to: "/contato" },
+];
+
 const resourceLinks = [
   { label: "Biblioteca Digital", to: "/biblioteca" },
   { label: "Notícias", to: "/noticias" },
@@ -69,18 +79,20 @@ export default function Navbar() {
             <GraduationCap className="h-5 w-5" />
           </span>
           <span className="flex min-w-0 flex-col leading-tight">
-            <span className="heading-font text-[14px] font-extrabold tracking-tight min-[380px]:text-base sm:text-lg">SSR<span className="text-primary">{isHome ? "CONNECT" : "-CONNECT"}</span></span>
-            <span className="ssr-brand-subtitle hidden text-[10px] font-semibold tracking-wide text-muted-foreground sm:block">CETI Sebastião Soares Ribeiro</span>
+            <span className="heading-font text-[14px] font-extrabold tracking-tight min-[380px]:text-base sm:text-lg">{isHome ? "CETI" : "SSR"}<span className="text-primary">{isHome ? "" : "-CONNECT"}</span></span>
+            <span className="ssr-brand-subtitle hidden text-[10px] font-semibold tracking-wide text-muted-foreground sm:block">{isHome ? "SEBASTIÃO SOARES RIBEIRO · SSR-CONNECT" : "CETI Sebastião Soares Ribeiro"}</span>
           </span>
         </Link>
 
         {/* Links desktop */}
         <div className="ssr-desktop-links hidden items-center gap-5 xl:gap-7 lg:flex">
-          {mainLinks.map((l) => (
+          {(isHome ? homeLinks : mainLinks).map((l) => (
             <NavLink key={l.to} to={l.to} className={linkClass} end={l.to === "/"}>
               {l.label}
             </NavLink>
           ))}
+          {!isHome && (
+            <>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="flex min-h-10 items-center gap-1 text-sm font-medium tracking-wide text-foreground/80 transition-colors hover:text-primary">
@@ -100,22 +112,24 @@ export default function Navbar() {
           <NavLink to="/contato" className={linkClass}>
             Contato
           </NavLink>
+            </>
+          )}
         </div>
 
         {/* Ações */}
         <div className="flex shrink-0 items-center gap-1 sm:gap-2">
           <ThemeToggle className={isHome ? "ssr-header-theme" : ""} />
-          <Link
-            to={isHome ? "/portal-aluno" : "/admin-login"}
+          {!isHome && <Link
+            to="/admin-login"
             className="ssr-header-login hidden min-h-10 items-center rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-foreground/80 transition-colors hover:border-primary/40 hover:text-primary xl:inline-flex"
           >
             Entrar
-          </Link>
+          </Link>}
           <Link
-            to="/contato"
+            to={isHome ? "/portal-aluno" : "/contato"}
             className="ssr-header-enroll hidden min-h-10 items-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 xl:inline-flex"
           >
-            {isHome ? "Matrículas" : "Fale com a escola"}
+            {isHome ? "Acessar Portal do Aluno" : "Fale com a escola"}
           </Link>
           <button
             type="button"
@@ -135,7 +149,7 @@ export default function Navbar() {
         <div id="ssr-menu-mobile" className="lg:hidden">
           <div className="ssr-mobile-menu mx-3 mt-2 max-h-[min(74dvh,calc(100dvh-6rem))] overflow-y-auto overscroll-contain rounded-2xl border border-border bg-card p-3 shadow-float min-[380px]:mx-4 sm:mx-auto sm:max-w-xl">
             <div className="flex flex-col gap-1">
-              {mainLinks.map((l) => (
+              {(isHome ? homeLinks : mainLinks).map((l) => (
                 <NavLink
                   key={l.to}
                   to={l.to}
@@ -149,6 +163,8 @@ export default function Navbar() {
                   {l.label}
                 </NavLink>
               ))}
+              {!isHome && (
+                <>
               <div className="px-4 pb-1 pt-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                 Recursos
               </div>
@@ -165,18 +181,20 @@ export default function Navbar() {
                   {l.label}
                 </NavLink>
               ))}
+                </>
+              )}
               <div className="my-1 border-t border-border/60" />
-              <NavLink
-                to={isHome ? "/portal-aluno" : "/admin-login"}
+              {!isHome && <NavLink
+                to="/admin-login"
                 className="rounded-xl border border-border/70 px-4 py-3 text-center text-sm font-semibold text-foreground/80"
               >
                 Entrar
-              </NavLink>
+              </NavLink>}
               <NavLink
-                to="/contato"
+                to={isHome ? "/portal-aluno" : "/contato"}
                 className="mt-2 rounded-xl bg-primary px-4 py-3 text-center text-sm font-semibold text-primary-foreground"
               >
-                {isHome ? "Matrículas" : "Fale Conosco"}
+                {isHome ? "Acessar Portal do Aluno" : "Fale Conosco"}
               </NavLink>
             </div>
           </div>
