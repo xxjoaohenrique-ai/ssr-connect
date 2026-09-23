@@ -34,7 +34,7 @@ export async function hashPassword(password) {
   }
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const digest = await derivePassword(password, salt, PASSWORD_ITERATIONS);
-  return `${PASSWORD_SCHEME}${PASSWORD_ITERATIONS}${b64url(salt)}${b64url(digest)}`;
+  return [PASSWORD_SCHEME, PASSWORD_ITERATIONS, b64url(salt), b64url(digest)].join("$");
 }
 export function isLegacyPasswordHash(stored) {
   return typeof stored === "string" && /^[0-9a-f]{64}$/i.test(stored);
