@@ -14,11 +14,11 @@ const items = [
 export default function MobileNav() {
   return (
     <nav
-      aria-label="Navegação principal"
+      aria-label="Navegação rápida no celular e tablet"
       className="ssr-bottom-nav fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 shadow-[0_-8px_30px_-20px_rgba(15,23,42,0.25)] backdrop-blur-xl lg:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      <div className="mx-auto grid max-w-lg grid-cols-5 items-stretch px-1">
+      <div className="mx-auto grid max-w-xl grid-cols-5 items-stretch px-1">
         {items.map(({ to, label, icon: Icon, end }) => (
           <NavLink
             key={to}
@@ -26,7 +26,7 @@ export default function MobileNav() {
             end={end}
             aria-label={label}
             className={({ isActive }) =>
-              `flex min-h-[58px] min-w-0 flex-col items-center justify-center gap-0.5 rounded-xl px-0.5 py-1.5 text-[10px] font-semibold transition-colors sm:text-[11px] ${
+              `flex min-h-[58px] min-w-0 flex-col items-center justify-center gap-0.5 rounded-xl px-0.5 py-1.5 text-[11px] font-semibold transition-colors sm:text-xs ${
                 isActive ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground"
               }`
             }
