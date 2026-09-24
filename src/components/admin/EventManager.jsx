@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Plus, Pencil, Trash2, Save, Loader2 } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { Plus, Pencil, Trash2, Save, Loader2, CalendarDays } from "lucide-react";
 import { adminList, adminCreate, adminUpdate, adminDelete } from "@/lib/adminApi";
 import { Modal, Field, inputCls } from "./ui";
 
@@ -77,8 +76,8 @@ export default function EventManager() {
       )}
 
       {editing && (
-        <Modal title={editing === "new" ? "Novo evento" : "Editar evento"} onClose={close}>
-          <form onSubmit={save} className="space-y-4">
+        <Modal title={editing === "new" ? "Novo evento" : "Editar evento"} description="Defina as datas e as informações do calendário." icon={CalendarDays} onClose={close}>
+          <form onSubmit={save} className="ssr-admin-form space-y-4">
             <Field label="Título"><input required value={form.title} onChange={set("title")} className={inputCls} /></Field>
             <Field label="Descrição"><textarea rows={3} value={form.description} onChange={set("description")} className={inputCls} /></Field>
             <div className="grid gap-4 sm:grid-cols-2">
