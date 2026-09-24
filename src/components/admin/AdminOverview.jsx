@@ -37,22 +37,23 @@ export default function AdminOverview({ onNavigate }) {
   }, []);
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="heading-font text-xl font-bold">Resumo do portal</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Conteúdo e pessoas cadastradas na plataforma.</p>
+    <div className="ssr-admin-overview space-y-6">
+      <div className="ssr-admin-welcome">
+        <div><h1 className="heading-font text-3xl font-extrabold tracking-tight sm:text-4xl">Olá, equipe!</h1><p className="mt-2 text-sm text-muted-foreground sm:text-base">Acompanhe as informações da escola e organize suas publicações.</p></div>
+        <div className="ssr-admin-date"><CalendarDays className="h-5 w-5 shrink-0 text-primary" /><span><strong>{new Intl.DateTimeFormat("pt-BR", { dateStyle: "full" }).format(new Date())}</strong><small>Painel administrativo da escola</small></span></div>
       </div>
-      <AdminStatsGrid stats={stats} counts={counts} />
-      <section className="rounded-3xl border border-border bg-card p-5 shadow-sm sm:p-6">
-        <h3 className="heading-font text-lg font-bold">Publicar e atualizar</h3>
-        <p className="mb-5 mt-1 text-sm text-muted-foreground">Escolha uma tarefa para começar.</p>
+      <AdminStatsGrid stats={stats} counts={counts} onNavigate={onNavigate} />
+      <section className="ssr-admin-panel">
+        <h2 className="heading-font text-xl font-bold">Ações rápidas</h2>
+        <p className="mb-5 mt-1 text-sm text-muted-foreground">Publique um conteúdo ou envie um comunicado para a comunidade escolar.</p>
         <AdminQuickActions actions={actions} onNavigate={onNavigate} />
       </section>
-      <section>
-        <h3 className="heading-font text-lg font-bold">Gerenciar outras áreas</h3>
+      <section className="ssr-admin-panel">
+        <h2 className="heading-font text-xl font-bold">Gerenciar a escola</h2>
+        <p className="mt-1 text-sm text-muted-foreground">Acesse e atualize as principais áreas do portal.</p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {areas.map((area) => (
-            <button key={area.key} type="button" onClick={() => onNavigate(area.key)} className="group flex min-w-0 items-center gap-3 rounded-2xl border border-border bg-card p-4 text-left transition-colors hover:border-primary/40 hover:bg-primary/5">
+            <button key={area.key} type="button" onClick={() => onNavigate(area.key)} className="ssr-admin-area-card group flex min-w-0 items-center gap-3 rounded-2xl border border-border bg-card p-4 text-left transition-colors hover:border-primary/40 hover:bg-primary/5">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><area.icon className="h-5 w-5" /></span>
               <span className="min-w-0 flex-1"><span className="block text-sm font-semibold">{area.title}</span><span className="block text-xs text-muted-foreground">{area.detail}</span></span>
               <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
