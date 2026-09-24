@@ -79,6 +79,8 @@ export default function NewsManager() {
       {editing && (
         <Modal title={editing === "new" ? "Nova notícia" : "Editar notícia"} description="Organize o conteúdo antes de publicá-lo no portal." icon={Newspaper} onClose={close}>
           <form onSubmit={save} className="ssr-admin-form space-y-4">
+            <div className="ssr-admin-form-section">
+              <span className="ssr-admin-form-section-title">Dados da notícia</span>
             <Field label="Título"><input required value={form.title} onChange={set("title")} className={inputCls} /></Field>
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Categoria"><select value={form.category} onChange={set("category")} className={inputCls}>{CATEGORIES.map((c) => <option key={c}>{c}</option>)}</select></Field>
@@ -87,10 +89,9 @@ export default function NewsManager() {
             <Field label="Resumo"><input value={form.excerpt} onChange={set("excerpt")} className={inputCls} /></Field>
             <Field label="Conteúdo"><textarea rows={5} value={form.content} onChange={set("content")} className={inputCls} /></Field>
             <Field label="Imagem (URL)"><input value={form.image_url} onChange={set("image_url")} placeholder="https://..." className={inputCls} /></Field>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Autor"><input value={form.author} onChange={set("author")} className={inputCls} /></Field>
-              <label className="flex items-center gap-2 self-end pb-3 text-sm"><input type="checkbox" checked={form.is_published} onChange={set("is_published")} className="h-4 w-4 rounded" /> Publicado</label>
+            <Field label="Autor"><input value={form.author} onChange={set("author")} className={inputCls} /></Field>
             </div>
+            <label className="ssr-admin-form-status"><input type="checkbox" checked={form.is_published} onChange={set("is_published")} /> <span><strong>Publicado</strong><small>A notícia ficará visível no site.</small></span></label>
             <div className="flex justify-end gap-2 pt-2">
               <button type="button" onClick={close} className="rounded-full border border-border px-5 py-2.5 text-sm font-medium">Cancelar</button>
               <button type="submit" disabled={saving} className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"><Save className="h-4 w-4" /> {saving ? "Salvando..." : "Salvar"}</button>
