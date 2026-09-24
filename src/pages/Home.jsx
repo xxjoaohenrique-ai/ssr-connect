@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search, ArrowRight, BookOpen, CalendarDays, School, BarChart3, Lightbulb, Newspaper, Image as ImageIcon, Users, GraduationCap, Megaphone, Code2, AlertTriangle, ChevronRight, Loader2 } from "lucide-react";
+import { Search, ArrowRight, BookOpen, CalendarDays, Image as ImageIcon, Users, GraduationCap, Megaphone, Code2, AlertTriangle, ChevronRight, Loader2 } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import TestimonialSection from "@/components/TestimonialSection";
 import TickerBanner from "@/components/TickerBanner";
-import HomeShowcase from "@/components/HomeShowcase";
 import "@/styles/home-reference.css";
 import { Image } from "@/components/ui/image";
 import { base44 } from "@/api/base44Client";
@@ -15,12 +14,8 @@ const STUDENTS_IMG = `${import.meta.env.BASE_URL}images/students.svg`;
 const hubTiles = [
   { icon: BookOpen, title: "Biblioteca Digital", desc: "Vídeo-aulas e materiais de estudo publicados pelos professores.", to: "/biblioteca", color: "from-blue-500 to-blue-600" },
   { icon: CalendarDays, title: "Calendário Escolar", desc: "Provas, eventos, feriados e reuniões em um só lugar.", to: "/calendario", color: "from-emerald-500 to-emerald-600" },
-  { icon: Newspaper, title: "Notícias e Avisos", desc: "Comunicados oficiais e atualizações da escola.", to: "/noticias", color: "from-amber-500 to-orange-500" },
   { icon: ImageIcon, title: "Galeria", desc: "Fotos e vídeos dos eventos e do dia a dia escolar.", to: "/galeria", color: "from-sky-500 to-indigo-500" },
   { icon: GraduationCap, title: "Portal do Aluno", desc: "Acesso a notas, materiais, aulas e avisos da turma.", to: "/portal-aluno", color: "from-violet-500 to-purple-600" },
-  { icon: Users, title: "Sobre a Escola", desc: "Conheça a história, missão e estrutura do CETI.", to: "/sobre", color: "from-rose-500 to-pink-600" },
-  { icon: Code2, title: "Cursos e Turmas", desc: "Cursos técnicos integrados e formação regular.", to: "/cursos", color: "from-emerald-500 to-teal-600" },
-  { icon: Megaphone, title: "Fale Conosco", desc: "Dúvidas, matrículas e contato com a secretaria.", to: "/contato", color: "from-amber-500 to-orange-500" },
 ];
 
 const courses = [
@@ -46,26 +41,20 @@ export default function Home() {
   const navigate = useNavigate();
   const [news, setNews] = useState([]);
   const [notices, setNotices] = useState([]);
-  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dataError, setDataError] = useState(false);
 
   useEffect(() => {
     let active = true;
     (async () => {
-      const today = new Date(); today.setHours(0, 0, 0, 0);
       const results = await Promise.allSettled([
         base44.entities.News.filter({ is_published: true }, "-date", 3),
         base44.entities.Notice.filter({ is_active: true }, "-date", 4),
-        base44.entities.CalendarEvent.filter({ is_active: true }, "date"),
       ]);
       if (!active) return;
-      const [newsResult, noticesResult, eventsResult] = results;
+      const [newsResult, noticesResult] = results;
       if (newsResult.status === "fulfilled") setNews(newsResult.value);
       if (noticesResult.status === "fulfilled") setNotices(noticesResult.value);
-      if (eventsResult.status === "fulfilled") {
-        setEvents(eventsResult.value.filter((e) => e.date && new Date(e.date + "T00:00:00") >= today).slice(0, 4));
-      }
       setDataError(results.some((result) => result.status === "rejected"));
       setLoading(false);
     })();
@@ -89,7 +78,7 @@ export default function Home() {
 
   return (
     <div className="ssr-reference-home overflow-x-hidden">
-      {/* Capa pública: as quatro janelas levam a páginas reais do site. */}
+      {/* Apresentação e acesso às páginas principais da escola. */}
       <section className="ssr-reference-hero" aria-labelledby="ssr-home-heading">
         <div className="ssr-reference-hero-inner">
           <div className="ssr-reference-copy">
@@ -110,12 +99,6 @@ export default function Home() {
               <Link to="/sobre" className="ssr-reference-cta ssr-reference-cta--primary"><Users size={21} aria-hidden="true" /> Conheça a nossa escola <ArrowRight size={18} aria-hidden="true" /></Link>
               <Link to="/portal-aluno" className="ssr-reference-cta ssr-reference-cta--secondary"><GraduationCap size={20} aria-hidden="true" /> Acesse o Portal Escolar</Link>
             </motion.div>
-            <div className="ssr-reference-values" aria-label="Explore nossa comunidade">
-              <Link to="/sobre"><GraduationCap size={23} aria-hidden="true" /><strong>Educação de qualidade</strong><span>Ensino e oportunidades.</span></Link>
-              <Link to="/contato"><Users size={23} aria-hidden="true" /><strong>Comunidade engajada</strong><span>Escola e família juntas.</span></Link>
-              <Link to="/cursos"><Lightbulb size={23} aria-hidden="true" /><strong>Projetos que inspiram</strong><span>Aprender na prática.</span></Link>
-              <Link to="/cursos"><BarChart3 size={23} aria-hidden="true" /><strong>Novas possibilidades</strong><span>Conheça nossos cursos.</span></Link>
-            </div>
             <form onSubmit={handleSearch} role="search" className="ssr-reference-search">
               <Search size={18} aria-hidden="true" />
               <label htmlFor="ssr-home-search" className="sr-only">Pesquisar informações da escola</label>
@@ -123,17 +106,14 @@ export default function Home() {
               <button type="submit" disabled={!query.trim()}>Buscar <ArrowRight size={16} aria-hidden="true" /></button>
             </form>
           </div>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.18 }} className="ssr-reference-preview">
-            <HomeShowcase events={events} news={news} loading={loading} />
-          </motion.div>
         </div>
       </section>
       {/* Avisos continuam editáveis pelo administrador e visíveis ao público. */}
       <TickerBanner />
 
-      {/* KNOWLEDGE HUB */}
+      {/* Serviços que ainda não têm uma prévia própria nesta página. */}
       <section className="ssr-home-section mx-auto max-w-7xl px-4 py-12 sm:py-20 sm:px-6 lg:px-8">
-        <SectionHeading eyebrow="Hub do Conhecimento" title="Tudo o que você precisa, em um só lugar" description="Centralize o acesso às ferramentas e informações essenciais da vida escolar — para alunos, professores, pais e comunidade." />
+        <SectionHeading eyebrow="Serviços" title="Explore a escola" description="Acesse os espaços e recursos da comunidade escolar." />
         <div className="ssr-home-hub-grid mt-8 grid gap-3 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
           {hubTiles.map((t, i) => (
             <motion.div key={t.title} custom={i} variants={fadeUp} initial="hidden" whileInView="show" whileHover={{ y: -6, scale: 1.02 }} viewport={{ once: true, margin: "-60px" }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
@@ -159,15 +139,6 @@ export default function Home() {
 
           <div>
             <SectionHeading align="left"               eyebrow="Sobre o CETI" title="Um espaço para aprender e crescer"               description="O CETI Sebastião Soares Ribeiro reúne ensino regular, formação técnica e atividades para a comunidade escolar." />
-            <p className="mt-5 text-sm leading-relaxed text-muted-foreground">Conheça os cursos, acompanhe as novidades e encontre os canais de comunicação da escola em um só lugar.</p>
-            <div className="mt-8 grid grid-cols-3 gap-2 sm:gap-4">
-              {[{ n: "Ensino", l: "Regular" }, { n: "Cursos", l: "Técnicos" }, { n: "Vida", l: "Escolar" }].map((s) => (
-                <div key={s.l} className="min-w-0 rounded-2xl border border-border bg-background px-1.5 py-3 text-center sm:p-4">
-                  <p className="heading-font text-base font-bold text-primary sm:text-2xl">{s.n}</p>
-                  <p className="text-xs text-muted-foreground">{s.l}</p>
-                </div>
-              ))}
-            </div>
             <Link to="/sobre" className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:scale-105">Conheça nossa história <ArrowRight className="h-4 w-4" /></Link>
           </div>
         </div>
