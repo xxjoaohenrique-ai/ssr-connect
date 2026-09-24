@@ -16,7 +16,6 @@ const mainLinks = [
 const resourceLinks = [
   { label: "Biblioteca Digital", to: "/biblioteca" },
   { label: "Galeria", to: "/galeria" },
-  { label: "Painel Admin", to: "/admin" },
 ];
 
 // Cabeçalho inteligente com glassmorphism e navegação responsiva
@@ -75,6 +74,9 @@ export default function Navbar() {
               {l.label}
             </NavLink>
           ))}
+          <NavLink to="/admin-login" className={linkClass}>
+            Administração
+          </NavLink>
         </div>
 
         {/* Ações */}
@@ -135,6 +137,12 @@ export default function Navbar() {
                 </NavLink>
               ))}
               <div className="my-1 border-t border-border/60" />
+              <NavLink
+                to="/admin-login"
+                className="rounded-xl border border-border/70 px-4 py-3 text-center text-sm font-semibold text-foreground/80 hover:bg-muted"
+              >
+                Acesso da administração
+              </NavLink>
               <NavLink
                 to="/portal-aluno"
                 className="mt-2 rounded-xl bg-primary px-4 py-3 text-center text-sm font-semibold text-primary-foreground"
