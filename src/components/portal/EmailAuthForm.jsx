@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Lock, User, Loader2, KeyRound, AlertCircle, UserPlus, Info } from "lucide-react";
+import { Mail, Lock, User, Loader2, KeyRound, AlertCircle, UserPlus, Info, Eye, EyeOff, MessageCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const inputCls = "w-full rounded-xl border border-border bg-background py-3 pl-11 pr-4 text-sm outline-none ring-primary transition focus:ring-2";
 
@@ -15,6 +16,7 @@ export default function EmailAuthForm({ title, subtitle, onLogin, onRegister, ex
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const submit = async (e) => {
     e.preventDefault();
@@ -37,7 +39,7 @@ export default function EmailAuthForm({ title, subtitle, onLogin, onRegister, ex
   };
 
   return (
-    <motion.form initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} onSubmit={submit} className="mx-auto max-w-md rounded-3xl border border-border bg-card p-8 shadow-sm">
+    <motion.form initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} onSubmit={submit} className="ssr-access-card mx-auto max-w-md rounded-3xl border border-border bg-card p-8 shadow-sm">
       <div className="mb-6 flex items-center gap-3">
         <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary"><KeyRound className="h-6 w-6" /></span>
         <div>
@@ -53,13 +55,16 @@ export default function EmailAuthForm({ title, subtitle, onLogin, onRegister, ex
             <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome completo" className={inputCls} required />
           </div>
         )}
+        <label className="ssr-access-label" htmlFor="portal-email">E-mail</label>
         <div className="relative">
           <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="E-mail" className={inputCls} required />
+          <input id="portal-email" type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="seu@email.com" className={inputCls} required />
         </div>
+        <label className="ssr-access-label" htmlFor="portal-password">Senha</label>
         <div className="relative">
           <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Senha" className={inputCls} required />
+          <input id="portal-password" type={showPassword ? "text" : "password"} autoComplete={mode === "login" ? "current-password" : "new-password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Sua senha" className={`${inputCls} !pr-12`} required />
+          <button type="button" onClick={() => setShowPassword((s) => !s)} aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-2 text-muted-foreground hover:text-primary">{showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}</button>
         </div>
         {mode === "register" && extraFields.map((f) => (
           <div key={f.key} className="relative">
@@ -84,6 +89,7 @@ export default function EmailAuthForm({ title, subtitle, onLogin, onRegister, ex
           <>Já tem conta? <button type="button" onClick={() => { setMode("login"); setErr(null); }} className="font-semibold text-primary hover:underline">Entrar</button></>
         )}
       </p>
+      {mode === "login" && <div className="ssr-access-help"><MessageCircle className="h-5 w-5" /><span>Precisa de ajuda? <Link to="/contato">Fale com a escola</Link></span></div>}
     </motion.form>
   );
 }

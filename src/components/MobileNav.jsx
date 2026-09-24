@@ -8,7 +8,7 @@ const items = [
   { to: "/cursos", label: "Cursos", icon: BookOpen },
   { to: "/noticias", label: "Notícias", icon: Newspaper },
   { to: "/calendario", label: "Agenda", icon: CalendarDays },
-  { to: "/portal-aluno", label: "Portal", icon: UserRound },
+  { to: "/portal-aluno", label: "Minha conta", icon: UserRound },
 ];
 
 export default function MobileNav() {

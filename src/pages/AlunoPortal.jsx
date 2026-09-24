@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { GraduationCap, KeyRound, Loader2, AlertCircle, Lock, User, Briefcase, Users } from "lucide-react";
+import { GraduationCap, KeyRound, Loader2, AlertCircle, Lock, Mail, Briefcase, Users, Eye, EyeOff, MessageCircle, ArrowRight } from "lucide-react";
 import PageHero from "@/components/PageHero";
+import { Link } from "react-router-dom";
+import "@/styles/school-pages.css";
 import { getSession, setSession, clearSession, loginTeacher, registerTeacher, loginParent, registerParent } from "@/lib/portalAuth";
 import { loginAluno } from "@/lib/alunoAuth";
 import AlunoDashboard from "@/components/portal/AlunoDashboard";
@@ -24,6 +26,7 @@ export default function AlunoPortal() {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const switchTab = (t) => { setTab(t); setErr(null); };
   const onLogout = () => { clearSession(); setSessionState(null); };
@@ -78,33 +81,43 @@ export default function AlunoPortal() {
   }
 
   return (
-    <div>
-      <PageHero eyebrow="Portal Escolar" title="Acesse sua conta" description="Selecione seu perfil para entrar. Alunos usam o e-mail gerado pela escola; professores e pais usam e-mail e senha." />
-      <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
-        <div className="mx-auto mb-6 grid max-w-md grid-cols-3 gap-2">
+    <div className="ssr-access-page">
+      <div className="ssr-access-intro">
+        <div className="ssr-access-school" aria-hidden="true"><GraduationCap /></div>
+        <div className="ssr-access-intro-copy">
+          <h1>Bem-vindo</h1>
+          <p>Acesse sua conta para continuar.</p>
+        </div>
+      </div>
+      <section className="ssr-access-content mx-auto max-w-3xl px-4 sm:px-6">
+        <div className="ssr-access-tabs mx-auto mb-6 grid max-w-md grid-cols-3 gap-2" role="group" aria-label="Perfil de acesso">
           {TABS.map((t) => (
-            <button key={t.key} onClick={() => switchTab(t.key)} className={`flex items-center justify-center gap-1.5 rounded-full px-3 py-2.5 text-xs font-semibold transition ${tab === t.key ? "bg-primary text-primary-foreground" : "border border-border bg-card text-muted-foreground hover:text-primary"}`}>
+            <button key={t.key} type="button" aria-pressed={tab === t.key} onClick={() => switchTab(t.key)} className={`flex items-center justify-center gap-1.5 rounded-full px-3 py-2.5 text-xs font-semibold transition ${tab === t.key ? "bg-primary text-primary-foreground" : "border border-border bg-card text-muted-foreground hover:text-primary"}`}>
               <t.icon className="h-4 w-4" /> {t.label}
             </button>
           ))}
         </div>
 
         {tab === "aluno" && (
-          <motion.form initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} onSubmit={doAlunoLogin} className="mx-auto max-w-md rounded-3xl border border-border bg-card p-8 shadow-sm">
+          <motion.form initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} onSubmit={doAlunoLogin} className="ssr-access-card mx-auto max-w-md rounded-3xl border border-border bg-card p-8 shadow-sm">
             <div className="mb-2 space-y-4">
+              <label className="ssr-access-label" htmlFor="student-email">E-mail</label>
               <div className="relative">
-                <User className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <input value={login} onChange={(e) => setLogin(e.target.value)} placeholder="E-mail (Gmail)" className={inputCls} type="email" required />
+                <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <input id="student-email" autoComplete="username" value={login} onChange={(e) => setLogin(e.target.value)} placeholder="seu@email.com" className={inputCls} type="email" required />
               </div>
+              <label className="ssr-access-label" htmlFor="student-password">Senha</label>
               <div className="relative">
                 <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Senha" className={inputCls} required />
+                <input id="student-password" autoComplete="current-password" type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Sua senha" className={`${inputCls} !pr-12`} required />
+                <button type="button" onClick={() => setShowPassword((s) => !s)} aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-2 text-muted-foreground hover:text-primary">{showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}</button>
               </div>
             </div>
             {err && <p className="mt-4 flex items-center gap-2 text-sm text-destructive"><AlertCircle className="h-4 w-4" /> {err}</p>}
-            <button type="submit" disabled={busy} className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:scale-[1.02] disabled:opacity-60">
-              {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <KeyRound className="h-4 w-4" />} Entrar
+            <button type="submit" disabled={busy} className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:scale-[1.02] disabled:opacity-60">
+              {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <KeyRound className="h-4 w-4" />} Entrar <ArrowRight className="h-4 w-4" />
             </button>
+            <div className="ssr-access-help"><MessageCircle className="h-5 w-5" /><span>Precisa de ajuda? <Link to="/contato">Fale com a escola</Link></span></div>
           </motion.form>
         )}
 
