@@ -47,16 +47,16 @@ export default function Admin() {
       {/* Cabeçalho do painel */}
       <section className="relative overflow-hidden border-b border-border bg-card/40">
         <div className="ssr-hero-grid pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
-        <div className="relative mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-6 px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
+        <div className="relative mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-5 px-4 py-7 sm:px-6 sm:py-8 lg:px-8">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
               <ShieldCheck className="h-3.5 w-3.5" /> Painel Administrativo
             </span>
-            <h1 className="heading-font mt-4 text-3xl font-extrabold tracking-[-0.045em] text-balance sm:text-4xl">
-              Gestão de conteúdo
+            <h1 className="heading-font mt-3 text-2xl font-extrabold tracking-[-0.045em] text-balance sm:text-3xl">
+              {active === "overview" ? "Visão geral da escola" : SECTIONS.find((s) => s.key === active).label}
             </h1>
-            <p className="mt-3 max-w-2xl text-muted-foreground text-pretty">
-              Gerencie comunicados, notícias, eventos, alunos e conteúdos da escola em um só lugar.
+            <p className="mt-1 max-w-2xl text-sm text-muted-foreground text-pretty">
+              {active === "overview" ? "Acompanhe as informações e escolha o que deseja gerenciar." : SECTIONS.find((s) => s.key === active).desc}
             </p>
           </div>
           <button
@@ -69,7 +69,7 @@ export default function Admin() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-7 sm:px-6 sm:py-10 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-4">
+        <div className="grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
           <aside className="lg:sticky lg:top-24 lg:self-start">
             {/* Navegação mobile: barra horizontal rolável e fixa */}
             <AdminSectionNav sections={SECTIONS} active={active} onSelect={setActive} />
@@ -116,7 +116,7 @@ export default function Admin() {
             </div>
           </aside>
 
-          <div className="lg:col-span-3">
+          <div className="min-w-0">
             <div key={active} className="animate-fade-in-up">
               <Current onNavigate={setActive} />
             </div>
