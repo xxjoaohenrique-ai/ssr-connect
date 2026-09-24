@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Newspaper, CalendarDays, Users, Megaphone, Images, UtensilsCrossed, ShieldCheck, ArrowRight } from "lucide-react";
+import { Newspaper, CalendarDays, Users, Megaphone, Images, UtensilsCrossed, ShieldCheck, ArrowRight, BookOpen } from "lucide-react";
 import { adminList } from "@/lib/adminApi";
 import AdminStatsGrid from "./AdminStatsGrid";
 import AdminQuickActions from "./AdminQuickActions";
@@ -18,6 +18,7 @@ const actions = [
 ];
 
 const areas = [
+  { key: "history", icon: BookOpen, title: "História da escola", detail: "Texto da página Sobre a Escola" },
   { key: "students", icon: Users, title: "Alunos e turmas", detail: "Cadastros e acessos dos estudantes" },
   { key: "gallery", icon: Images, title: "Galeria da escola", detail: "Fotos publicadas no site" },
   { key: "menu", icon: UtensilsCrossed, title: "Cardápio escolar", detail: "Almoço e lanche da semana" },

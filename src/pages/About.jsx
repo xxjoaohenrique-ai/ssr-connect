@@ -1,8 +1,11 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Target, Eye, Heart, Shield, Users2, Lightbulb, MapPin, Award, Building2 } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import SectionHeading from "@/components/SectionHeading";
 import { Image } from "@/components/ui/image";
+import { base44 } from "@/api/base44Client";
+import { HISTORY_DEFAULTS } from "@/lib/historyDefaults";
 
 const ABOUT_IMG = `${import.meta.env.BASE_URL}images/about.svg`;
 
@@ -41,6 +44,18 @@ const fade = {
 };
 
 export default function About() {
+  const [history, setHistory] = useState(HISTORY_DEFAULTS);
+
+  useEffect(() => {
+    let mounted = true;
+    const load = () => base44.entities.ContactInfo.list()
+      .then((rows) => { if (mounted) setHistory({ ...HISTORY_DEFAULTS, ...rows[0] }); })
+      .catch(() => {});
+    load();
+    const unsubscribe = base44.entities.ContactInfo.subscribe(load);
+    return () => { mounted = false; unsubscribe(); };
+  }, []);
+
   return (
     <div>
       <PageHero
@@ -58,25 +73,14 @@ export default function About() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="overflow-hidden rounded-3xl shadow-2xl"
         >
-          <Image src={ABOUT_IMG} alt="Mãos trabalhando em projeto de robótica no CETI" fittingType="fill" className="aspect-[4/3] w-full" />
+          <Image src={ABOUT_IMG} alt="Ilustração de atividades escolares" fittingType="fill" className="aspect-[4/3] w-full" />
         </motion.div>
         <div>
-          <SectionHeading align="left" eyebrow="Nossa História" title="Tradição que se reinventa" />
+          <SectionHeading align="left" eyebrow="Nossa História" title={history.history_title || HISTORY_DEFAULTS.history_title} />
           <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted-foreground">
-            <p>
-              Fundado em 2001 por um grupo de educadores visionários, o CETI Sebastião Soares Ribeiro nasceu com o
-              propósito de transformar a maneira como o conhecimento é compartilhado. Começamos com
-              apenas 80 alunos em uma pequena unidade no centro da cidade.
-            </p>
-            <p>
-              Em mais de duas décadas, crescemos para uma estrutura completa com mais de 2.400
-              estudantes, mantendo sempre o compromisso com a educação personalizada e a inovação
-              pedagógica. Hoje somos referência em metodologias ativas e integração tecnológica.
-            </p>
-            <p>
-              O CETI Sebastião Soares Ribeiro homenageia um educador que dedicou a vida ao ensino.
-              Damos continuidade ao seu legado, revelando o potencial único de cada estudante.
-            </p>
+            {(history.history_text || HISTORY_DEFAULTS.history_text).split(/\n\s*\n/).filter(Boolean).map((paragraph, index) => (
+              <p key={index} className="whitespace-pre-line">{paragraph}</p>
+            ))}
           </div>
         </div>
       </section>
