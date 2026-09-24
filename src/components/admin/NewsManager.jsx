@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Plus, Pencil, Trash2, Save, Loader2 } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { Plus, Pencil, Trash2, Save, Loader2, Newspaper } from "lucide-react";
 import { adminList, adminCreate, adminUpdate, adminDelete } from "@/lib/adminApi";
 import { Modal, Field, inputCls } from "./ui";
 
@@ -78,8 +77,8 @@ export default function NewsManager() {
       )}
 
       {editing && (
-        <Modal title={editing === "new" ? "Nova notícia" : "Editar notícia"} onClose={close}>
-          <form onSubmit={save} className="space-y-4">
+        <Modal title={editing === "new" ? "Nova notícia" : "Editar notícia"} description="Organize o conteúdo antes de publicá-lo no portal." icon={Newspaper} onClose={close}>
+          <form onSubmit={save} className="ssr-admin-form space-y-4">
             <Field label="Título"><input required value={form.title} onChange={set("title")} className={inputCls} /></Field>
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Categoria"><select value={form.category} onChange={set("category")} className={inputCls}>{CATEGORIES.map((c) => <option key={c}>{c}</option>)}</select></Field>
