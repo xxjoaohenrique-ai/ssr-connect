@@ -213,7 +213,7 @@ export default function StudentManager() {
       {/* Modal novo / editar aluno */}
       {editing && (
         <Modal title={editing === "new" ? "Novo aluno" : "Editar aluno"} description={editing === "new" ? "Cadastre um estudante e configure seu acesso ao portal." : "Atualize os dados do estudante."} icon={UserPlus} className="ssr-student-modal" onClose={close}>
-          <form onSubmit={save} className="ssr-student-form space-y-5">
+          <form onSubmit={save} className="ssr-admin-form ssr-student-form space-y-5">
             <div className="ssr-student-form-section">
               <span className="ssr-student-form-label">Dados do estudante</span>
               <Field label="Nome completo"><input required autoComplete="name" value={form.name} onChange={set("name")} placeholder="Nome completo do aluno" className={inputCls} /></Field>
@@ -241,8 +241,8 @@ export default function StudentManager() {
 
       {/* Modal adicionar turma inteira */}
       {bulkOpen && (
-        <Modal title="Adicionar turma inteira" onClose={() => setBulkOpen(false)}>
-          <form onSubmit={saveBulk} className="space-y-4">
+        <Modal title="Adicionar turma inteira" description="Cadastre os alunos de uma turma de uma vez." icon={Users} onClose={() => setBulkOpen(false)}>
+          <form onSubmit={saveBulk} className="ssr-admin-form space-y-4">
             <Field label="Turma"><input required value={bulk.turma} onChange={(e) => setBulk((b) => ({ ...b, turma: e.target.value }))} placeholder="Ex.: 1º Ano A" className={inputCls} /></Field>
             <Field label="Curso"><select value={bulk.course} onChange={(e) => setBulk((b) => ({ ...b, course: e.target.value }))} className={inputCls}><option value="">Selecione o curso...</option>{COURSE_OPTIONS.map((c) => <option key={c} value={c}>{c}</option>)}</select></Field>
             <Field label="Importar ficha em PDF (opcional)">
