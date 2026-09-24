@@ -488,3 +488,79 @@ select:focus-visible, textarea:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .ssr-skip-link { transition: none; }
 }
+
+/* Acabamento compartilhado: hierarquia, formulários e interação. */
+html { scroll-padding-top: calc(5.75rem + env(safe-area-inset-top)); }
+
+#conteudo-principal { isolation: isolate; }
+
+#conteudo-principal :is(h1, h2, h3) {
+  overflow-wrap: break-word;
+}
+
+#conteudo-principal :is(input, textarea, select) {
+  transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+#conteudo-principal :is(input, textarea, select):focus-visible {
+  border-color: hsl(var(--primary) / .65);
+  box-shadow: 0 0 0 4px hsl(var(--primary) / .12);
+}
+
+#conteudo-principal :is(input, textarea)::placeholder {
+  color: hsl(var(--muted-foreground) / .8);
+}
+
+#conteudo-principal :is(button, a):disabled {
+  cursor: not-allowed;
+}
+
+.ssr-page-hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid hsl(var(--border) / .65);
+  background:
+    radial-gradient(circle at 90% 5%, hsl(var(--primary) / .11), transparent 38%),
+    linear-gradient(115deg, hsl(var(--card) / .9), hsl(var(--secondary) / .045));
+}
+
+.ssr-page-hero::after {
+  content: "";
+  position: absolute;
+  right: -4rem;
+  bottom: -7rem;
+  width: 19rem;
+  height: 19rem;
+  border: 1px solid hsl(var(--primary) / .09);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.dark .ssr-page-hero {
+  background:
+    radial-gradient(circle at 90% 5%, hsl(var(--primary) / .11), transparent 40%),
+    linear-gradient(115deg, hsl(var(--card) / .95), hsl(var(--background)));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ssr-home-tile, .ssr-home-course, .ssr-course-card,
+  .ssr-quick-link, .ssr-feature-panel {
+    transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+  }
+  .ssr-home-tile:hover, .ssr-home-course:hover, .ssr-course-card:hover,
+  .ssr-quick-link:hover {
+    transform: translateY(-3px);
+  }
+}
+
+@media (max-width: 639px) {
+  #conteudo-principal :is(h1, h2, h3) { text-wrap: balance; }
+  .ssr-page-hero::after { width: 12rem; height: 12rem; right: -5rem; bottom: -5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ssr-home-tile, .ssr-home-course, .ssr-course-card, .ssr-quick-link {
+    transform: none !important;
+    transition: none !important;
+  }
+}
