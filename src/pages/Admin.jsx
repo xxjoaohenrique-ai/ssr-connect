@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Newspaper, Megaphone, CalendarDays, MessageSquare, ShieldCheck, Users, UtensilsCrossed, Phone, LayoutDashboard, Radio, Images, LogOut, BookOpen } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Newspaper, Megaphone, CalendarDays, MessageSquare, ShieldCheck, Users, UtensilsCrossed, Phone, LayoutDashboard, Radio, Images, LogOut, BookOpen, GraduationCap, ExternalLink } from "lucide-react";
+import ThemeToggle from "@/components/ThemeToggle";
+import "@/styles/admin-dashboard.css";
 import AdminOverview from "@/components/admin/AdminOverview";
 import NewsManager from "@/components/admin/NewsManager";
 import NoticeManager from "@/components/admin/NoticeManager";
@@ -19,7 +21,7 @@ import ManagementTeamManager from "@/components/admin/ManagementTeamManager";
 import { clearAdmin } from "@/lib/adminAuth";
 
 const SECTIONS = [
-  { key: "overview", label: "Início", group: "Início", icon: LayoutDashboard, desc: "Visão geral do portal", Component: AdminOverview },
+  { key: "overview", label: "Visão geral", group: "Início", icon: LayoutDashboard, desc: "Resumo da escola", Component: AdminOverview },
   { key: "history", label: "História", group: "Conteúdo", icon: BookOpen, desc: "História exibida em Sobre a Escola", Component: HistoryManager },
   { key: "management_team", label: "Equipe Gestora", group: "Conteúdo", icon: Users, desc: "Integrantes exibidos em Sobre a Escola", Component: ManagementTeamManager },
   { key: "news", label: "Notícias", group: "Conteúdo", icon: Newspaper, desc: "Publicar e editar notícias", Component: NewsManager },
@@ -47,42 +49,30 @@ export default function Admin() {
   };
 
   return (
-    <div>
-      {/* Cabeçalho do painel */}
-      <section className="relative overflow-hidden border-b border-border bg-card/40">
-        <div className="ssr-hero-grid pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
-        <div className="relative mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-5 px-4 py-7 sm:px-6 sm:py-8 lg:px-8">
-          <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
-              <ShieldCheck className="h-3.5 w-3.5" /> Painel Administrativo
-            </span>
-            <h1 className="heading-font mt-3 text-2xl font-extrabold tracking-[-0.045em] text-balance sm:text-3xl">
-              {active === "overview" ? "Visão geral da escola" : SECTIONS.find((s) => s.key === active).label}
-            </h1>
-            <p className="mt-1 max-w-2xl text-sm text-muted-foreground text-pretty">
-              {active === "overview" ? "Acompanhe as informações e escolha o que deseja gerenciar." : SECTIONS.find((s) => s.key === active).desc}
-            </p>
-          </div>
-          <button
-            onClick={logout}
-            className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground/80 transition-colors hover:border-destructive/40 hover:text-destructive"
-          >
-            <LogOut className="h-4 w-4" /> Sair
-          </button>
+    <div className="ssr-admin-shell">
+      <header className="ssr-admin-topbar">
+        <Link to="/" className="ssr-admin-brand" aria-label="SSR-CONNECT — página inicial">
+          <GraduationCap className="h-7 w-7" aria-hidden="true" />
+          <span>SSR<span className="ssr-admin-brand-accent">-CONNECT</span></span>
+        </Link>
+        <span className="ssr-admin-topbar-title">Painel administrativo</span>
+        <div className="ssr-admin-topbar-actions">
+          <Link to="/" className="ssr-admin-topbar-button"><ExternalLink className="h-4 w-4" /> <span>Ver site</span></Link>
+          <ThemeToggle className="ssr-admin-theme" />
+          <button type="button" onClick={logout} className="ssr-admin-topbar-button"><LogOut className="h-4 w-4" /> <span>Sair</span></button>
         </div>
-      </section>
+      </header>
 
-      <section className="mx-auto max-w-7xl px-4 py-7 sm:px-6 sm:py-10 lg:px-8">
-        <div className="grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
-          <aside className="lg:sticky lg:top-24 lg:self-start">
+      <div className="ssr-admin-columns">
+          <aside className="ssr-admin-aside">
             {/* Navegação mobile: barra horizontal rolável e fixa */}
             <AdminSectionNav sections={SECTIONS} active={active} onSelect={setActive} />
 
             {/* Navegação desktop: sidebar vertical */}
-            <div className="hidden rounded-2xl border border-border bg-card p-2.5 shadow-soft lg:block">
+            <nav aria-label="Seções do painel administrativo" className="ssr-admin-sidebar hidden lg:block">
               {NAV_GROUPS.map((group) => (
-                <div key={group} className="mb-4 last:mb-1">
-                  <p className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{group}</p>
+                <div key={group} className="ssr-admin-nav-group">
+                  <p className="ssr-admin-nav-heading">{group}</p>
                   {SECTIONS.filter((section) => section.group === group).map((s) => {
                     const isActive = active === s.key;
                     return (
@@ -91,42 +81,28 @@ export default function Admin() {
                         type="button"
                         aria-pressed={isActive}
                         onClick={() => setActive(s.key)}
-                        className={`group mb-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors duration-200 ${
-                          isActive
-                            ? "bg-primary/10 text-primary"
-                            : "hover:bg-muted"
-                        }`}
+                        className={`ssr-admin-nav-item ${isActive ? "ssr-admin-nav-item-active" : ""}`}
                       >
-                        <span
-                          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition ${
-                            isActive ? "bg-primary/15" : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"
-                          }`}
-                        >
-                          <s.icon className="h-5 w-5" />
-                        </span>
-                        <span>
-                          <p className="text-sm font-semibold">{s.label}</p>
-                          <p className={`text-xs ${"text-muted-foreground"}`}>{s.desc}</p>
+                        <span className="ssr-admin-nav-icon"><s.icon className="h-5 w-5" /></span>
+                        <span className="min-w-0">
+                          <span className="block text-sm font-semibold">{s.label}</span>
+                          <span className="ssr-admin-nav-description">{s.desc}</span>
                         </span>
                       </button>
                     );
                   })}
                 </div>
               ))}
-              <div className="mt-2 flex items-start gap-2 rounded-2xl border border-border bg-background p-4 text-xs text-muted-foreground">
-                <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
-                Área protegida — apenas contas de administrador (e-mail e senha) acessam este painel.
-              </div>
-            </div>
+            </nav>
           </aside>
 
-          <div className="min-w-0">
+          <div className="ssr-admin-content min-w-0">
+            {active !== "overview" && <div className="ssr-admin-section-heading"><span className="text-xs font-semibold uppercase tracking-widest text-primary">Gerenciar conteúdo</span><h1 className="heading-font mt-2 text-3xl font-bold">{SECTIONS.find((s) => s.key === active).label}</h1><p className="mt-1 text-sm text-muted-foreground">{SECTIONS.find((s) => s.key === active).desc}</p></div>}
             <div key={active} className="animate-fade-in-up">
               <Current onNavigate={setActive} />
             </div>
           </div>
-        </div>
-      </section>
+      </div>
     </div>
   );
 }
