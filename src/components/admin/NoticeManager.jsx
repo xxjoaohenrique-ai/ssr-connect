@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Plus, Pencil, Trash2, Save, Loader2 } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { Plus, Pencil, Trash2, Save, Loader2, Megaphone } from "lucide-react";
 import { adminList, adminCreate, adminUpdate, adminDelete } from "@/lib/adminApi";
 import { Modal, Field, inputCls } from "./ui";
 
@@ -77,8 +76,8 @@ export default function NoticeManager() {
       )}
 
       {editing && (
-        <Modal title={editing === "new" ? "Novo aviso" : "Editar aviso"} onClose={close}>
-          <form onSubmit={save} className="space-y-4">
+        <Modal title={editing === "new" ? "Novo aviso" : "Editar aviso"} description="Envie um comunicado para a comunidade escolar." icon={Megaphone} onClose={close}>
+          <form onSubmit={save} className="ssr-admin-form space-y-4">
             <Field label="Título"><input required value={form.title} onChange={set("title")} className={inputCls} /></Field>
             <Field label="Conteúdo"><textarea required rows={4} value={form.content} onChange={set("content")} className={inputCls} /></Field>
             <div className="grid gap-4 sm:grid-cols-3">
