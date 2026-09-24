@@ -35,3 +35,29 @@
 .ssr-course-details[open] summary svg{transform:rotate(90deg)}
 .dark .ssr-course-level{color:#80e4d9}
 @media(max-width:560px){.ssr-access-intro{min-height:185px;padding:34px 20px 8px}.ssr-access-school{right:8px;opacity:.6}.ssr-access-tabs{gap:6px}.ssr-access-tabs button{font-size:11px;padding:8px 4px;gap:4px}.ssr-access-tabs svg{width:15px;height:15px}.ssr-course-card{grid-template-columns:58px minmax(0,1fr);gap:12px;padding:16px}.ssr-course-icon{width:58px;height:58px;border-radius:14px}.ssr-course-icon-accent{width:16px;height:16px;right:5px;bottom:5px}.ssr-course-body h2{font-size:18px}.ssr-course-body>p{font-size:14px}.ssr-course-body .text-xs{font-size:12px}}
+
+/* Cursos e acesso: acabamento das superfícies em temas claro e escuro. */
+.ssr-course-card {
+  border-color: hsl(var(--border) / .85);
+  box-shadow: 0 8px 28px -23px hsl(var(--foreground) / .22);
+}
+.ssr-course-card:hover { border-color: hsl(var(--primary) / .4); }
+.ssr-course-icon { box-shadow: 0 12px 24px -15px hsl(var(--primary) / .7); }
+.ssr-courses-controls input {
+  box-shadow: 0 7px 22px -18px hsl(var(--foreground) / .35);
+}
+.ssr-access-content form {
+  border: 1px solid hsl(var(--border) / .85);
+  background: hsl(var(--card));
+  box-shadow: 0 24px 54px -40px hsl(var(--foreground) / .35);
+}
+.ssr-access-tabs button[aria-pressed="true"],
+.ssr-courses-controls button[aria-pressed="true"] {
+  box-shadow: 0 7px 18px -10px hsl(var(--primary) / .65);
+}
+.dark .ssr-course-card, .dark .ssr-access-content form {
+  box-shadow: 0 16px 32px -22px #0009;
+}
+@media (hover: none) {
+  .ssr-course-card:hover { box-shadow: 0 8px 28px -23px hsl(var(--foreground) / .22); }
+}
