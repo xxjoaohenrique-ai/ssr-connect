@@ -19,6 +19,7 @@ const actions = [
 
 const areas = [
   { key: "history", icon: BookOpen, title: "História da escola", detail: "Texto da página Sobre a Escola" },
+  { key: "management_team", icon: Users, title: "Equipe gestora", detail: "Nomes e cargos da página Sobre a Escola" },
   { key: "students", icon: Users, title: "Alunos e turmas", detail: "Cadastros e acessos dos estudantes" },
   { key: "gallery", icon: Images, title: "Galeria da escola", detail: "Fotos publicadas no site" },
   { key: "menu", icon: UtensilsCrossed, title: "Cardápio escolar", detail: "Almoço e lanche da semana" },
