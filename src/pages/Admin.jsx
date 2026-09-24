@@ -15,11 +15,13 @@ import TickerManager from "@/components/admin/TickerManager";
 import AdminSectionNav from "@/components/admin/AdminSectionNav";
 import GalleryManager from "@/components/admin/GalleryManager";
 import HistoryManager from "@/components/admin/HistoryManager";
+import ManagementTeamManager from "@/components/admin/ManagementTeamManager";
 import { clearAdmin } from "@/lib/adminAuth";
 
 const SECTIONS = [
   { key: "overview", label: "Início", group: "Início", icon: LayoutDashboard, desc: "Visão geral do portal", Component: AdminOverview },
   { key: "history", label: "História", group: "Conteúdo", icon: BookOpen, desc: "História exibida em Sobre a Escola", Component: HistoryManager },
+  { key: "management_team", label: "Equipe Gestora", group: "Conteúdo", icon: Users, desc: "Integrantes exibidos em Sobre a Escola", Component: ManagementTeamManager },
   { key: "news", label: "Notícias", group: "Conteúdo", icon: Newspaper, desc: "Publicar e editar notícias", Component: NewsManager },
   { key: "notices", label: "Avisos", group: "Conteúdo", icon: Megaphone, desc: "Mural de avisos e comunicados", Component: NoticeManager },
   { key: "events", label: "Eventos", group: "Conteúdo", icon: CalendarDays, desc: "Calendário escolar e provas", Component: EventManager },

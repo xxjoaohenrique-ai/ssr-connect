@@ -31,13 +31,6 @@ const structure = [
   "Salas climatizadas com lousas interativas",
 ];
 
-const team = [
-  { name: "Dra. Helena Ribeiro", role: "Diretora Geral", bio: "Doutora em Educação, 20 anos de experiência em gestão escolar." },
-  { name: "Prof. Marcos Tavares", role: "Coordenador Pedagógico", bio: "Especialista em metodologias ativas e currículo digital." },
-  { name: "Profa. Ana Beatriz Souza", role: "Coordenadora do Ensino Médio", bio: "Mestre em Matemática, orienta o preparatório vestibular." },
-  { name: "Sr. Paulo Mendes", role: "Orientador Educacional", bio: "Psicólogo, responsável pelo bem-estar socioemocional dos alunos." },
-];
-
 const fade = {
   hidden: { opacity: 0, y: 24 },
   show: (i = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.55, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] } }),
@@ -45,6 +38,9 @@ const fade = {
 
 export default function About() {
   const [history, setHistory] = useState(HISTORY_DEFAULTS);
+  const team = Array.isArray(history.management_team)
+    ? history.management_team.filter((member) => member?.name?.trim() && member?.role?.trim())
+    : [];
 
   useEffect(() => {
     let mounted = true;
@@ -164,9 +160,10 @@ export default function About() {
           <div>
             <SectionHeading align="left" eyebrow="Equipe Gestora" title="Liderança que conduz" />
             <div className="mt-8 space-y-4">
+              {team.length === 0 && <p className="rounded-2xl border border-dashed border-border bg-background p-5 text-sm text-muted-foreground">A equipe gestora será apresentada aqui em breve.</p>}
               {team.map((m, i) => (
                 <motion.div
-                  key={m.name}
+                  key={`${m.name}-${i}`}
                   custom={i}
                   variants={fade}
                   initial="hidden"
@@ -175,12 +172,12 @@ export default function About() {
                   className="flex gap-4 rounded-2xl border border-border bg-background p-5"
                 >
                   <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-lg font-bold text-white">
-                    {m.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
+                    {m.name.trim().split(/\s+/).map((n) => n[0]).slice(0, 2).join("").toUpperCase()}
                   </span>
                   <div>
                     <h3 className="heading-font font-semibold">{m.name}</h3>
                     <p className="text-sm font-medium text-primary">{m.role}</p>
-                    <p className="mt-1 text-xs text-muted-foreground">{m.bio}</p>
+                    {m.bio && <p className="mt-1 text-xs text-muted-foreground">{m.bio}</p>}
                   </div>
                 </motion.div>
               ))}
