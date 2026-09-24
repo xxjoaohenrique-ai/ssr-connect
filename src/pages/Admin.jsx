@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Newspaper, Megaphone, CalendarDays, MessageSquare, ShieldCheck, Users, UtensilsCrossed, Phone, LayoutDashboard, Radio, Images, LogOut } from "lucide-react";
+import { Newspaper, Megaphone, CalendarDays, MessageSquare, ShieldCheck, Users, UtensilsCrossed, Phone, LayoutDashboard, Radio, Images, LogOut, BookOpen } from "lucide-react";
 import AdminOverview from "@/components/admin/AdminOverview";
 import NewsManager from "@/components/admin/NewsManager";
 import NoticeManager from "@/components/admin/NoticeManager";
@@ -14,10 +14,12 @@ import ContactInfoManager from "@/components/admin/ContactInfoManager";
 import TickerManager from "@/components/admin/TickerManager";
 import AdminSectionNav from "@/components/admin/AdminSectionNav";
 import GalleryManager from "@/components/admin/GalleryManager";
+import HistoryManager from "@/components/admin/HistoryManager";
 import { clearAdmin } from "@/lib/adminAuth";
 
 const SECTIONS = [
   { key: "overview", label: "Início", group: "Início", icon: LayoutDashboard, desc: "Visão geral do portal", Component: AdminOverview },
+  { key: "history", label: "História", group: "Conteúdo", icon: BookOpen, desc: "História exibida em Sobre a Escola", Component: HistoryManager },
   { key: "news", label: "Notícias", group: "Conteúdo", icon: Newspaper, desc: "Publicar e editar notícias", Component: NewsManager },
   { key: "notices", label: "Avisos", group: "Conteúdo", icon: Megaphone, desc: "Mural de avisos e comunicados", Component: NoticeManager },
   { key: "events", label: "Eventos", group: "Conteúdo", icon: CalendarDays, desc: "Calendário escolar e provas", Component: EventManager },
