@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Briefcase, Loader2, Check, X, Save } from "lucide-react";
+import { Briefcase, Loader2, Check, X, Save, Users } from "lucide-react";
 import { adminList, adminUpdate } from "@/lib/adminApi";
 import { Modal, Field, inputCls } from "./ui";
 
@@ -72,8 +72,8 @@ export default function TeacherManager() {
       )}
 
       {editing && (
-        <Modal title={`Turmas de ${editing.name}`} onClose={() => setEditing(null)}>
-          <form onSubmit={saveTurmas} className="space-y-4">
+        <Modal title={`Turmas de ${editing.name}`} description="Atribua turmas e confirme o acesso do professor." icon={Users} onClose={() => setEditing(null)}>
+          <form onSubmit={saveTurmas} className="ssr-admin-form space-y-4">
             <Field label="Turmas (separadas por vírgula)"><input value={turmas} onChange={(e) => setTurmas(e.target.value)} placeholder="Ex.: 1º Ano A, 2º Ano B" className={inputCls} /></Field>
             <p className="text-xs text-muted-foreground">Salvar já aprova o professor (fica ativo) e libera o acesso aos alunos das turmas informadas.</p>
             <div className="flex justify-end gap-2 pt-2">
