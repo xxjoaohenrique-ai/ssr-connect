@@ -78,6 +78,8 @@ export default function EventManager() {
       {editing && (
         <Modal title={editing === "new" ? "Novo evento" : "Editar evento"} description="Defina as datas e as informações do calendário." icon={CalendarDays} onClose={close}>
           <form onSubmit={save} className="ssr-admin-form space-y-4">
+            <div className="ssr-admin-form-section">
+              <span className="ssr-admin-form-section-title">Dados do evento</span>
             <Field label="Título"><input required value={form.title} onChange={set("title")} className={inputCls} /></Field>
             <Field label="Descrição"><textarea rows={3} value={form.description} onChange={set("description")} className={inputCls} /></Field>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -88,7 +90,8 @@ export default function EventManager() {
               <Field label="Tipo"><select value={form.type} onChange={set("type")} className={inputCls}>{TYPES.map((t) => <option key={t}>{t}</option>)}</select></Field>
               <Field label="Local"><input value={form.location} onChange={set("location")} className={inputCls} /></Field>
             </div>
-            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.is_active} onChange={set("is_active")} className="h-4 w-4 rounded" /> Ativo</label>
+            </div>
+            <label className="ssr-admin-form-status"><input type="checkbox" checked={form.is_active} onChange={set("is_active")} /> <span><strong>Ativo no calendário</strong><small>O evento ficará visível na agenda escolar.</small></span></label>
             <div className="flex justify-end gap-2 pt-2">
               <button type="button" onClick={close} className="rounded-full border border-border px-5 py-2.5 text-sm font-medium">Cancelar</button>
               <button type="submit" disabled={saving} className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"><Save className="h-4 w-4" /> {saving ? "Salvando..." : "Salvar"}</button>

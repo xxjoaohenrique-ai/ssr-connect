@@ -78,6 +78,8 @@ export default function NoticeManager() {
       {editing && (
         <Modal title={editing === "new" ? "Novo aviso" : "Editar aviso"} description="Envie um comunicado para a comunidade escolar." icon={Megaphone} onClose={close}>
           <form onSubmit={save} className="ssr-admin-form space-y-4">
+            <div className="ssr-admin-form-section">
+              <span className="ssr-admin-form-section-title">Dados do aviso</span>
             <Field label="Título"><input required value={form.title} onChange={set("title")} className={inputCls} /></Field>
             <Field label="Conteúdo"><textarea required rows={4} value={form.content} onChange={set("content")} className={inputCls} /></Field>
             <div className="grid gap-4 sm:grid-cols-3">
@@ -89,7 +91,8 @@ export default function NoticeManager() {
               <input value={form.turma || ""} onChange={set("turma")} placeholder="Ex.: 3 A sistema" list="notices-turmas" className={inputCls} />
               <datalist id="notices-turmas">{Array.from(new Set(items.map((i) => i.turma).filter(Boolean))).sort().map((t) => <option key={t} value={t} />)}</datalist>
             </Field>
-            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.is_active} onChange={set("is_active")} className="h-4 w-4 rounded" /> Ativo no mural</label>
+            </div>
+            <label className="ssr-admin-form-status"><input type="checkbox" checked={form.is_active} onChange={set("is_active")} /> <span><strong>Ativo no mural</strong><small>O aviso ficará visível para o público selecionado.</small></span></label>
             <div className="flex justify-end gap-2 pt-2">
               <button type="button" onClick={close} className="rounded-full border border-border px-5 py-2.5 text-sm font-medium">Cancelar</button>
               <button type="submit" disabled={saving} className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"><Save className="h-4 w-4" /> {saving ? "Salvando..." : "Salvar"}</button>

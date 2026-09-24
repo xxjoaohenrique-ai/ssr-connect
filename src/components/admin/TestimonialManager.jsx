@@ -76,6 +76,8 @@ export default function TestimonialManager() {
       {editing && (
         <Modal title={editing === "new" ? "Novo depoimento" : "Editar depoimento"} description="Registre e revise o depoimento da comunidade escolar." icon={MessageSquare} onClose={close}>
           <form onSubmit={save} className="ssr-admin-form space-y-4">
+            <div className="ssr-admin-form-section">
+              <span className="ssr-admin-form-section-title">Dados do depoimento</span>
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Nome"><input required value={form.name} onChange={set("name")} className={inputCls} /></Field>
               <Field label="Papel"><select value={form.role} onChange={set("role")} className={inputCls}>{ROLES.map((r) => <option key={r}>{r}</option>)}</select></Field>
@@ -83,7 +85,8 @@ export default function TestimonialManager() {
             <Field label="Depoimento"><textarea required rows={4} value={form.content} onChange={set("content")} className={inputCls} /></Field>
             <Field label="Avaliação (1-5)"><input type="number" min={1} max={5} value={form.rating} onChange={set("rating")} className={inputCls} /></Field>
             <Field label="Avatar (URL)"><input value={form.avatar_url} onChange={set("avatar_url")} placeholder="https://..." className={inputCls} /></Field>
-            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.is_approved} onChange={set("is_approved")} className="h-4 w-4 rounded" /> Aprovado (visível no site)</label>
+            </div>
+            <label className="ssr-admin-form-status"><input type="checkbox" checked={form.is_approved} onChange={set("is_approved")} /> <span><strong>Aprovado</strong><small>O depoimento ficará visível no site.</small></span></label>
             <div className="flex justify-end gap-2 pt-2">
               <button type="button" onClick={close} className="rounded-full border border-border px-5 py-2.5 text-sm font-medium">Cancelar</button>
               <button type="submit" disabled={saving} className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"><Save className="h-4 w-4" /> {saving ? "Salvando..." : "Salvar"}</button>
