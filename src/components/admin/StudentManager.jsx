@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import {
-  Plus, Pencil, Trash2, Save, Loader2, Users, RefreshCw, KeyRound, Copy, Check, X,
+  Plus, Pencil, Trash2, Save, Loader2, Users, KeyRound, Copy, Check, X, UserPlus, Info,
 } from "lucide-react";
-import { base44 } from "@/api/base44Client";
 import { adminList, adminCreate, adminUpdate, adminDelete, adminBulkCreate } from "@/lib/adminApi";
 import { Modal, Field, inputCls } from "./ui";
 import { genLogin, genPassword } from "@/lib/alunoAuth";
@@ -22,6 +21,7 @@ export default function StudentManager() {
   const [bulk, setBulk] = useState({ turma: "", course: "", names: "" });
   const [creds, setCreds] = useState(null); // [{name, login, password}]
   const [copied, setCopied] = useState(null);
+  const [formError, setFormError] = useState("");
 
   const load = async () => {
     setLoading(true);
@@ -41,8 +41,8 @@ export default function StudentManager() {
     setTimeout(() => setCopied(null), 1500);
   };
 
-  const openNew = () => { setForm(empty); setEditing("new"); };
-  const openEdit = (it) => { setForm({ name: it.name, turma: it.turma, course: it.course || "", enrollment: it.enrollment || "", is_active: it.is_active }); setEditing(it.id); };
+  const openNew = () => { setForm({ ...empty }); setFormError(""); setEditing("new"); };
+  const openEdit = (it) => { setFormError(""); setForm({ name: it.name, turma: it.turma, course: it.course || "", enrollment: it.enrollment || "", is_active: it.is_active }); setEditing(it.id); };
   const close = () => setEditing(null);
   const set = (k) => (e) =>
     setForm((f) => ({ ...f, [k]: e.target.type === "checkbox" ? e.target.checked : e.target.value }));
@@ -50,7 +50,9 @@ export default function StudentManager() {
   // Criar / editar um aluno. Na criação, gera login + senha e mostra as credenciais.
   const save = async (e) => {
     e.preventDefault();
+    setFormError("");
     setSaving(true);
+    try {
     if (editing === "new") {
       const login = genLogin(form.name, existingLogins);
       const password = genPassword();
@@ -73,7 +75,13 @@ export default function StudentManager() {
         is_active: form.is_active,
       });
     }
-    setSaving(false); setEditing(null); load();
+    setEditing(null);
+    load();
+    } catch (error) {
+      setFormError(error?.message || "Não foi possível salvar o aluno. Tente novamente.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   // Gerar nova senha para um aluno e mostrar a senha em texto.
@@ -204,20 +212,29 @@ export default function StudentManager() {
 
       {/* Modal novo / editar aluno */}
       {editing && (
-        <Modal title={editing === "new" ? "Novo aluno" : "Editar aluno"} onClose={close}>
-          <form onSubmit={save} className="space-y-4">
-            <Field label="Nome do aluno"><input required value={form.name} onChange={set("name")} className={inputCls} /></Field>
-            <Field label="Turma"><input required value={form.turma} onChange={set("turma")} placeholder="Ex.: 1º Ano A" list="turmas-list" className={inputCls} />
-              <datalist id="turmas-list">{turmas.filter((t) => t !== "Todas").map((t) => <option key={t} value={t} />)}</datalist>
-            </Field>
-            <Field label="Curso"><select value={form.course} onChange={set("course")} className={inputCls}><option value="">Selecione o curso...</option>{COURSE_OPTIONS.map((c) => <option key={c} value={c}>{c}</option>)}</select></Field>
-            <Field label="Matrícula (opcional)"><input value={form.enrollment} onChange={set("enrollment")} className={inputCls} /></Field>
-            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.is_active} onChange={set("is_active")} className="h-4 w-4 rounded" /> Ativo</label>
-            <div className="flex justify-end gap-2 pt-2">
-              <button type="button" onClick={close} className="rounded-full border border-border px-5 py-2.5 text-sm font-medium">Cancelar</button>
-              <button type="submit" disabled={saving} className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"><Save className="h-4 w-4" /> {saving ? "Salvando..." : "Salvar"}</button>
+        <Modal title={editing === "new" ? "Novo aluno" : "Editar aluno"} description={editing === "new" ? "Cadastre um estudante e configure seu acesso ao portal." : "Atualize os dados do estudante."} icon={UserPlus} className="ssr-student-modal" onClose={close}>
+          <form onSubmit={save} className="ssr-student-form space-y-5">
+            <div className="ssr-student-form-section">
+              <span className="ssr-student-form-label">Dados do estudante</span>
+              <Field label="Nome completo"><input required autoComplete="name" value={form.name} onChange={set("name")} placeholder="Nome completo do aluno" className={inputCls} /></Field>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Turma"><input required value={form.turma} onChange={set("turma")} placeholder="Ex.: 1º Ano A" list="turmas-list" className={inputCls} />
+                  <datalist id="turmas-list">{turmas.filter((t) => t !== "Todas").map((t) => <option key={t} value={t} />)}</datalist>
+                </Field>
+                <Field label="Curso"><select value={form.course} onChange={set("course")} className={inputCls}><option value="">Selecione o curso...</option>{COURSE_OPTIONS.map((c) => <option key={c} value={c}>{c}</option>)}</select></Field>
+              </div>
+              <Field label="Matrícula (opcional)"><input value={form.enrollment} onChange={set("enrollment")} placeholder="Número da matrícula, se houver" className={inputCls} /></Field>
             </div>
-            {editing === "new" && <p className="text-xs text-muted-foreground">O login e a senha serão gerados automaticamente ao salvar.</p>}
+            <label className="ssr-student-status flex cursor-pointer items-center gap-3 rounded-2xl border border-border p-4">
+              <input type="checkbox" checked={form.is_active} onChange={set("is_active")} className="h-5 w-5 shrink-0 accent-primary" />
+              <span><strong className="block text-sm">Acesso ativo</strong><span className="block text-xs text-muted-foreground">O aluno poderá entrar no portal com suas credenciais.</span></span>
+            </label>
+            {editing === "new" && <p className="ssr-student-credentials-note flex items-start gap-2 rounded-xl border border-primary/20 bg-primary/5 p-3 text-xs text-muted-foreground"><Info className="h-4 w-4 shrink-0 text-primary" /> O login e a senha serão gerados automaticamente após salvar. Copie as credenciais para entregá-las ao aluno.</p>}
+            {formError && <p role="alert" className="text-sm text-destructive">{formError}</p>}
+            <div className="ssr-student-form-actions flex flex-wrap justify-end gap-2 border-t border-border pt-5">
+              <button type="button" onClick={close} className="min-h-11 rounded-xl border border-border px-5 py-2.5 text-sm font-medium hover:bg-muted">Cancelar</button>
+              <button type="submit" disabled={saving} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60">{saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} {saving ? "Salvando..." : editing === "new" ? "Cadastrar aluno" : "Salvar alterações"}</button>
+            </div>
           </form>
         </Modal>
       )}

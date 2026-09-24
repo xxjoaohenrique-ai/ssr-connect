@@ -76,3 +76,17 @@
 @media (prefers-reduced-motion: reduce) {
   .ssr-admin-shell *, .ssr-admin-shell *::before, .ssr-admin-shell *::after { transition-duration: 0.01ms !important; }
 }
+
+/* Cadastro de aluno: formulário mais claro sem modificar o fluxo de criação. */
+.ssr-student-modal { max-width: 690px; }
+.ssr-student-form-section { display: grid; gap: 16px; padding: 20px; border: 1px solid hsl(var(--border)); border-radius: 18px; background: hsl(var(--background) / .58); }
+.ssr-student-form-label { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: hsl(var(--primary)); }
+.ssr-student-form :is(input:not([type="checkbox"]), select) { min-height: 46px; }
+.ssr-student-status { background: hsl(var(--background) / .4); transition: border-color .2s, background-color .2s; }
+.ssr-student-status:has(input:checked) { border-color: hsl(var(--primary) / .32); background: hsl(var(--primary) / .045); }
+.ssr-student-status:focus-within { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
+.dark .ssr-student-form-section { background: #111c2a; }
+@media (max-width: 639px) {
+  .ssr-student-form-section { padding: 16px; }
+  .ssr-student-form-actions > button { flex: 1; }
+}
