@@ -93,8 +93,18 @@
 
 /* Mesmo padrão para todas as janelas de cadastro e edição do painel. */
 .ssr-admin-modal { max-width: 720px; }
+.ssr-admin-modal { border-color: hsl(var(--primary) / .34); box-shadow: 0 30px 90px -35px #020d1dc7; }
 .ssr-admin-modal > div:first-child { gap: 16px; }
 .ssr-admin-modal > div:first-child button { flex: none; }
+.ssr-admin-modal > div:first-child > div:first-child > span:first-child { width: 48px; height: 48px; border: 1px solid hsl(var(--primary) / .35); background: hsl(var(--primary) / .12); }
+.ssr-admin-form-section { display: grid; gap: 16px; padding: 20px; border: 1px solid hsl(var(--border)); border-radius: 18px; background: hsl(var(--background) / .55); }
+.ssr-admin-form-section-title { color: hsl(var(--primary)); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.ssr-admin-form-status { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: 1px solid hsl(var(--border)); border-radius: 14px; cursor: pointer; background: hsl(var(--background) / .5); }
+.ssr-admin-form-status:has(input:checked) { border-color: hsl(var(--primary) / .34); background: hsl(var(--primary) / .055); }
+.ssr-admin-form-status strong, .ssr-admin-form-status small { display: block; }
+.ssr-admin-form-status strong { font-size: 13px; }
+.ssr-admin-form-status small { margin-top: 2px; color: hsl(var(--muted-foreground)); font-size: 11px; line-height: 1.4; }
+.ssr-admin-form-status:focus-within { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
 .ssr-admin-form > label > span:first-child { margin-bottom: 8px; }
 .ssr-admin-form :is(input:not([type="checkbox"]), textarea, select) { min-height: 46px; }
 .ssr-admin-form textarea { resize: vertical; }
@@ -105,7 +115,11 @@
 .ssr-admin-form > div:last-child > button[type="submit"] { padding-inline: 22px; }
 .dark .ssr-admin-modal { border-color: #34465b; background: #17212f; }
 .dark .ssr-admin-modal > div:first-child { border-color: #34465b; background: #17212ff7; }
+.dark .ssr-admin-form-section { border-color: #34465b; background: #111c2a; }
+.dark .ssr-admin-form-status { border-color: #34465b; background: #152233; }
+.dark .ssr-admin-form-status:has(input:checked) { border-color: #287db0; background: #193148; }
 @media (max-width: 639px) {
   .ssr-admin-modal { max-height: min(90dvh, 820px); }
+  .ssr-admin-form-section { padding: 15px; }
   .ssr-admin-form > div:last-child:has(> button[type="submit"]) > button { flex: 1; }
 }
