@@ -1,0 +1,37 @@
+.ssr-access-page,.ssr-courses-page{min-height:70vh;background:radial-gradient(circle at 95% 13%,rgba(29,149,218,.11),transparent 35%),radial-gradient(circle at 6% 78%,rgba(0,158,143,.08),transparent 42%),hsl(var(--background))}
+.ssr-access-intro{position:relative;display:flex;align-items:center;max-width:880px;min-height:200px;margin:auto;padding:42px 24px 16px;overflow:hidden}
+.ssr-access-intro:after{content:"";position:absolute;right:-65px;top:-105px;width:300px;height:300px;border-radius:50%;background:rgba(39,148,222,.09)}
+.ssr-access-intro-copy{position:relative;z-index:1}
+.ssr-access-intro h1{font-size:clamp(2.4rem,7vw,4.2rem);font-weight:800;line-height:1.1;letter-spacing:-.045em;color:hsl(var(--foreground))}
+.ssr-access-intro p{margin-top:18px;font-size:clamp(1rem,2.8vw,1.2rem);color:hsl(var(--muted-foreground))}
+.ssr-access-school{position:absolute;right:45px;top:23px;display:grid;place-items:center;width:125px;height:125px;border-radius:36%;color:rgba(31,121,194,.18);transform:rotate(-8deg)}
+.ssr-access-school svg{width:95px;height:95px;stroke-width:1.3}
+.ssr-access-content{padding-top:20px;padding-bottom:70px}
+.ssr-access-tabs{max-width:540px}
+.ssr-access-tabs button{min-width:0;min-height:46px;white-space:nowrap}
+.ssr-access-card,.ssr-access-content form{max-width:540px;padding:clamp(20px,5vw,38px);box-shadow:0 16px 45px rgba(20,54,91,.06)}
+.ssr-access-card input{min-height:50px}
+.ssr-access-label{display:block;font-size:14px;font-weight:700;margin-bottom:-9px}
+.ssr-access-help{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:26px;padding-top:24px;border-top:1px solid hsl(var(--border));font-size:14px;color:hsl(var(--muted-foreground))}
+.ssr-access-help svg{color:hsl(var(--secondary));flex-shrink:0}
+.ssr-access-help a{color:hsl(var(--primary));text-decoration:underline;text-underline-offset:3px}
+.ssr-courses-heading{margin-bottom:28px}
+.ssr-courses-eyebrow{display:inline-flex;align-items:center;border:1px solid rgba(16,126,187,.14);border-radius:99px;padding:6px 14px;background:rgba(28,146,224,.07);color:hsl(var(--primary));font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.ssr-courses-heading h1{margin-top:12px;font-size:clamp(2rem,5vw,3.1rem);font-weight:800;letter-spacing:-.045em;line-height:1.15}
+.ssr-courses-heading p{margin-top:6px;color:hsl(var(--muted-foreground));font-size:16px}
+.ssr-courses-controls{max-width:780px}
+.ssr-courses-controls input{min-height:50px}
+.ssr-courses-controls button{min-height:42px}
+.ssr-courses-list{max-width:900px}
+.ssr-course-card{display:grid;grid-template-columns:76px minmax(0,1fr);gap:20px;padding:22px;min-width:0;box-shadow:0 8px 30px rgba(21,70,103,.035)}
+.ssr-course-icon{position:relative;display:grid;place-items:center;align-self:start;width:76px;height:76px;border-radius:18px;background:linear-gradient(135deg,#0961db,#028e86);color:#fff;box-shadow:0 8px 16px rgba(5,101,151,.14)}
+.ssr-course-icon-accent{position:absolute;bottom:8px;right:9px;width:22px;height:22px;stroke-width:2;background:rgba(0,118,148,.6);border-radius:5px}
+.ssr-course-body{min-width:0}
+.ssr-course-level{display:inline-block;padding:4px 10px;border-radius:99px;background:rgba(0,151,135,.12);color:#087b76;font-size:12px;font-weight:700;text-transform:uppercase}
+.ssr-course-body h2{line-height:1.25}
+.ssr-course-body>p{margin-top:5px}
+.ssr-course-details summary{list-style:none}
+.ssr-course-details summary::-webkit-details-marker{display:none}
+.ssr-course-details[open] summary svg{transform:rotate(90deg)}
+.dark .ssr-course-level{color:#80e4d9}
+@media(max-width:560px){.ssr-access-intro{min-height:185px;padding:34px 20px 8px}.ssr-access-school{right:8px;opacity:.6}.ssr-access-tabs{gap:6px}.ssr-access-tabs button{font-size:11px;padding:8px 4px;gap:4px}.ssr-access-tabs svg{width:15px;height:15px}.ssr-course-card{grid-template-columns:58px minmax(0,1fr);gap:12px;padding:16px}.ssr-course-icon{width:58px;height:58px;border-radius:14px}.ssr-course-icon-accent{width:16px;height:16px;right:5px;bottom:5px}.ssr-course-body h2{font-size:18px}.ssr-course-body>p{font-size:14px}.ssr-course-body .text-xs{font-size:12px}}
