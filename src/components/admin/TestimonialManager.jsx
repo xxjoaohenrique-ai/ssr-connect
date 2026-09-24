@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Plus, Pencil, Trash2, Save, Loader2, Check, X } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { Plus, Pencil, Trash2, Save, Loader2, Check, X, MessageSquare } from "lucide-react";
 import { adminList, adminCreate, adminUpdate, adminDelete } from "@/lib/adminApi";
 import { Modal, Field, inputCls } from "./ui";
 
@@ -75,8 +74,8 @@ export default function TestimonialManager() {
       )}
 
       {editing && (
-        <Modal title={editing === "new" ? "Novo depoimento" : "Editar depoimento"} onClose={close}>
-          <form onSubmit={save} className="space-y-4">
+        <Modal title={editing === "new" ? "Novo depoimento" : "Editar depoimento"} description="Registre e revise o depoimento da comunidade escolar." icon={MessageSquare} onClose={close}>
+          <form onSubmit={save} className="ssr-admin-form space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Nome"><input required value={form.name} onChange={set("name")} className={inputCls} /></Field>
               <Field label="Papel"><select value={form.role} onChange={set("role")} className={inputCls}>{ROLES.map((r) => <option key={r}>{r}</option>)}</select></Field>
