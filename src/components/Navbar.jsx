@@ -1,22 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown, GraduationCap } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
+import { Menu, X, GraduationCap } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 
 const mainLinks = [
-  { label: "Início", to: "/" },
-  { label: "Sobre", to: "/sobre" },
-  { label: "Cursos", to: "/cursos" },
-  { label: "Admin", to: "/admin" },
-];
-
-const homeLinks = [
   { label: "Início", to: "/" },
   { label: "A Escola", to: "/sobre" },
   { label: "Notícias", to: "/noticias" },
@@ -28,10 +15,8 @@ const homeLinks = [
 
 const resourceLinks = [
   { label: "Biblioteca Digital", to: "/biblioteca" },
-  { label: "Notícias", to: "/noticias" },
   { label: "Galeria", to: "/galeria" },
-  { label: "Calendário Escolar", to: "/calendario" },
-  { label: "Portal do Aluno", to: "/portal-aluno" },
+  { label: "Painel Admin", to: "/admin" },
 ];
 
 // Cabeçalho inteligente com glassmorphism e navegação responsiva
@@ -39,7 +24,6 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const location = useLocation();
-  const isHome = location.pathname === "/";
 
   useEffect(() => {
     const onScroll = () => {
@@ -68,7 +52,7 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 z-50 w-full transition-all duration-300 glass-nav ssr-site-header ${isHome ? "ssr-reference-header" : ""} ${
+      className={`fixed top-0 z-50 w-full transition-all duration-300 glass-nav ssr-site-header ssr-reference-header ${
         scrolled ? "pb-2 pt-[calc(0.5rem_+_env(safe-area-inset-top))] shadow-soft" : "pb-3 pt-[calc(0.75rem_+_env(safe-area-inset-top))]"
       }`}
     >
@@ -79,57 +63,28 @@ export default function Navbar() {
             <GraduationCap className="h-5 w-5" />
           </span>
           <span className="flex min-w-0 flex-col leading-tight">
-            <span className="heading-font text-[14px] font-extrabold tracking-tight min-[380px]:text-base sm:text-lg">{isHome ? "CETI" : "SSR"}<span className="text-primary">{isHome ? "" : "-CONNECT"}</span></span>
-            <span className="ssr-brand-subtitle hidden text-[10px] font-semibold tracking-wide text-muted-foreground sm:block">{isHome ? "SEBASTIÃO SOARES RIBEIRO · SSR-CONNECT" : "CETI Sebastião Soares Ribeiro"}</span>
+            <span className="heading-font text-[14px] font-extrabold tracking-tight min-[380px]:text-base sm:text-lg">CETI</span>
+            <span className="ssr-brand-subtitle hidden text-[10px] font-semibold tracking-wide text-muted-foreground sm:block">SEBASTIÃO SOARES RIBEIRO · SSR-CONNECT</span>
           </span>
         </Link>
 
         {/* Links desktop */}
-        <div className={"ssr-desktop-links hidden items-center gap-5 xl:gap-7 " + (isHome ? "2xl:flex" : "lg:flex")}>
-          {(isHome ? homeLinks : mainLinks).map((l) => (
+        <div className="ssr-desktop-links hidden items-center gap-5 xl:gap-7 2xl:flex">
+          {mainLinks.map((l) => (
             <NavLink key={l.to} to={l.to} className={linkClass} end={l.to === "/"}>
               {l.label}
             </NavLink>
           ))}
-          {!isHome && (
-            <>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="flex min-h-10 items-center gap-1 text-sm font-medium tracking-wide text-foreground/80 transition-colors hover:text-primary">
-                Recursos <ChevronDown className="h-4 w-4" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="center" className="w-56">
-              {resourceLinks.map((l) => (
-                <DropdownMenuItem key={l.to} asChild>
-                  <Link to={l.to} className="cursor-pointer">
-                    {l.label}
-                  </Link>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <NavLink to="/contato" className={linkClass}>
-            Contato
-          </NavLink>
-            </>
-          )}
         </div>
 
         {/* Ações */}
         <div className="flex shrink-0 items-center gap-1 sm:gap-2">
-          <ThemeToggle className={isHome ? "ssr-header-theme" : ""} />
-          {!isHome && <Link
-            to="/admin-login"
-            className="ssr-header-login hidden min-h-10 items-center rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-foreground/80 transition-colors hover:border-primary/40 hover:text-primary xl:inline-flex"
-          >
-            Entrar
-          </Link>}
+          <ThemeToggle className="ssr-header-theme" />
           <Link
-            to={isHome ? "/portal-aluno" : "/contato"}
+            to="/portal-aluno"
             className="ssr-header-enroll hidden min-h-10 items-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 xl:inline-flex"
           >
-            {isHome ? "Acessar Portal do Aluno" : "Fale com a escola"}
+            Acessar Portal do Aluno
           </Link>
           <button
             type="button"
@@ -137,7 +92,7 @@ export default function Navbar() {
             aria-label={open ? "Fechar menu" : "Abrir menu"}
             aria-expanded={open}
             aria-controls="ssr-menu-mobile"
-            className={"ssr-mobile-trigger inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border text-foreground transition-colors hover:bg-primary/10 " + (isHome ? "2xl:hidden" : "lg:hidden")}
+            className="ssr-mobile-trigger inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border text-foreground transition-colors hover:bg-primary/10 2xl:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -146,10 +101,10 @@ export default function Navbar() {
 
       {/* Menu mobile */}
       {open && (
-        <div id="ssr-menu-mobile" className={isHome ? "2xl:hidden" : "lg:hidden"}>
+        <div id="ssr-menu-mobile" className="2xl:hidden">
           <div className="ssr-mobile-menu mx-3 mt-2 max-h-[min(74dvh,calc(100dvh-6rem))] overflow-y-auto overscroll-contain rounded-2xl border border-border bg-card p-3 shadow-float min-[380px]:mx-4 sm:mx-auto sm:max-w-xl">
             <div className="flex flex-col gap-1">
-              {(isHome ? homeLinks : mainLinks).map((l) => (
+              {mainLinks.map((l) => (
                 <NavLink
                   key={l.to}
                   to={l.to}
@@ -163,10 +118,8 @@ export default function Navbar() {
                   {l.label}
                 </NavLink>
               ))}
-              {!isHome && (
-                <>
               <div className="px-4 pb-1 pt-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                Recursos
+                Mais recursos
               </div>
               {resourceLinks.map((l) => (
                 <NavLink
@@ -181,20 +134,12 @@ export default function Navbar() {
                   {l.label}
                 </NavLink>
               ))}
-                </>
-              )}
               <div className="my-1 border-t border-border/60" />
-              {!isHome && <NavLink
-                to="/admin-login"
-                className="rounded-xl border border-border/70 px-4 py-3 text-center text-sm font-semibold text-foreground/80"
-              >
-                Entrar
-              </NavLink>}
               <NavLink
-                to={isHome ? "/portal-aluno" : "/contato"}
+                to="/portal-aluno"
                 className="mt-2 rounded-xl bg-primary px-4 py-3 text-center text-sm font-semibold text-primary-foreground"
               >
-                {isHome ? "Acessar Portal do Aluno" : "Fale Conosco"}
+                Acessar Portal do Aluno
               </NavLink>
             </div>
           </div>
