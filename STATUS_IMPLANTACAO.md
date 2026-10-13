@@ -1,65 +1,31 @@
-# SSR-CONNECT — implantação em 23/09/2026
+# SSR-CONNECT — estado verificado no repositório
 
-- Site: https://ssr-connect.pages.dev
-- Supabase exclusivo: `gczbmneklbmiitsgjvbm` (São Paulo).
-- Tabela `ssr_records` com RLS e sem acesso direto de anon/authenticated.
-- Bucket `ssr-public` existente; usar somente para materiais públicos.
-- Funções `ssrApi`, `adminApi`, `portalApi` implantadas.
-- `PORTAL_TOKEN_SECRET` aleatório configurado apenas no servidor.
-- Compilação Vite e testes de tokens passaram.
-- Consultas públicas retornam HTTP 200; dados privados sem sessão retornam 401/403.
-- Home, JavaScript, `/portal-aluno` e `/admin-login` responderam HTTP 200.
-- Verificação visual em navegador não realizada nesta sessão.
-- Supabase Auth configurado com a URL publicada e redirecionamentos.
-- Primeira conta administrativa criada; login e validação de sessão testados.
-- Código completo enviado ao GitHub em `main`.
+Atualizado em 13/10/2026 com base nos arquivos e execuções visíveis no GitHub. Esta página registra o estado do código; não substitui uma checagem ao vivo dos serviços.
 
-## Causa do problema
+## Hospedagem
 
-O repositório remoto não continha `src/`, `scripts/`, `tests/` nem as Edge
-Functions. O HTML referenciava `/src/main.jsx`, mas esse arquivo não existia
-no GitHub. A publicação correta usa os arquivos compilados em `dist`.
+- Endereço principal definido no projeto: https://ssr-connect.pages.dev
+- Publicação automática: Cloudflare Pages via `.github/workflows/cloudflare-pages.yml`, em pushes para `main`.
+- GitHub Pages: publicação manual pelo workflow `.github/workflows/pages.yml`; não é a hospedagem principal e pode ficar desatualizado.
+- Últimas execuções de build/teste/publicação encontradas no GitHub: 24/09/2026, concluídas com sucesso. Não há confirmação neste registro de uma execução posterior nem de disponibilidade ao vivo em 13/10/2026.
 
-## Atualizar a hospedagem
+## Aplicação e backend
 
-O Cloudflare foi configurado por upload direto, sem sincronização automática
-com GitHub. Após alterar o código:
+O repositório contém o frontend React/Vite, as funções `ssrApi`, `adminApi` e `portalApi`, migração SQL, autenticação com tokens de sessão e configuração do Cloudflare. O registro de implantação anterior relata que funções e conta inicial de administrador foram configuradas em setembro; esse estado precisa ser confirmado no painel Supabase antes de uma manutenção que dependa dele.
 
-```sh
-npm ci
-npm test
-npm run build
-npx wrangler pages deploy dist --project-name ssr-connect --branch main
-```
+## Itens que ainda precisam de validação
 
-`.env.production` contém somente URL e chave publicável do projeto dedicado.
-Nunca adicionar chaves secretas ou o segredo de sessão a esse arquivo.
+- Exportar/importar e conferir os registros, contas e mídias que estavam no Base44. O código não contém esses dados.
+- Fazer uma verificação visual atual em desktop e celular.
+- Testar login de aluno, professor, responsável e administrador, além de cadastros e operações do painel, em ambiente de homologação.
+- Confirmar no Cloudflare e Supabase que o deployment e as funções correspondem à versão atual.
+- A extração automática de nomes de PDFs e a integração remota de IA permanecem indisponíveis conforme os adaptadores do frontend.
 
-## Dados anteriores
+## Fluxo recomendado de atualização
 
-O banco estava vazio no início desta implantação. O código exportado não
-inclui alunos, professores, responsáveis, contas antigas ou mídias. A
-importação exige uma exportação dos registros; não desligar o sistema antigo
-antes de importar e conferir os dados. O banco Palmeirais Conectada não foi alterado.
+1. Execute `npm ci`, `npm test` e `npm run build`.
+2. Faça as alterações em uma branch e revise o resultado.
+3. Integre à `main`; o workflow do Cloudflare executará os testes, o build e a publicação.
+4. Confira o resultado do workflow e abra o endereço principal para testar a navegação e os fluxos afetados.
 
-
-## Publicação automática via GitHub Actions (configurada em código)
-
-O workflow `.github/workflows/cloudflare-pages.yml` foi acrescentado para
-compilar e testar o projeto e publicar a pasta `dist` no **projeto Pages existente**
-`ssr-connect` após cada push em `main`. Ele não cria outro projeto, não altera
-o Supabase nem desativa a publicação separada do GitHub Pages.
-
-**Para ativá-lo, ainda é necessário cadastrar duas credenciais no repositório:**
-
-1. Em Cloudflare, crie um API token com permissão de editar Cloudflare Pages
-   para a conta que contém o projeto `ssr-connect`. Não inclua esse token no código.
-2. No GitHub, abra Settings > Secrets and variables > Actions > New repository secret
-   e salve o token como `CLOUDFLARE_API_TOKEN`.
-3. Na mesma área, salve o identificador da conta Cloudflare como
-   `CLOUDFLARE_ACCOUNT_ID`. Ele consta no painel da conta Cloudflare.
-4. Abra Actions > Publicar SSR-CONNECT no Cloudflare Pages > Run workflow
-   para publicar a versão atual sem precisar criar um novo commit.
-
-O workflow informa erro explícito quando faltar alguma credencial: um build
-com sucesso, sozinho, **não confirma que o Cloudflare foi atualizado**.
+As chaves de serviço e `PORTAL_TOKEN_SECRET` devem ficar somente nos secrets do backend. `.env.production` deve conter apenas configuração publicável do frontend.
