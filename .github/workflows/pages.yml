@@ -1,8 +1,8 @@
 name: Publicar SSR-CONNECT no GitHub Pages
 
+# O endereço oficial é o Cloudflare Pages. O GitHub Pages fica como opção
+# secundária para publicação manual, sem competir com o deploy automático.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -23,8 +23,8 @@ jobs:
       - name: Verificar se o projeto React foi enviado por completo
         run: |
           test -s src/main.jsx || { echo "::error::Falta src/main.jsx. O repositório recebeu apenas parte do ZIP."; exit 1; }
-          test -s src/App.jsx || { echo "::error::Falta src/App.jsx. Envie a pasta src completa."; exit 1; }
-          test -s src/api/ssrClient.js || { echo "::error::Falta src/api/ssrClient.js. Envie a pasta src completa."; exit 1; }
+          test -s src/App.jsx || { echo "::error::Falta src/App.jsx. O repositório recebeu apenas parte do ZIP."; exit 1; }
+          test -s src/api/ssrClient.js || { echo "::error::Falta src/api/ssrClient.js. O repositório recebeu apenas parte do ZIP."; exit 1; }
 
       - uses: actions/setup-node@v4
         with:
