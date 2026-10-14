@@ -3,7 +3,7 @@ import { ClipboardCheck, Loader2, AlertTriangle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const todayMidnight = () => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; };
-const daysUntil = (dateStr) => Math.round((new Date(dateStr + "T00:00:00") - todayMidnight()) / 86400000);
+const daysUntil = (dateStr) => Math.round((new Date(dateStr + "T00:00:00").getTime() - todayMidnight().getTime()) / 86400000);
 
 const TYPE_TONE = {
   "Prova": "bg-amber-500/15 text-amber-600",
@@ -36,7 +36,7 @@ export default function DeadlinesCard({ title = "Próximos prazos de entrega", s
   };
 
   return (
-    <div className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
+    <div className="rounded-3xl border border-border bg-card p-6 shadow-xs sm:p-8">
       <div className="flex items-center gap-3">
         <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><ClipboardCheck className="h-5 w-5" /></span>
         <div>

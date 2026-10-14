@@ -27,7 +27,7 @@ export default function QuickLinks() {
               {t.external ? <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" /> : <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground" />}
             </>
           );
-          const cls = "flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition hover:scale-[1.02] hover:border-primary/40";
+          const cls = "flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-4 text-left shadow-xs transition hover:scale-[1.02] hover:border-primary/40";
           if (t.href) return <a key={t.key} href={t.href} target="_blank" rel="noopener noreferrer" className={cls}>{inner}</a>;
           if (t.to) return <Link key={t.key} to={t.to} className={cls}>{inner}</Link>;
           return <button key={t.key} type="button" onClick={() => scrollTo(t.target)} className={cls}>{inner}</button>;

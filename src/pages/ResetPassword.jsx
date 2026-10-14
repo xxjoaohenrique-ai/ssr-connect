@@ -25,7 +25,7 @@ export default function ResetPassword() {
     }
     setLoading(true);
     try {
-      await base44.auth.resetPassword({ resetToken, newPassword });
+      await base44.auth.resetPassword({ newPassword });
       sessionStorage.removeItem("ssr_recovery");
       window.location.href = `${import.meta.env.BASE_URL}login`;
     } catch (err) {

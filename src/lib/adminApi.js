@@ -24,7 +24,7 @@ async function call(payload) {
   }
 }
 
-export function adminList(entity, { sort, limit, filter } = {}) {
+export function adminList(entity, { sort = undefined, limit = undefined, filter = undefined } = {}) {
   return call({ action: "list", entity, sort, limit, filter }).then((d) => d.rows);
 }
 export function adminCreate(entity, data) {

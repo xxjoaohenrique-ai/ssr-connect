@@ -87,7 +87,7 @@ export default function Calendar() {
                       if (day === null) return <div key={i} />;
                       const ev = eventsByDate[dateKey(day)];
                       return (
-                        <div key={i} className={`relative flex aspect-square flex-col items-center justify-center rounded-xl border p-1 text-sm transition ${ev ? "border-primary/40 bg-primary/5" : "border-border bg-background"} hover:shadow-sm`}>
+                        <div key={i} className={`relative flex aspect-square flex-col items-center justify-center rounded-xl border p-1 text-sm transition ${ev ? "border-primary/40 bg-primary/5" : "border-border bg-background"} hover:shadow-xs`}>
                           <span className={`font-medium ${ev ? "text-primary" : "text-foreground"}`}>{day}</span>
                           {ev && <span className={`absolute bottom-1.5 h-1.5 w-1.5 rounded-full ${typeColors[ev.type] || "bg-primary"}`} />}
                         </div>
@@ -110,7 +110,7 @@ export default function Calendar() {
                 const d = new Date(ev.date + "T00:00:00");
                 return (
                   <motion.div key={ev.id} initial={{ opacity: 0, x: -16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4">
-                    <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary text-white">
+                    <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-linear-to-br from-primary to-secondary text-white">
                       <span className="heading-font text-xl font-bold leading-none">{d.getDate()}</span>
                       <span className="text-[10px] uppercase">{months[d.getMonth()].slice(0, 3)}</span>
                     </div>
@@ -140,7 +140,7 @@ export default function Calendar() {
                   const p = fmtUp(ev.date);
                   return (
                     <div key={ev.id} className="flex gap-3 border-b border-border pb-4 last:border-0 last:pb-0">
-                      <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-secondary/15 text-primary">
+                      <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-linear-to-br from-primary/15 to-secondary/15 text-primary">
                         <span className="heading-font text-sm font-bold leading-none">{p.day}</span>
                         <span className="text-[9px] uppercase">{p.month}</span>
                       </div>

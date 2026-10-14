@@ -154,7 +154,7 @@ export default function AdminAccessManager() {
               value={newEmail}
               onChange={(e) => setNewEmail(e.target.value)}
               placeholder="novo.admin@escola.com"
-              className="w-full rounded-xl border border-border bg-background py-3 pl-11 pr-4 text-sm outline-none ring-primary transition focus:ring-2"
+              className="w-full rounded-xl border border-border bg-background py-3 pl-11 pr-4 text-sm outline-hidden ring-primary transition focus:ring-2"
               required
             />
           </div>

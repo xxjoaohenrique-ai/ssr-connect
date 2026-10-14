@@ -27,14 +27,14 @@ export default function MaterialsCard() {
         {t.href ? <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" /> : <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground" />}
       </>
     );
-    const cls = "group flex w-full items-center gap-3 rounded-2xl border border-border bg-background p-4 text-left transition hover:scale-[1.02] hover:border-primary/40 hover:shadow-sm";
+    const cls = "group flex w-full items-center gap-3 rounded-2xl border border-border bg-background p-4 text-left transition hover:scale-[1.02] hover:border-primary/40 hover:shadow-xs";
     if (t.href) return <a key={t.title} href={t.href} target="_blank" rel="noopener noreferrer" className={cls}>{inner}</a>;
     if (t.to) return <Link key={t.title} to={t.to} className={cls}>{inner}</Link>;
     return <button key={t.title} type="button" onClick={() => scrollTo(t.target)} className={cls}>{inner}</button>;
   };
 
   return (
-    <div className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
+    <div className="rounded-3xl border border-border bg-card p-6 shadow-xs sm:p-8">
       <div className="flex items-center gap-3">
         <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary/10 text-secondary"><FolderOpen className="h-5 w-5" /></span>
         <div>

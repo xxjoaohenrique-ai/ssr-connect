@@ -93,11 +93,11 @@ export default function Chatbot() {
   const suggestions = ["Como faço matrícula?", "Cardápio de hoje", "Próximos eventos"];
 
   return (
-    <div className="fixed bottom-[calc(4.75rem_+_env(safe-area-inset-bottom))] lg:bottom-[calc(1.25rem_+_env(safe-area-inset-bottom))] right-[calc(1.25rem_+_env(safe-area-inset-right))] z-50 flex flex-col items-end gap-3">
+    <div className="fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom))] lg:bottom-[calc(1.25rem+env(safe-area-inset-bottom))] right-[calc(1.25rem+env(safe-area-inset-right))] z-50 flex flex-col items-end gap-3">
       {open && (
         <div className="flex h-[440px] max-h-[calc(100dvh-11rem)] w-[calc(100vw-2.5rem)] max-w-sm flex-col overflow-hidden rounded-3xl border border-border bg-card/95 shadow-2xl backdrop-blur-xl">
           {/* Header */}
-          <div className="flex items-center justify-between bg-gradient-to-r from-primary to-secondary px-5 py-4 text-white">
+          <div className="flex items-center justify-between bg-linear-to-r from-primary to-secondary px-5 py-4 text-white">
             <div className="flex items-center gap-2">
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
                 <Bot className="h-5 w-5" />
@@ -188,7 +188,7 @@ export default function Chatbot() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send()}
               placeholder="Digite sua dúvida..."
-              className="flex-1 rounded-full bg-muted px-4 py-2.5 text-sm outline-none ring-primary transition focus:ring-2"
+              className="flex-1 rounded-full bg-muted px-4 py-2.5 text-sm outline-hidden ring-primary transition focus:ring-2"
             />
             <button
               onClick={() => send()}
@@ -205,7 +205,7 @@ export default function Chatbot() {
       <button
         onClick={() => setOpen((o) => !o)}
         aria-label="Abrir assistente"
-        className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-white shadow-2xl shadow-primary/40 transition-transform hover:scale-110 hover:rotate-3"
+        className="flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br from-primary to-secondary text-white shadow-2xl shadow-primary/40 transition-transform hover:scale-110 hover:rotate-3"
       >
         {open ? <X className="h-7 w-7" /> : <MessageCircle className="h-7 w-7" />}
       </button>

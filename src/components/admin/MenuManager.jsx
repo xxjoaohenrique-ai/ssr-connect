@@ -93,7 +93,7 @@ export default function MenuManager() {
         </div>
         <div className="mt-3 h-2 overflow-hidden rounded-full bg-muted">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-primary to-secondary transition-all duration-500"
+            className="h-full rounded-full bg-linear-to-r from-primary to-secondary transition-all duration-500"
             style={{ width: `${Math.round((completeDays / DAYS.length) * 100)}%` }}
           />
         </div>
@@ -132,7 +132,7 @@ export default function MenuManager() {
                         rows={2}
                         value={cur?.[m.key] || ""}
                         onChange={set(d, m.key)}
-                        className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none ring-primary transition focus:ring-2"
+                        className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-hidden ring-primary transition focus:ring-2"
                         placeholder={m.ph}
                       />
                     </div>

@@ -28,15 +28,19 @@ async function authRequest(path,body,method='POST',accessToken=null) {
   if(!res.ok) throw new Error(data.msg||data.error_description||data.message||data.error||'Falha de autenticação.');
   return data;
 }
+let refreshRequest = null;
 async function accessToken() {
   const sess=getSession();
   if(!sess?.access_token) return null;
   if(Date.now() < sess.expires_at-60000) return sess.access_token;
   if(!sess.refresh_token) return sess.access_token;
-  try {
-    const next=await authRequest('token?grant_type=refresh_token',{refresh_token:sess.refresh_token});
-    saveSession(next);return next.access_token;
-  } catch {localStorage.removeItem(STORAGE);return null;}
+  if (!refreshRequest) {
+    refreshRequest = authRequest('token?grant_type=refresh_token',{refresh_token:sess.refresh_token})
+      .then(next => { saveSession(next); return next.access_token; })
+      .catch(() => { localStorage.removeItem(STORAGE); return null; })
+      .finally(() => { refreshRequest = null; });
+  }
+  return refreshRequest;
 }
 async function api(name,body) {
   ready();
@@ -46,7 +50,7 @@ async function api(name,body) {
   const data=await res.json().catch(()=>({}));
   if(!res.ok) {
     const err=new Error(data.error||`Erro no servidor (${res.status}).`);
-    err.response={data,status:res.status};throw err;
+    Object.assign(err, {response: {data,status:res.status}});throw err;
   }
   return data;
 }
@@ -58,8 +62,9 @@ const entity=(name)=>({
 });
 async function upload({file}) {
   ready();
-  const s=JSON.parse(localStorage.getItem('ceti_portal_session')||'null');
-  const a=JSON.parse(localStorage.getItem('ceti_admin_session')||'null');
+  const readStored = (name) => { try { return JSON.parse(localStorage.getItem(name)||'null'); } catch { return null; } };
+  const s=readStored('ceti_portal_session');
+  const a=readStored('ceti_admin_session');
   const form=new FormData();form.set('file',file);form.set('token',a?.token||s?.token||'');
   const res=await fetch(`${url}/functions/v1/ssrApi?op=upload`,{method:'POST',headers:{apikey:key},body:form});
   const data=await res.json().catch(()=>({}));
@@ -67,7 +72,7 @@ async function upload({file}) {
   return data;
 }
 export const ssr = {
-  entities:new Proxy({},{get(_target,name){return entity(String(name));}}),
+  entities:new Proxy(/** @type {Record<string, ReturnType<typeof entity>>} */ ({}),{get(_target,name){return entity(String(name));}}),
   functions:{invoke:async(name,payload)=>({data:await api(name,payload)})},
   integrations:{Core:{
     UploadFile:upload,

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import {
-  ArrowRight, Bell, BookOpen, CalendarDays, Code2, GraduationCap,
+  ArrowRight, Bell, BookOpen, CalendarDays, Code2,
   Lightbulb, Newspaper, UserRound, Users, Clock3,
 } from "lucide-react";
 

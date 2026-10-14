@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { KeyRound, Loader2, AlertCircle, CheckCircle2, Lock } from "lucide-react";
 
-const inputCls = "w-full rounded-xl border border-border bg-background py-3 pl-11 pr-4 text-sm outline-none ring-primary transition focus:ring-2";
+const inputCls = "w-full rounded-xl border border-border bg-background py-3 pl-11 pr-4 text-sm outline-hidden ring-primary transition focus:ring-2";
 
 // onSubmit(current, next) => Promise
 export default function ChangePasswordCard({ onSubmit }) {
@@ -27,7 +27,7 @@ export default function ChangePasswordCard({ onSubmit }) {
   };
 
   return (
-    <form onSubmit={submit} className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
+    <form onSubmit={submit} className="rounded-3xl border border-border bg-card p-6 shadow-xs sm:p-8">
       <h3 className="heading-font text-base font-bold">Trocar minha senha</h3>
       <div className="mt-5 space-y-4">
         <div className="relative">

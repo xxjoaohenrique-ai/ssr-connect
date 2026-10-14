@@ -56,7 +56,7 @@ export default function DeleteAccountCard({ session, onLogout }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => !busy && setOpen(false)}
-            className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/40 backdrop-blur-sm sm:items-center"
+            className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/40 backdrop-blur-xs sm:items-center"
           >
             <motion.div
               initial={{ y: "100%", opacity: 0.6 }}

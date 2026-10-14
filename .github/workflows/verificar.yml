@@ -25,5 +25,9 @@ jobs:
         run: npm ci
       - name: Testar autenticacao e sessoes
         run: npm test
+      - name: Verificar codigo
+        run: npm run lint
+      - name: Verificar tipos sem gerar arquivos
+        run: npm run typecheck
       - name: Compilar interface React/Vite
         run: npm run build

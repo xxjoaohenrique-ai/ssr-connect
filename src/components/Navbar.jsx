@@ -51,7 +51,7 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 z-50 w-full transition-all duration-300 glass-nav ssr-site-header ssr-reference-header ${
-        scrolled ? "pb-2 pt-[calc(0.5rem_+_env(safe-area-inset-top))] shadow-soft" : "pb-3 pt-[calc(0.75rem_+_env(safe-area-inset-top))]"
+        scrolled ? "pb-2 pt-[calc(0.5rem+env(safe-area-inset-top))] shadow-soft" : "pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))]"
       }`}
     >
       <nav className="mx-auto flex max-w-7xl min-w-0 items-center justify-between gap-2 px-3 min-[380px]:px-4 sm:gap-3 sm:px-6 lg:px-8">

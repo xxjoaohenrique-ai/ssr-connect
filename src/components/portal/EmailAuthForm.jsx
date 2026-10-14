@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Mail, Lock, User, Loader2, KeyRound, AlertCircle, UserPlus, Info, Eye, EyeOff, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const inputCls = "w-full rounded-xl border border-border bg-background py-3 pl-11 pr-4 text-sm outline-none ring-primary transition focus:ring-2";
+const inputCls = "w-full rounded-xl border border-border bg-background py-3 pl-11 pr-4 text-sm outline-hidden ring-primary transition focus:ring-2";
 
 // Formulário de login/cadastro por e-mail e senha (professor e pai).
 // extraFields: [{ key, label, placeholder }] — só aparece no cadastro.
@@ -39,7 +39,7 @@ export default function EmailAuthForm({ title, subtitle, onLogin, onRegister, ex
   };
 
   return (
-    <motion.form initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} onSubmit={submit} className="ssr-access-card mx-auto max-w-md rounded-3xl border border-border bg-card p-8 shadow-sm">
+    <motion.form initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} onSubmit={submit} className="ssr-access-card mx-auto max-w-md rounded-3xl border border-border bg-card p-8 shadow-xs">
       <div className="mb-6 flex items-center gap-3">
         <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary"><KeyRound className="h-6 w-6" /></span>
         <div>
@@ -63,7 +63,7 @@ export default function EmailAuthForm({ title, subtitle, onLogin, onRegister, ex
         <label className="ssr-access-label" htmlFor="portal-password">Senha</label>
         <div className="relative">
           <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <input id="portal-password" type={showPassword ? "text" : "password"} autoComplete={mode === "login" ? "current-password" : "new-password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Sua senha" className={`${inputCls} !pr-12`} required />
+          <input id="portal-password" type={showPassword ? "text" : "password"} autoComplete={mode === "login" ? "current-password" : "new-password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Sua senha" className={`${inputCls} pr-12!`} required />
           <button type="button" onClick={() => setShowPassword((s) => !s)} aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-2 text-muted-foreground hover:text-primary">{showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}</button>
         </div>
         {mode === "register" && extraFields.map((f) => (

@@ -51,7 +51,7 @@ export default function Library() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Buscar por título, disciplina ou professor..."
-            className="w-full rounded-full border border-border bg-card py-3 pl-12 pr-4 text-sm outline-none ring-primary transition focus:ring-2"
+            className="w-full rounded-full border border-border bg-card py-3 pl-12 pr-4 text-sm outline-hidden ring-primary transition focus:ring-2"
           />
         </div>
 

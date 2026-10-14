@@ -20,7 +20,7 @@ export default function TickerBanner() {
   }, []);
 
   return (
-    <div className="ssr-ticker bg-gradient-to-r from-[#1e88e5] to-[#00897b] px-4 py-2.5 text-xs font-medium tracking-wide text-white sm:text-sm" role="status">
+    <div className="ssr-ticker bg-linear-to-r from-[#1e88e5] to-[#00897b] px-4 py-2.5 text-xs font-medium tracking-wide text-white sm:text-sm" role="status">
       <div className="ssr-ticker-content"><Megaphone size={17} aria-hidden="true" /><span>{text}</span></div>
     </div>
   );

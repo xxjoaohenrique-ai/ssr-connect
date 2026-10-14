@@ -8,7 +8,7 @@ export default function AdminQuickActions({ actions, onNavigate }) {
           key={action.key}
           type="button"
           onClick={() => onNavigate(action.key)}
-          className="ssr-admin-action flex items-center gap-3 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition hover:border-primary/40"
+          className="ssr-admin-action flex items-center gap-3 rounded-2xl border border-border bg-card p-4 text-left shadow-xs transition hover:border-primary/40"
         >
           <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${action.tone}`}><action.icon className="h-5 w-5" /></span>
           <span className="min-w-0 flex-1">

@@ -11,7 +11,7 @@ import ProfessorDashboard from "@/components/portal/ProfessorDashboard";
 import PaiDashboard from "@/components/portal/PaiDashboard";
 import EmailAuthForm from "@/components/portal/EmailAuthForm";
 
-const inputCls = "w-full rounded-xl border border-border bg-background py-3 pl-11 pr-4 text-sm outline-none ring-primary transition focus:ring-2";
+const inputCls = "w-full rounded-xl border border-border bg-background py-3 pl-11 pr-4 text-sm outline-hidden ring-primary transition focus:ring-2";
 
 const TABS = [
   { key: "aluno", label: "Aluno", icon: GraduationCap },
@@ -99,7 +99,7 @@ export default function AlunoPortal() {
         </div>
 
         {tab === "aluno" && (
-          <motion.form initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} onSubmit={doAlunoLogin} className="ssr-access-card mx-auto max-w-md rounded-3xl border border-border bg-card p-8 shadow-sm">
+          <motion.form initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} onSubmit={doAlunoLogin} className="ssr-access-card mx-auto max-w-md rounded-3xl border border-border bg-card p-8 shadow-xs">
             <div className="mb-2 space-y-4">
               <label className="ssr-access-label" htmlFor="student-email">E-mail</label>
               <div className="relative">
@@ -109,7 +109,7 @@ export default function AlunoPortal() {
               <label className="ssr-access-label" htmlFor="student-password">Senha</label>
               <div className="relative">
                 <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <input id="student-password" autoComplete="current-password" type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Sua senha" className={`${inputCls} !pr-12`} required />
+                <input id="student-password" autoComplete="current-password" type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Sua senha" className={`${inputCls} pr-12!`} required />
                 <button type="button" onClick={() => setShowPassword((s) => !s)} aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-2 text-muted-foreground hover:text-primary">{showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}</button>
               </div>
             </div>
