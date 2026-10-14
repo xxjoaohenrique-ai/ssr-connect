@@ -47,10 +47,10 @@ export default function TurmaStudentsTable({ turmas, teacherId }) {
   const chipCls = (active) =>
     `rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${active ? "bg-primary text-primary-foreground shadow-soft" : "bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary"}`;
 
-  const inputCls = "w-full rounded-lg border border-transparent bg-transparent px-2 py-1.5 text-sm outline-none transition hover:border-border focus:border-primary focus:bg-background";
+  const inputCls = "w-full rounded-lg border border-transparent bg-transparent px-2 py-1.5 text-sm outline-hidden transition hover:border-border focus:border-primary focus:bg-background";
 
   return (
-    <div className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
+    <div className="rounded-3xl border border-border bg-card p-6 shadow-xs sm:p-8">
       <div className="flex items-center gap-3">
         <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><Users className="h-5 w-5" /></span>
         <div className="flex-1">
@@ -61,7 +61,7 @@ export default function TurmaStudentsTable({ turmas, teacherId }) {
 
       <div className="relative mt-4">
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar por nome, login ou turma" className="w-full rounded-xl border border-border bg-background py-2.5 pl-10 pr-4 text-sm outline-none ring-primary transition focus:ring-2" />
+        <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar por nome, login ou turma" className="w-full rounded-xl border border-border bg-background py-2.5 pl-10 pr-4 text-sm outline-hidden ring-primary transition focus:ring-2" />
       </div>
 
       {!loading && (
@@ -104,7 +104,7 @@ export default function TurmaStudentsTable({ turmas, teacherId }) {
                       <input key={`t-${s.id}-${s.turma}`} defaultValue={s.turma || ""} onBlur={(e) => { const v = e.target.value.trim(); if (v !== (s.turma || "")) save(s.id, { turma: v }); }} className={inputCls} placeholder="—" />
                     </td>
                     <td className="py-1 align-middle">
-                      <select key={`c-${s.id}-${s.course}`} defaultValue={s.course || ""} onChange={(e) => save(s.id, { course: e.target.value })} className="w-full rounded-lg border border-transparent bg-transparent px-2 py-1.5 text-sm outline-none transition hover:border-border focus:border-primary focus:bg-background">
+                      <select key={`c-${s.id}-${s.course}`} defaultValue={s.course || ""} onChange={(e) => save(s.id, { course: e.target.value })} className="w-full rounded-lg border border-transparent bg-transparent px-2 py-1.5 text-sm outline-hidden transition hover:border-border focus:border-primary focus:bg-background">
                         <option value="">—</option>
                         {COURSE_OPTIONS.map((c) => <option key={c} value={c}>{c}</option>)}
                       </select>

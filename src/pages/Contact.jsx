@@ -130,16 +130,16 @@ ${form.message}`);
                   <h2 className="heading-font text-2xl font-bold">{info.form_heading}</h2>
                   <div className="grid gap-5 sm:grid-cols-2">
                     <Field icon={User} label="Nome completo" error={errors.name}>
-                      <input value={form.name} onChange={handleChange("name")} placeholder="Seu nome" className="w-full bg-transparent text-sm outline-none" />
+                      <input value={form.name} onChange={handleChange("name")} placeholder="Seu nome" className="w-full bg-transparent text-sm outline-hidden" />
                     </Field>
                     <Field icon={Mail} label="E-mail" error={errors.email}>
-                      <input type="email" value={form.email} onChange={handleChange("email")} placeholder="seu@email.com" className="w-full bg-transparent text-sm outline-none" />
+                      <input type="email" value={form.email} onChange={handleChange("email")} placeholder="seu@email.com" className="w-full bg-transparent text-sm outline-hidden" />
                     </Field>
                     <Field icon={Phone} label="Telefone (opcional)">
-                      <input value={form.phone} onChange={handleChange("phone")} placeholder="(11) 90000-0000" className="w-full bg-transparent text-sm outline-none" />
+                      <input value={form.phone} onChange={handleChange("phone")} placeholder="(11) 90000-0000" className="w-full bg-transparent text-sm outline-hidden" />
                     </Field>
                     <Field icon={MessageSquare} label="Assunto" error={errors.subject}>
-                      <input value={form.subject} onChange={handleChange("subject")} placeholder="Sobre o que é?" className="w-full bg-transparent text-sm outline-none" />
+                      <input value={form.subject} onChange={handleChange("subject")} placeholder="Sobre o que é?" className="w-full bg-transparent text-sm outline-hidden" />
                     </Field>
                   </div>
                   <div>
@@ -149,7 +149,7 @@ ${form.message}`);
                       onChange={handleChange("message")}
                       rows={5}
                       placeholder="Escreva sua mensagem aqui..."
-                      className={`w-full rounded-2xl border bg-background px-4 py-3 text-sm outline-none ring-primary transition focus:ring-2 ${
+                      className={`w-full rounded-2xl border bg-background px-4 py-3 text-sm outline-hidden ring-primary transition focus:ring-2 ${
                         errors.message ? "border-destructive" : "border-border"
                       }`}
                     />

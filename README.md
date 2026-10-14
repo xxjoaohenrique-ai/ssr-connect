@@ -38,7 +38,8 @@ O deploy automático do Cloudflare também executa testes e build. Consulte [CON
 
 - Na revisão de 13/10/2026, a URL do Supabase em `.env.production` falhou com `ENOTFOUND`. É necessário confirmar se o projeto existe/está ativo e ajustar a configuração pública antes de validar dados e login em produção.
 - A conta do administrador usa `AdminAccount`, independente do Supabase Auth e de contas Google. O fluxo `/forgot-password` não redefine essa conta. O e-mail deve ser consultado por um operador autorizado no banco; a senha existente não é recuperável a partir do hash. Um administrador com acesso pode redefinir a senha no painel.
-- A revisão atual executou sete testes, lint, verificação de tipos e build. O teste integrado do backend ficou impedido pelo DNS. Restam nove alertas de dependências relacionados a Tailwind e React Router; resolvê-los exige revisão de compatibilidade.
+- A revisão atual executou sete testes, lint, verificação de tipos e build. Após atualizar Tailwind para 4.3.3 e React Router para 7.18.4, `npm audit` não encontrou vulnerabilidades conhecidas. A página inicial foi conferida em celular e desktop e `/admin` redirecionou para login sem sessão. O teste integrado do backend ficou impedido pelo DNS.
+- A interface agora exige navegadores compatíveis com Tailwind 4: Chrome 111+, Safari 16.4+ ou Firefox 128+.
 - O contato abre o aplicativo de e-mail com a mensagem preenchida; o usuário precisa concluir o envio nesse aplicativo.
 
 - Os registros e contas antigos do Base44 precisam ser exportados, importados e conferidos; o código do site não migra esses dados automaticamente.

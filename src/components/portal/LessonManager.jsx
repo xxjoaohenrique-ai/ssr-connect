@@ -95,12 +95,12 @@ export default function LessonManager({ turmas, disciplines = [], author, teache
   const countByTurma = {};
   lessons.forEach((l) => { countByTurma[l.turma || ""] = (countByTurma[l.turma || ""] || 0) + 1; });
 
-  const inputCls = "w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none ring-primary transition focus:ring-2";
+  const inputCls = "w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-hidden ring-primary transition focus:ring-2";
   const chipCls = (active) =>
     `rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${active ? "bg-primary text-primary-foreground shadow-soft" : "bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary"}`;
 
   return (
-    <div className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
+    <div className="rounded-3xl border border-border bg-card p-6 shadow-xs sm:p-8">
       <div className="flex items-center gap-3">
         <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><Video className="h-5 w-5" /></span>
         <div>

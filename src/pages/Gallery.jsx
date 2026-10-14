@@ -59,7 +59,7 @@ export default function Gallery() {
                 className="group relative overflow-hidden rounded-3xl border border-border text-left transition hover:-translate-y-1 hover:shadow-card"
               >
                 <Image src={p.image_url} alt={p.title} className="aspect-square w-full transition duration-500 group-hover:scale-105" />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 pt-8">
+                <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent p-4 pt-8">
                   <p className="text-sm font-semibold leading-snug text-white">{p.title}</p>
                 </div>
               </motion.button>
@@ -70,7 +70,7 @@ export default function Gallery() {
 
       {/* Visualização ampliada */}
       {open && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm" onClick={() => setOpen(null)}>
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/80 p-4 backdrop-blur-xs" onClick={() => setOpen(null)}>
           <div className="relative w-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
             <div className="h-[75vh] overflow-hidden rounded-3xl bg-black">
               <Image src={open.image_url} alt={open.title} fittingType="fit" className="h-full w-full" />

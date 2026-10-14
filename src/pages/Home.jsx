@@ -133,7 +133,7 @@ export default function Home() {
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:gap-14 sm:px-6 lg:grid-cols-2 lg:px-8">
           <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="relative">
             <div className="overflow-hidden rounded-3xl shadow-2xl">
-              <Image src={STUDENTS_IMG} alt="Ilustração de estudantes em um ambiente de aprendizagem" fittingType="fill" className="aspect-[4/3] w-full" />
+              <Image src={STUDENTS_IMG} alt="Ilustração de estudantes em um ambiente de aprendizagem" fittingType="fill" className="aspect-4/3 w-full" />
             </div>
           </motion.div>
 
@@ -184,8 +184,8 @@ export default function Home() {
                       </div>
                       <div>
                         <span className="rounded-full bg-secondary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-secondary">{n.category}</span>
-                        <h3 className="heading-font mt-2 break-words text-base font-semibold leading-snug group-hover:text-primary sm:text-lg">{n.title}</h3>
-                        <p className="mt-1 break-words text-sm text-muted-foreground">{n.excerpt}</p>
+                        <h3 className="heading-font mt-2 wrap-break-word text-base font-semibold leading-snug group-hover:text-primary sm:text-lg">{n.title}</h3>
+                        <p className="mt-1 wrap-break-word text-sm text-muted-foreground">{n.excerpt}</p>
                       </div>
                     </motion.article>
                   );
@@ -226,7 +226,7 @@ export default function Home() {
 
       {/* CTA */}
       <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary to-secondary px-5 py-10 text-center text-primary-foreground shadow-card sm:px-16 sm:py-16">
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="relative overflow-hidden rounded-3xl bg-linear-to-br from-primary to-secondary px-5 py-10 text-center text-primary-foreground shadow-card sm:px-16 sm:py-16">
           <div className="absolute inset-0 opacity-30 prism-gradient" />
           <div className="relative">
             <motion.h2 initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1, duration: 0.5 }} className="heading-font text-3xl font-bold sm:text-4xl text-balance">Quer conhecer melhor o CETI?</motion.h2>

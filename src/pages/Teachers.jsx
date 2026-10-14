@@ -50,7 +50,7 @@ export default function Teachers() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Buscar professor ou disciplina..."
-              className="w-full rounded-full border border-border bg-card py-3 pl-12 pr-4 text-sm outline-none ring-primary transition focus:ring-2"
+              className="w-full rounded-full border border-border bg-card py-3 pl-12 pr-4 text-sm outline-hidden ring-primary transition focus:ring-2"
             />
           </div>
           <div className="flex flex-wrap gap-2">
@@ -81,8 +81,8 @@ export default function Teachers() {
               viewport={{ once: true, margin: "-40px" }}
               className="group overflow-hidden rounded-3xl border border-border bg-card text-center transition hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-primary/10"
             >
-              <div className="flex flex-col items-center bg-gradient-to-b from-primary/10 to-transparent px-6 pt-8 pb-4">
-                <span className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-2xl font-bold text-white shadow-xl">
+              <div className="flex flex-col items-center bg-linear-to-b from-primary/10 to-transparent px-6 pt-8 pb-4">
+                <span className="flex h-24 w-24 items-center justify-center rounded-full bg-linear-to-br from-primary to-secondary text-2xl font-bold text-white shadow-xl">
                   {t.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
                 </span>
               </div>

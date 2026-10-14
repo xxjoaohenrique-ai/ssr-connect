@@ -147,7 +147,7 @@ export default function StudentManager() {
             <button onClick={() => setCreds(null)} className="text-muted-foreground hover:text-foreground"><X className="h-4 w-4" /></button>
           </div>
           <div className="mt-3 overflow-x-auto">
-            <table className="w-full min-w-[26rem] text-sm">
+            <table className="w-full min-w-104 text-sm">
               <thead>
                 <tr className="text-left text-xs uppercase text-muted-foreground">
                   <th className="whitespace-nowrap py-2 pr-4">Aluno</th>

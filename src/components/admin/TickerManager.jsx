@@ -48,7 +48,7 @@ export default function TickerManager() {
       <form onSubmit={save} className="mt-6 space-y-5">
         <div>
           <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Texto do banner</label>
-          <textarea value={content} onChange={(e) => setContent(e.target.value)} rows={3} placeholder="Use · para separar os avisos" className="w-full rounded-2xl border border-border bg-background px-4 py-3 text-sm outline-none ring-primary transition focus:ring-2" />
+          <textarea value={content} onChange={(e) => setContent(e.target.value)} rows={3} placeholder="Use · para separar os avisos" className="w-full rounded-2xl border border-border bg-background px-4 py-3 text-sm outline-hidden ring-primary transition focus:ring-2" />
           <p className="mt-1.5 text-xs text-muted-foreground">Dica: separe os avisos com " · " para o efeito de marcadores.</p>
         </div>
 
@@ -59,7 +59,7 @@ export default function TickerManager() {
 
         <div>
           <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Pré-visualização</p>
-          <div className={`rounded-2xl bg-gradient-to-r from-[#1e88e5] to-[#00897b] px-4 py-2.5 text-center text-xs font-medium text-white sm:text-sm ${isActive ? "" : "opacity-50"}`}>
+          <div className={`rounded-2xl bg-linear-to-r from-[#1e88e5] to-[#00897b] px-4 py-2.5 text-center text-xs font-medium text-white sm:text-sm ${isActive ? "" : "opacity-50"}`}>
             <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-white align-middle" />
             {content || "Texto do banner..."}
           </div>

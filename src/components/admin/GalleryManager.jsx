@@ -147,7 +147,7 @@ export default function GalleryManager() {
                   <input
                     value={entry.title}
                     onChange={setEntryTitle(i)}
-                    className={inputCls + " !py-1.5 !text-xs"}
+                    className={inputCls + " py-1.5! text-xs!"}
                     placeholder="Ex.: Feira de Ciências 2026"
                     maxLength={120}
                   />

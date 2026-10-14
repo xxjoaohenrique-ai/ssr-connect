@@ -5,7 +5,7 @@ import { KeyRound, Loader2, AlertCircle, Lock, Mail } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import { getAdmin, loginAdminAccount } from "@/lib/adminAuth";
 
-const inputCls = "w-full rounded-xl border border-border bg-background py-3 pl-11 pr-4 text-sm outline-none ring-primary transition focus:ring-2";
+const inputCls = "w-full rounded-xl border border-border bg-background py-3 pl-11 pr-4 text-sm outline-hidden ring-primary transition focus:ring-2";
 
 // Login do Painel Administrativo — e-mail e senha da conta de administrador,
 // igual ao Portal Escolar (sem conta Google).
@@ -44,7 +44,7 @@ export default function AdminLogin() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           onSubmit={submit}
-          className="mx-auto max-w-md rounded-3xl border border-border bg-card p-8 shadow-sm"
+          className="mx-auto max-w-md rounded-3xl border border-border bg-card p-8 shadow-xs"
         >
           <div className="mb-2 space-y-4">
             <div className="relative">

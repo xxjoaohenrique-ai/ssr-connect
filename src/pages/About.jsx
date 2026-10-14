@@ -69,7 +69,7 @@ export default function About() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="overflow-hidden rounded-3xl shadow-2xl"
         >
-          <Image src={ABOUT_IMG} alt="Ilustração de atividades escolares" fittingType="fill" className="aspect-[4/3] w-full" />
+          <Image src={ABOUT_IMG} alt="Ilustração de atividades escolares" fittingType="fill" className="aspect-4/3 w-full" />
         </motion.div>
         <div>
           <SectionHeading align="left" eyebrow="Nossa História" title={history.history_title || HISTORY_DEFAULTS.history_title} />
@@ -96,7 +96,7 @@ export default function About() {
                 viewport={{ once: true, margin: "-60px" }}
                 className="rounded-3xl border border-border bg-background p-8 text-center transition hover:shadow-xl"
               >
-                <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-secondary text-white">
+                <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-primary to-secondary text-white">
                   <v.icon className="h-8 w-8" />
                 </span>
                 <h3 className="heading-font mt-6 text-2xl font-semibold">{v.title}</h3>
@@ -171,7 +171,7 @@ export default function About() {
                   viewport={{ once: true }}
                   className="flex gap-4 rounded-2xl border border-border bg-background p-5"
                 >
-                  <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-lg font-bold text-white">
+                  <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-primary to-secondary text-lg font-bold text-white">
                     {m.name.trim().split(/\s+/).map((n) => n[0]).slice(0, 2).join("").toUpperCase()}
                   </span>
                   <div>
@@ -193,7 +193,7 @@ export default function About() {
           <iframe
             title="Localização do CETI"
             src="https://www.openstreetmap.org/export/embed.html?bbox=-46.6593%2C-23.5613%2C-46.6373%2C-23.5413&layer=mapnik&marker=-23.5513%2C-46.6483"
-            className="h-[400px] w-full grayscale-[20%]"
+            className="h-[400px] w-full grayscale-20"
             loading="lazy"
           />
         </div>

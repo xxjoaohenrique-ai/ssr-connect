@@ -49,7 +49,7 @@ export default function News() {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="relative w-full sm:max-w-xs">
                 <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-                <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar notícia..." className="w-full rounded-full border border-border bg-card py-3 pl-12 pr-4 text-sm outline-none ring-primary transition focus:ring-2" />
+                <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar notícia..." className="w-full rounded-full border border-border bg-card py-3 pl-12 pr-4 text-sm outline-hidden ring-primary transition focus:ring-2" />
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {tags.map((t) => (
@@ -105,7 +105,7 @@ export default function News() {
 
       {/* Modal de leitura */}
       {selected && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm" onClick={() => setSelected(null)}>
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs" onClick={() => setSelected(null)}>
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-border bg-card p-6 shadow-2xl scrollbar-thin sm:p-8" onClick={(e) => e.stopPropagation()}>
             <span className="rounded-full bg-secondary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-secondary">{selected.category}</span>
             <h2 className="heading-font mt-4 text-2xl font-bold leading-tight">{selected.title}</h2>

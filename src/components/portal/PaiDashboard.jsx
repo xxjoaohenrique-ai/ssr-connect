@@ -67,7 +67,7 @@ export default function PaiDashboard({ session, onLogout }) {
       <PortalSectionTitle>Família</PortalSectionTitle>
 
       {/* Vincular filho */}
-      <form onSubmit={linkChild} className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
+      <form onSubmit={linkChild} className="rounded-3xl border border-border bg-card p-6 shadow-xs sm:p-8">
         <div className="flex items-center gap-3">
           <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><UserPlus className="h-5 w-5" /></span>
           <div>
@@ -76,8 +76,8 @@ export default function PaiDashboard({ session, onLogout }) {
           </div>
         </div>
         <div className="mt-4 grid gap-2 sm:grid-cols-2">
-          <input value={childLogin} onChange={(e) => setChildLogin(e.target.value)} placeholder="Login do aluno (ex.: joao.silva)" className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none ring-primary transition focus:ring-2" />
-          <input type="password" value={childPwd} onChange={(e) => setChildPwd(e.target.value)} placeholder="Senha do aluno" className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none ring-primary transition focus:ring-2" />
+          <input value={childLogin} onChange={(e) => setChildLogin(e.target.value)} placeholder="Login do aluno (ex.: joao.silva)" className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-hidden ring-primary transition focus:ring-2" />
+          <input type="password" value={childPwd} onChange={(e) => setChildPwd(e.target.value)} placeholder="Senha do aluno" className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-hidden ring-primary transition focus:ring-2" />
         </div>
         <p className="mt-2 text-xs text-muted-foreground">Para vincular, informe o login e a senha escolar do aluno (comprovação de parentesco).</p>
         <button type="submit" disabled={linking} className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:scale-[1.02] disabled:opacity-60">
@@ -87,7 +87,7 @@ export default function PaiDashboard({ session, onLogout }) {
       </form>
 
       {/* Filhos vinculados */}
-      <div className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
+      <div className="rounded-3xl border border-border bg-card p-6 shadow-xs sm:p-8">
         <div className="flex items-center gap-3">
           <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><GraduationCap className="h-5 w-5" /></span>
           <div>

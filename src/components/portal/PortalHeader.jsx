@@ -9,7 +9,7 @@ export default function PortalHeader({ name, meta, role, avatarClass = "bg-prima
   return (
     <div className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-card">
       {/* Faixa de destaque */}
-      <div className="h-1.5 w-full bg-gradient-to-r from-primary via-secondary to-primary" />
+      <div className="h-1.5 w-full bg-linear-to-r from-primary via-secondary to-primary" />
       <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-primary/5 blur-2xl" />
       <div className="relative p-6 sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">

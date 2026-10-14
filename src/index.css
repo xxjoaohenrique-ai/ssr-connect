@@ -1,6 +1,256 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@plugin 'tailwindcss-animate';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  --color-sidebar: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility heading-font {
+  font-family: 'Sora', sans-serif;
+}
+
+@utility glass-ui {
+  /* Frosted Glass / Glassmorphism — mais limpo e sutil */
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  .dark & {
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
+@utility dark {
+  & .glass-ui {
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  & .glass-nav {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+  }
+  & .card-soft {
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.2),
+      0 1px 3px rgba(0, 0, 0, 0.15);
+  }
+  & .shadow-soft {
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.2),
+      0 4px 16px -4px rgba(0, 0, 0, 0.3);
+  }
+  & .shadow-card {
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.2),
+      0 12px 32px -10px rgba(0, 0, 0, 0.4);
+  }
+  & .shadow-float {
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.25),
+      0 24px 48px -12px rgba(0, 0, 0, 0.5);
+  }
+}
+
+@utility glass-nav {
+  background: rgba(248, 250, 252, 0.72);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  .dark & {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+  }
+}
+
+@utility nexus-line {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(var(--primary) / 0.5),
+    transparent
+  );
+}
+
+@utility prism-gradient {
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(59, 130, 246, 0.12),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 80% 30%,
+      rgba(16, 185, 129, 0.12),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 50% 90%,
+      rgba(245, 158, 11, 0.06),
+      transparent 50%
+    );
+}
+
+@utility card-soft {
+  /* Cartão base — bordas suaves e sombra em camadas, moderno e limpo */
+  @apply rounded-3xl border border-border bg-card;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 1px 3px rgba(15, 23, 42, 0.03);
+  .dark & {
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.2),
+      0 1px 3px rgba(0, 0, 0, 0.15);
+  }
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility text-pretty {
+  text-wrap: pretty;
+}
+
+@utility scrollbar-thin {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 9999px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@utility shadow-soft {
+  /* Sombras em camadas — leveza moderna */
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 4px 16px -4px rgba(15, 23, 42, 0.06);
+  .dark & {
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.2),
+      0 4px 16px -4px rgba(0, 0, 0, 0.3);
+  }
+}
+
+@utility shadow-card {
+  box-shadow:
+    0 2px 4px rgba(15, 23, 42, 0.04),
+    0 12px 32px -10px rgba(15, 23, 42, 0.1);
+  .dark & {
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.2),
+      0 12px 32px -10px rgba(0, 0, 0, 0.4);
+  }
+}
+
+@utility shadow-float {
+  box-shadow:
+    0 4px 8px rgba(15, 23, 42, 0.05),
+    0 24px 48px -12px rgba(15, 23, 42, 0.14);
+  .dark & {
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.25),
+      0 24px 48px -12px rgba(0, 0, 0, 0.5);
+  }
+}
 
 @layer base {
   html {
@@ -109,202 +359,251 @@
   }
 }
 
-@layer components {
-  .heading-font {
-    font-family: 'Sora', sans-serif;
-  }
-
-  /* Frosted Glass / Glassmorphism — mais limpo e sutil */
-  .glass-ui {
-    background: rgba(255, 255, 255, 0.55);
-    backdrop-filter: blur(20px) saturate(140%);
-    -webkit-backdrop-filter: blur(20px) saturate(140%);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-  }
-  .dark .glass-ui {
-    background: rgba(15, 23, 42, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .glass-nav {
-    background: rgba(248, 250, 252, 0.72);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-  }
-  .dark .glass-nav {
-    background: rgba(15, 23, 42, 0.7);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-  }
-
-  .nexus-line {
-    background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.5), transparent);
-  }
-
-  .prism-gradient {
-    background: radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.12), transparent 45%),
-                radial-gradient(circle at 80% 30%, rgba(16, 185, 129, 0.12), transparent 45%),
-                radial-gradient(circle at 50% 90%, rgba(245, 158, 11, 0.06), transparent 50%);
-  }
-
-  /* Cartão base — bordas suaves e sombra em camadas, moderno e limpo */
-  .card-soft {
-    @apply rounded-3xl border border-border bg-card;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.03);
-  }
-  .dark .card-soft {
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.15);
-  }
-}
-
 @layer utilities {
-  .text-balance { text-wrap: balance; }
-  .text-pretty { text-wrap: pretty; }
-  .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
-  .scrollbar-thin::-webkit-scrollbar-thumb { background: hsl(var(--muted-foreground) / 0.3); border-radius: 9999px; }
-  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
-
-  /* Sombras em camadas — leveza moderna */
-  .shadow-soft {
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 16px -4px rgba(15, 23, 42, 0.06);
+  /* Smooth fade-in animation for page loads */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-  .shadow-card {
-    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04), 0 12px 32px -10px rgba(15, 23, 42, 0.1);
+  .animate-fade-in-up {
+    animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
-  .shadow-float {
-    box-shadow: 0 4px 8px rgba(15, 23, 42, 0.05), 0 24px 48px -12px rgba(15, 23, 42, 0.14);
+
+  @keyframes floatY {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
   }
-  .dark .shadow-soft { box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 4px 16px -4px rgba(0,0,0,0.3); }
-  .dark .shadow-card { box-shadow: 0 2px 4px rgba(0,0,0,0.2), 0 12px 32px -10px rgba(0,0,0,0.4); }
-  .dark .shadow-float { box-shadow: 0 4px 8px rgba(0,0,0,0.25), 0 24px 48px -12px rgba(0,0,0,0.5); }
-}
-
-/* Smooth fade-in animation for page loads */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-in-up { animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
-
-@keyframes floatY {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-.animate-float { animation: floatY 4s ease-in-out infinite; }
-
-/* Fundo animado — blobs de gradiente flutuantes, sutis */
-@keyframes blob1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(40px, -30px) scale(1.1); }
-  66% { transform: translate(-30px, 25px) scale(0.95); }
-}
-@keyframes blob2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(-45px, 30px) scale(1.08); }
-  66% { transform: translate(30px, -25px) scale(1.12); }
-}
-@keyframes blob3 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(25px, 35px) scale(1.1); }
-}
-.animate-blob1 { animation: blob1 22s ease-in-out infinite; }
-.animate-blob2 { animation: blob2 28s ease-in-out infinite; }
-.animate-blob3 { animation: blob3 24s ease-in-out infinite; }
-
-/* Animações adicionais — shimmer, gradiente animado, indicador de scroll, flutuação suave, brilho pulsante */
-@keyframes shimmer {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
-}
-@keyframes gradientPan {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-@keyframes scrollDown {
-  0% { opacity: 0; transform: translateY(0); }
-  40% { opacity: 1; }
-  80% { opacity: 0; transform: translateY(10px); }
-  100% { opacity: 0; transform: translateY(10px); }
-}
-@keyframes floatSlow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.35); }
-  50% { box-shadow: 0 0 0 12px hsl(var(--primary) / 0); }
-}
-
-.animate-shimmer { background-size: 200% auto; animation: shimmer 3s linear infinite; }
-.animate-gradient-pan { background-size: 200% 200%; animation: gradientPan 8s ease infinite; }
-.animate-scroll-down { animation: scrollDown 1.8s ease-in-out infinite; }
-.animate-float-slow { animation: floatSlow 6s ease-in-out infinite; }
-.animate-pulse-glow { animation: pulseGlow 2.4s ease-in-out infinite; }
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+  .animate-float {
+    animation: floatY 4s ease-in-out infinite;
   }
-}
 
-/* SSR-CONNECT · acabamento do portal (sem dependências ou scripts extras) */
-.ssr-hero {
-  background:
-    radial-gradient(circle at 88% 17%, hsl(var(--primary) / 0.095), transparent 34%),
-    radial-gradient(circle at 15% 85%, hsl(var(--secondary) / 0.06), transparent 32%),
-    hsl(var(--background));
-}
+  /* Fundo animado — blobs de gradiente flutuantes, sutis */
+  @keyframes blob1 {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    33% {
+      transform: translate(40px, -30px) scale(1.1);
+    }
+    66% {
+      transform: translate(-30px, 25px) scale(0.95);
+    }
+  }
+  @keyframes blob2 {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    33% {
+      transform: translate(-45px, 30px) scale(1.08);
+    }
+    66% {
+      transform: translate(30px, -25px) scale(1.12);
+    }
+  }
+  @keyframes blob3 {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    50% {
+      transform: translate(25px, 35px) scale(1.1);
+    }
+  }
+  .animate-blob1 {
+    animation: blob1 22s ease-in-out infinite;
+  }
+  .animate-blob2 {
+    animation: blob2 28s ease-in-out infinite;
+  }
+  .animate-blob3 {
+    animation: blob3 24s ease-in-out infinite;
+  }
 
-.ssr-hero-grid {
-  background-image:
-    linear-gradient(hsl(var(--foreground) / 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, hsl(var(--foreground) / 0.035) 1px, transparent 1px);
-  background-size: 42px 42px;
-  mask-image: linear-gradient(90deg, transparent 28%, #000 100%);
-  -webkit-mask-image: linear-gradient(90deg, transparent 28%, #000 100%);
-}
+  /* Animações adicionais — shimmer, gradiente animado, indicador de scroll, flutuação suave, brilho pulsante */
+  @keyframes shimmer {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 200% 50%;
+    }
+  }
+  @keyframes gradientPan {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  @keyframes scrollDown {
+    0% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+    40% {
+      opacity: 1;
+    }
+    80% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+  @keyframes floatSlow {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  @keyframes pulseGlow {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 hsl(var(--primary) / 0.35);
+    }
+    50% {
+      box-shadow: 0 0 0 12px hsl(var(--primary) / 0);
+    }
+  }
 
-.ssr-hero-panel {
-  box-shadow:
-    0 2px 4px hsl(var(--foreground) / 0.025),
-    0 24px 70px -32px hsl(var(--foreground) / 0.18);
-}
+  .animate-shimmer {
+    background-size: 200% auto;
+    animation: shimmer 3s linear infinite;
+  }
+  .animate-gradient-pan {
+    background-size: 200% 200%;
+    animation: gradientPan 8s ease infinite;
+  }
+  .animate-scroll-down {
+    animation: scrollDown 1.8s ease-in-out infinite;
+  }
+  .animate-float-slow {
+    animation: floatSlow 6s ease-in-out infinite;
+  }
+  .animate-pulse-glow {
+    animation: pulseGlow 2.4s ease-in-out infinite;
+  }
 
-.dark .ssr-hero {
-  background:
-    radial-gradient(circle at 90% 10%, hsl(var(--primary) / 0.15), transparent 42%),
-    radial-gradient(circle at 7% 90%, hsl(var(--secondary) / 0.08), transparent 36%),
-    hsl(var(--background));
-}
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 
-.dark .ssr-hero-grid { opacity: 0.45; }
+  /* SSR-CONNECT · acabamento do portal (sem dependências ou scripts extras) */
+  .ssr-hero {
+    background:
+      radial-gradient(
+        circle at 88% 17%,
+        hsl(var(--primary) / 0.095),
+        transparent 34%
+      ),
+      radial-gradient(
+        circle at 15% 85%,
+        hsl(var(--secondary) / 0.06),
+        transparent 32%
+      ),
+      hsl(var(--background));
+  }
 
-.ssr-quick-link:focus-visible {
-  outline: 2px solid hsl(var(--ring));
-  outline-offset: 3px;
-}
+  .ssr-hero-grid {
+    background-image:
+      linear-gradient(hsl(var(--foreground) / 0.035) 1px, transparent 1px),
+      linear-gradient(
+        90deg,
+        hsl(var(--foreground) / 0.035) 1px,
+        transparent 1px
+      );
+    background-size: 42px 42px;
+    mask-image: linear-gradient(90deg, transparent 28%, #000 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 28%, #000 100%);
+  }
 
-/* Foco visível para teclado, incluindo menu e atalhos do aplicativo. */
-a:focus-visible, button:focus-visible, input:focus-visible,
-select:focus-visible, textarea:focus-visible {
-  outline: 2px solid hsl(var(--ring));
-  outline-offset: 3px;
-}
+  .ssr-hero-panel {
+    box-shadow:
+      0 2px 4px hsl(var(--foreground) / 0.025),
+      0 24px 70px -32px hsl(var(--foreground) / 0.18);
+  }
 
-@media (max-width: 639px) {
-  .ssr-hero-grid { background-size: 32px 32px; opacity: 0.6; }
-  .ssr-hero-panel { border-radius: 1.25rem; }
-}
+  .dark .ssr-hero {
+    background:
+      radial-gradient(
+        circle at 90% 10%,
+        hsl(var(--primary) / 0.15),
+        transparent 42%
+      ),
+      radial-gradient(
+        circle at 7% 90%,
+        hsl(var(--secondary) / 0.08),
+        transparent 36%
+      ),
+      hsl(var(--background));
+  }
 
-@media (prefers-reduced-motion: reduce) {
-  html:focus-within { scroll-behavior: auto; }
-  .ssr-quick-link svg { transition: none; }
-}
+  .dark .ssr-hero-grid {
+    opacity: 0.45;
+  }
 
+  .ssr-quick-link:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
 
-/* SSR-CONNECT • atualização visual 2026
+  /* Foco visível para teclado, incluindo menu e atalhos do aplicativo. */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 639px) {
+    .ssr-hero-grid {
+      background-size: 32px 32px;
+      opacity: 0.6;
+    }
+    .ssr-hero-panel {
+      border-radius: 1.25rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html:focus-within {
+      scroll-behavior: auto;
+    }
+    .ssr-quick-link svg {
+      transition: none;
+    }
+  }
+
+  /* SSR-CONNECT • atualização visual 2026
    Apenas apresentação: nenhuma regra depende do Auth, API ou estado dos portais. */
+}
 @layer base {
   :root {
     --background: 210 35% 98%;

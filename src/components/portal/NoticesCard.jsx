@@ -31,7 +31,7 @@ export default function NoticesCard({ title = "Avisos", subtitle, turmas = null 
   }, [turmas]);
 
   return (
-    <div className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
+    <div className="rounded-3xl border border-border bg-card p-6 shadow-xs sm:p-8">
       <div className="flex items-center gap-3">
         <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600"><Megaphone className="h-5 w-5" /></span>
         <div>

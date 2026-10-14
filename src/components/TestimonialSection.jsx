@@ -57,12 +57,12 @@ export default function TestimonialSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
-                className="flex flex-col rounded-3xl border border-border bg-card p-7 shadow-sm"
+                className="flex flex-col rounded-3xl border border-border bg-card p-7 shadow-xs"
               >
                 <Quote className="h-8 w-8 text-primary/30" />
                 <blockquote className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{t.content}</blockquote>
                 <figcaption className="mt-5 flex items-center gap-3 border-t border-border pt-4">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-sm font-bold text-white">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-linear-to-br from-primary to-secondary text-sm font-bold text-white">
                     {(t.name || "?").charAt(0)}
                   </span>
                   <div>
@@ -94,12 +94,12 @@ export default function TestimonialSection() {
           ) : (
             <form onSubmit={submit} className="mt-6 space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
-                <input required value={form.name} onChange={set("name")} placeholder="Seu nome" className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none ring-primary transition focus:ring-2" />
-                <select value={form.role} onChange={set("role")} className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none ring-primary transition focus:ring-2">
+                <input required value={form.name} onChange={set("name")} placeholder="Seu nome" className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-hidden ring-primary transition focus:ring-2" />
+                <select value={form.role} onChange={set("role")} className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-hidden ring-primary transition focus:ring-2">
                   {ROLES.map((r) => <option key={r}>{r}</option>)}
                 </select>
               </div>
-              <textarea required rows={3} value={form.content} onChange={set("content")} placeholder="Conte sua experiência no CETI..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none ring-primary transition focus:ring-2" />
+              <textarea required rows={3} value={form.content} onChange={set("content")} placeholder="Conte sua experiência no CETI..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-hidden ring-primary transition focus:ring-2" />
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <label className="flex items-center gap-3 text-sm">
                   Avaliação:
