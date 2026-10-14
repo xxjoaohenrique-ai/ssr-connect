@@ -1,66 +1,112 @@
 import { useEffect, useState } from "react";
-import { Newspaper, CalendarDays, Users, Megaphone, Images, UtensilsCrossed, ShieldCheck, ArrowRight, BookOpen } from "lucide-react";
+import { Newspaper, CalendarDays, Users, Megaphone, Images, UtensilsCrossed, ShieldCheck, ArrowUpRight, BookOpen, GraduationCap, Phone, MessageSquare, Radio, Sparkles } from "lucide-react";
 import { adminList } from "@/lib/adminApi";
-import AdminStatsGrid from "./AdminStatsGrid";
-import AdminQuickActions from "./AdminQuickActions";
 
 const stats = [
-  { key: "news", icon: Newspaper, label: "Notícias", tone: "text-primary bg-primary/10" },
-  { key: "events", icon: CalendarDays, label: "Eventos", tone: "text-secondary bg-secondary/10" },
-  { key: "students", icon: Users, label: "Alunos", tone: "text-amber-600 bg-amber-500/10" },
-  { key: "notices", icon: Megaphone, label: "Avisos ativos", tone: "text-primary bg-primary/10" },
+  { key: "news", icon: Newspaper, label: "Notícias", tone: "blue" },
+  { key: "events", icon: CalendarDays, label: "Eventos", tone: "violet" },
+  { key: "students", icon: Users, label: "Alunos cadastrados", tone: "amber" },
+  { key: "notices", icon: Megaphone, label: "Avisos ativos", tone: "green" },
 ];
 
 const actions = [
-  { key: "news", icon: Newspaper, label: "Nova notícia", description: "Publique um conteúdo no portal", tone: "text-primary bg-primary/10" },
-  { key: "notices", icon: Megaphone, label: "Criar aviso", description: "Envie um comunicado escolar", tone: "text-secondary bg-secondary/10" },
-  { key: "events", icon: CalendarDays, label: "Adicionar evento", description: "Atualize o calendário escolar", tone: "text-amber-600 bg-amber-500/10" },
+  { key: "news", icon: Newspaper, title: "Publicar notícia", detail: "Compartilhe novidades da escola", tone: "blue" },
+  { key: "notices", icon: Megaphone, title: "Criar aviso", detail: "Envie um comunicado importante", tone: "green" },
+  { key: "events", icon: CalendarDays, title: "Adicionar evento", detail: "Atualize o calendário escolar", tone: "amber" },
 ];
 
 const areas = [
-  { key: "history", icon: BookOpen, title: "História da escola", detail: "Texto da página Sobre a Escola" },
-  { key: "management_team", icon: Users, title: "Equipe gestora", detail: "Nomes e cargos da página Sobre a Escola" },
-  { key: "students", icon: Users, title: "Alunos e turmas", detail: "Cadastros e acessos dos estudantes" },
-  { key: "gallery", icon: Images, title: "Galeria da escola", detail: "Fotos publicadas no site" },
-  { key: "menu", icon: UtensilsCrossed, title: "Cardápio escolar", detail: "Almoço e lanche da semana" },
-  { key: "access", icon: ShieldCheck, title: "Contas administrativas", detail: "Gerenciar os acessos da equipe" },
+  { key: "history", icon: BookOpen, title: "História da escola", detail: "Apresentação e trajetória" },
+  { key: "management_team", icon: Users, title: "Equipe gestora", detail: "Cargos e integrantes" },
+  { key: "students", icon: GraduationCap, title: "Alunos e turmas", detail: "Cadastros e organização" },
+  { key: "teachers", icon: Users, title: "Professores", detail: "Equipe e turmas atendidas" },
+  { key: "gallery", icon: Images, title: "Galeria", detail: "Fotos e registros escolares" },
+  { key: "menu", icon: UtensilsCrossed, title: "Cardápio", detail: "Refeições da semana" },
+  { key: "contact", icon: Phone, title: "Contato", detail: "Informações para a comunidade" },
+  { key: "testimonials", icon: MessageSquare, title: "Depoimentos", detail: "Mensagens da comunidade" },
+  { key: "ticker", icon: Radio, title: "Faixa de avisos", detail: "Destaque no topo do site" },
+  { key: "access", icon: ShieldCheck, title: "Acessos administrativos", detail: "Contas da equipe gestora" },
 ];
 
 export default function AdminOverview({ onNavigate }) {
   const [counts, setCounts] = useState({ news: 0, events: 0, students: 0, notices: 0 });
+  const [updated, setUpdated] = useState(false);
+  const today = new Intl.DateTimeFormat("pt-BR", { dateStyle: "full" }).format(new Date());
 
   useEffect(() => {
+    let mounted = true;
     Promise.all([
-      adminList("News").then((items) => items.length), adminList("CalendarEvent").then((items) => items.length),
-      adminList("Student").then((items) => items.length), adminList("Notice", { filter: { is_active: true } }).then((items) => items.length),
-    ]).then(([news, events, students, notices]) => setCounts({ news, events, students, notices })).catch(() => {});
+      adminList("News").then((items) => items.length),
+      adminList("CalendarEvent").then((items) => items.length),
+      adminList("Student").then((items) => items.length),
+      adminList("Notice", { filter: { is_active: true } }).then((items) => items.length),
+    ]).then(([news, events, students, notices]) => {
+      if (mounted) {
+        setCounts({ news, events, students, notices });
+        setUpdated(true);
+      }
+    }).catch(() => {});
+    return () => { mounted = false; };
   }, []);
 
   return (
-    <div className="ssr-admin-overview space-y-6">
-      <div className="ssr-admin-welcome">
-        <div><h1 className="heading-font text-3xl font-extrabold tracking-tight sm:text-4xl">Olá, equipe!</h1><p className="mt-2 text-sm text-muted-foreground sm:text-base">Acompanhe as informações da escola e organize suas publicações.</p></div>
-        <div className="ssr-admin-date"><CalendarDays className="h-5 w-5 shrink-0 text-primary" /><span><strong>{new Intl.DateTimeFormat("pt-BR", { dateStyle: "full" }).format(new Date())}</strong><small>Painel administrativo da escola</small></span></div>
-      </div>
-      <AdminStatsGrid stats={stats} counts={counts} onNavigate={onNavigate} />
-      <section className="ssr-admin-panel">
-        <h2 className="heading-font text-xl font-bold">Ações rápidas</h2>
-        <p className="mb-5 mt-1 text-sm text-muted-foreground">Publique um conteúdo ou envie um comunicado para a comunidade escolar.</p>
-        <AdminQuickActions actions={actions} onNavigate={onNavigate} />
+    <main className="ssr-new-admin">
+      <section className="ssr-admin-hero">
+        <div className="ssr-admin-hero-copy">
+          <span className="ssr-admin-eyebrow"><Sparkles size={14} /> CENTRAL DE GESTÃO</span>
+          <h1>Bom dia, equipe!</h1>
+          <p>Gerencie o portal do CETI Sebastião Soares Ribeiro em um só lugar.</p>
+          <div className="ssr-admin-hero-date"><CalendarDays size={16} /><span>{today}</span></div>
+        </div>
+        <div className="ssr-admin-hero-mark" aria-hidden="true"><GraduationCap size={82} strokeWidth={1.25} /></div>
       </section>
-      <section className="ssr-admin-panel">
-        <h2 className="heading-font text-xl font-bold">Gerenciar a escola</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Acesse e atualize as principais áreas do portal.</p>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          {areas.map((area) => (
-            <button key={area.key} type="button" onClick={() => onNavigate(area.key)} className="ssr-admin-area-card group flex min-w-0 items-center gap-3 rounded-2xl border border-border bg-card p-4 text-left transition-colors hover:border-primary/40 hover:bg-primary/5">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><area.icon className="h-5 w-5" /></span>
-              <span className="min-w-0 flex-1"><span className="block text-sm font-semibold">{area.title}</span><span className="block text-xs text-muted-foreground">{area.detail}</span></span>
-              <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+
+      <section className="ssr-admin-new-section" aria-labelledby="admin-summary-title">
+        <div className="ssr-admin-new-heading">
+          <div><span className="ssr-admin-eyebrow">ACOMPANHAMENTO</span><h2 id="admin-summary-title">Resumo do portal</h2></div>
+          <span className="ssr-admin-sync">{updated ? "Dados atualizados" : "Carregando dados…"}</span>
+        </div>
+        <div className="ssr-admin-new-stats">
+          {stats.map((stat) => (
+            <button key={stat.key} type="button" onClick={() => onNavigate(stat.key)} className="ssr-admin-new-stat">
+              <span className={`ssr-admin-new-icon tone-${stat.tone}`}><stat.icon size={21} /></span>
+              <span className="ssr-admin-new-stat-copy"><small>{stat.label}</small><strong>{counts[stat.key]}</strong></span>
+              <ArrowUpRight className="ssr-admin-new-arrow" size={17} />
             </button>
           ))}
         </div>
       </section>
-    </div>
+
+      <section className="ssr-admin-new-section">
+        <div className="ssr-admin-new-heading">
+          <div><span className="ssr-admin-eyebrow">ATALHOS</span><h2>O que você quer fazer?</h2></div>
+        </div>
+        <div className="ssr-admin-new-actions">
+          {actions.map((action) => (
+            <button key={action.key} type="button" onClick={() => onNavigate(action.key)} className="ssr-admin-new-action">
+              <span className={`ssr-admin-new-icon tone-${action.tone}`}><action.icon size={21} /></span>
+              <span><strong>{action.title}</strong><small>{action.detail}</small></span>
+              <ArrowUpRight size={18} className="ssr-admin-new-arrow" />
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="ssr-admin-new-section">
+        <div className="ssr-admin-new-heading">
+          <div><span className="ssr-admin-eyebrow">ÁREAS DO PORTAL</span><h2>Gerenciar conteúdos e pessoas</h2></div>
+        </div>
+        <div className="ssr-admin-new-areas">
+          {areas.map((area) => (
+            <button key={area.key} type="button" onClick={() => onNavigate(area.key)} className="ssr-admin-new-area">
+              <span className="ssr-admin-new-area-icon"><area.icon size={19} /></span>
+              <span><strong>{area.title}</strong><small>{area.detail}</small></span>
+              <ArrowUpRight size={16} className="ssr-admin-new-arrow" />
+            </button>
+          ))}
+        </div>
+      </section>
+      <footer className="ssr-admin-new-footer">SSR-CONNECT <span>·</span> Painel administrativo escolar</footer>
+    </main>
   );
 }
