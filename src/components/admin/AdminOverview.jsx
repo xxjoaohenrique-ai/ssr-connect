@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Newspaper, CalendarDays, Users, Megaphone, Images, UtensilsCrossed, ShieldCheck, ArrowUpRight, BookOpen, GraduationCap, Phone, MessageSquare, Radio, Sparkles } from "lucide-react";
 import { adminList } from "@/lib/adminApi";
+import "@/styles/admin-overview.css";
 
 const stats = [
   { key: "news", icon: Newspaper, label: "Notícias", tone: "blue" },
