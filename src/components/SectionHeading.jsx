@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 
 // Cabeçalho de seção reutilizável com eyebrow + título + descrição
-export default function SectionHeading({ eyebrow, title, description, align = "center" }) {
+export default function SectionHeading({ eyebrow, title, description = "", align = "center" }) {
   const alignment = align === "left" ? "text-left" : "text-center mx-auto";
   const accent = align === "left" ? "" : "mx-auto";
   return (

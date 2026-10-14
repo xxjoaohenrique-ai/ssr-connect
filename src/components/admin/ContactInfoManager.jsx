@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Save, Loader2, CheckCircle2, Phone } from "lucide-react";
-import { base44 } from "@/api/base44Client";
 import { adminList, adminCreate, adminUpdate } from "@/lib/adminApi";
 import { Field, inputCls } from "./ui";
 import { CONTACT_DEFAULTS } from "@/lib/contactDefaults";

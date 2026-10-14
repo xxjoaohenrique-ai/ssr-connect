@@ -2,7 +2,9 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 /** Imagem responsiva independente de CDN externa. */
-export const Image = React.forwardRef(function Image({
+/** @typedef {React.ImgHTMLAttributes<HTMLImageElement> & { fittingType?: string, aspectRatio?: string | number, originWidth?: number, originHeight?: number, focalPointX?: number, focalPointY?: number, quality?: number }} ImageProps */
+/** @type {React.ForwardRefExoticComponent<ImageProps & React.RefAttributes<HTMLImageElement>>} */
+export const Image = React.forwardRef(/** @param {ImageProps} props */ function Image({
   src, fittingType='fill', aspectRatio, className, style, originWidth,
   originHeight, focalPointX, focalPointY, quality, onError, ...props
 }, ref) {

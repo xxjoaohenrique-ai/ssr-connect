@@ -9,7 +9,7 @@ import { CONTACT_DEFAULTS } from "@/lib/contactDefaults";
 export default function Contact() {
   const { toast } = useToast();
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState(/** @type {Record<string, string>} */ ({}));
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [info, setInfo] = useState(CONTACT_DEFAULTS);
@@ -30,6 +30,7 @@ export default function Contact() {
   ];
 
   const validate = () => {
+    /** @type {Record<string, string>} */
     const e = {};
     if (!form.name.trim()) e.name = "Informe seu nome.";
     if (!form.email.trim()) e.email = "Informe seu e-mail.";
@@ -50,13 +51,16 @@ export default function Contact() {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
-    // Simulação de envio (substitua por integração real quando necessário)
-    setTimeout(() => {
-      setLoading(false);
-      setSent(true);
-      toast({ title: "Mensagem enviada!", description: "Entraremos em contato em breve." });
-      setForm({ name: "", email: "", phone: "", subject: "", message: "" });
-    }, 1500);
+    const subject = encodeURIComponent(form.subject.trim());
+    const body = encodeURIComponent(`Nome: ${form.name}
+E-mail: ${form.email}
+Telefone: ${form.phone}
+
+${form.message}`);
+    window.location.href = `mailto:${info.email}?subject=${subject}&body=${body}`;
+    setLoading(false);
+    setSent(true);
+    toast({ title: "Mensagem preparada", description: "Conclua o envio no seu aplicativo de e-mail." });
   };
 
   return (
@@ -110,9 +114,9 @@ export default function Contact() {
                   <span className="flex h-20 w-20 items-center justify-center rounded-full bg-secondary/15 text-secondary">
                     <CheckCircle2 className="h-10 w-10" />
                   </span>
-                  <h3 className="heading-font mt-6 text-2xl font-bold">Mensagem enviada!</h3>
+                  <h3 className="heading-font mt-6 text-2xl font-bold">Mensagem preparada</h3>
                   <p className="mt-2 max-w-sm text-sm text-muted-foreground">
-                    Recebemos sua mensagem e entraremos em contato em breve. Verifique seu e-mail.
+                    Conclua o envio no seu aplicativo de e-mail. A escola receberá a mensagem depois que você a enviar.
                   </p>
                   <button
                     onClick={() => setSent(false)}
@@ -172,7 +176,7 @@ export default function Contact() {
   );
 }
 
-function Field({ icon: Icon, label, error, children }) {
+function Field({ icon: Icon, label, error = undefined, children }) {
   return (
     <div>
       <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</label>

@@ -2,9 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const root = new URL("../", import.meta.url);
-const fromRoot = (file) => join(root.pathname, file);
+const fromRoot = (file) => join(fileURLToPath(root), file);
 
 test("manifesto referenciado pelo HTML existe e aponta para um ícone real", () => {
   const html = readFileSync(fromRoot("index.html"), "utf8");

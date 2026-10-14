@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Megaphone, Loader2, Save, CheckCircle2 } from "lucide-react";
-import { base44 } from "@/api/base44Client";
 import { adminList, adminCreate, adminUpdate } from "@/lib/adminApi";
 
 export default function TickerManager() {
