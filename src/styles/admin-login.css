@@ -272,3 +272,6 @@
 @media (prefers-reduced-motion: reduce) {
   .ssr-admin-login *, .ssr-admin-login *::before, .ssr-admin-login *::after { transition: none !important }
 }
+
+.ssr-admin-login__brand-name,
+.ssr-admin-login__brand-sub { display: block; }
