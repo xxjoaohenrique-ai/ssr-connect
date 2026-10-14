@@ -1,8 +1,10 @@
 name: Publicar SSR-CONNECT no GitHub Pages
 
-# O endereço oficial é o Cloudflare Pages. O GitHub Pages fica como opção
-# secundária para publicação manual, sem competir com o deploy automático.
+# O Cloudflare é o endereço principal. O endereço secundário do GitHub
+# também publica o build React, nunca os arquivos-fonte da branch.
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
