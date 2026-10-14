@@ -4,7 +4,7 @@ Portal do CETI Sebastião Soares Ribeiro, feito com React/Vite, Supabase Auth e 
 
 ## Publicação
 
-O endereço principal é [ssr-connect.pages.dev](https://ssr-connect.pages.dev). O workflow `.github/workflows/cloudflare-pages.yml` compila e publica no Cloudflare Pages quando há push em `main`. O workflow personalizado de GitHub Pages foi limitado a execução manual, mas o GitHub ainda iniciou o workflow gerenciado `pages build and deployment` após o merge de 13/10/2026. Isso indica que a publicação por branch ainda está ativa nas configurações de Pages do repositório; a alteração do arquivo do workflow não a desativa. O Cloudflare continua sendo a hospedagem principal.
+O endereço principal é [ssr-connect.pages.dev](https://ssr-connect.pages.dev). O workflow `.github/workflows/cloudflare-pages.yml` compila e publica no Cloudflare Pages quando há push em `main`. O endereço secundário [xxjoaohenrique-ai.github.io/ssr-connect](https://xxjoaohenrique-ai.github.io/ssr-connect/) usa `.github/workflows/pages.yml` para publicar o build React na subpasta `/ssr-connect/`, também a cada push em `main`. Em Settings > Pages, a origem deve ser **GitHub Actions**. Publicar diretamente os arquivos da branch expõe `/src/main.jsx` sem compilação e impede a aplicação de iniciar.
 
 O build do Cloudflare usa `.env.production` para a URL do Supabase e a chave publicável. Chaves publishable/anon são destinadas ao navegador. Nunca coloque `SUPABASE_SERVICE_ROLE_KEY`, `PORTAL_TOKEN_SECRET` ou senhas em arquivos `VITE_*` ou no repositório.
 
